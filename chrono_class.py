@@ -9,7 +9,7 @@ from file_manager import *
 from find_com import *
 from classe_line import *
 
-DURATION_INT = 5
+DURATION_INT = 10
 TIME_RECORD = 60
 
 class Chrono_widget(QWidget):
@@ -42,7 +42,7 @@ class Chrono_widget(QWidget):
         lay.addWidget(self.time_passed_qll)
         lay.addWidget(self.pages_qsw) 
 
-        self.update_gui_1()
+        self.update_gui()
 
     def countdown(self, txt):
         self.serial.set_SERIAL_SAVING_FLAG(2)
@@ -53,47 +53,37 @@ class Chrono_widget(QWidget):
         self.timer_.timeout.connect(lambda:self.timer_timeout(txt))
         self.timer_.start(1000)
 
-        self.update_gui_1()
+        self.update_gui()
 
     def timer_timeout(self, txt):
-        self.second_counter = TIME_RECORD
         if(self.first_counter > 0):
             self.first_counter -= 1
 
         #mode manuel
-        if self.first_counter == 0: 
+        elif(self.first_counter == 0 and self.FLAG_TIMER == 0): 
+            self.serial.set_FLAG_RECORD(1)
+            self.serial.set_SERIAL_SAVING_FLAG(1)
             self.widget_counter_int = (self.widget_counter_int + 1) % 4
             self.pages_qsw.setCurrentIndex(self.widget_counter_int)
             txt.setText("Let's go !")
 
-            self.serial.set_SERIAL_SAVING_FLAG(1)
-            self.timer_2 = QtCore.QTimer(self)
-            self.timer_.timeout.connect(self.timer_timeout2)
-            self.timer_2.start(1000)
-
-        self.update_gui_1()
-
-    def timer_timeout2(self):
-        if(self.second_counter > 0):
-            self.second_counter -= 1
-
-        if(self.second_counter == 0): #FIN de l'enregistrement*
-            self.serial.set_SERIAL_SAVING_FLAG(0)
-            self.serial_flag = self.serial.SERIAL_SAVING_FLAG #il vaut bien 0
-            #print(self.ID_class)
+            self.first_counter = TIME_RECORD
+            self.FLAG_TIMER = 1
+        
+        elif(self.first_counter == 0 and self.FLAG_TIMER == 1):
             self.rec_panel.panel.l_classRow[self.ID_class].update_gui()
             self.switch_w(True, False)
-            self.timer_2.stop()
             self.timer_.stop()
+            self.serial.set_FLAG_RECORD(0)
             self.serial.graph.set_graph_flag(0)
+            self.serial.set_SERIAL_SAVING_FLAG(0)
+            self.serial_flag = self.serial.SERIAL_SAVING_FLAG #il vaut bien 0
+            self.FLAG_TIMER = 0
 
-        self.update_gui_2()
+        self.update_gui()
 
-    def update_gui_1(self):
+    def update_gui(self):
         self.time_passed_qll.setText(str(self.first_counter))
-
-    def update_gui_2(self):
-        self.time_passed_qll.setText(str(self.second_counter))
 
     def get_id(self, ind): #créer la variable globale permet de ne pas prendre en argument img_panel
         self.ID_class = ind
@@ -104,11 +94,10 @@ class Chrono_widget(QWidget):
 
     def stop_chrono(self):
         self.timer_.stop()
-        self.timer_2.stop()
         
-    
 
     file = "" 
     ID_class = 100 #créer la variable globale permet de ne pas prendre en argument img_panel
+    FLAG_TIMER = 0
     
     
