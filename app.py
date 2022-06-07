@@ -7,6 +7,7 @@ from PySide6.QtGui import *
 from PySide6.QtCore import * 
 from classe_line import ClassRow
 from find_com import *
+from Selection_classes import *
 
 from chrono_class import Chrono_widget
 from time import sleep
@@ -21,56 +22,6 @@ from random import randint
 
 img_panel = ""
 rec_panel = ""
-
-class Selection_classes(QWidget):
-	def __init__(self, _list, _panel, parent = None):
-		super(Selection_classes, self).__init__( parent )
-
-		self.liste = _list
-		self.panel = _panel
-
-		scroll = QScrollArea(self)
-		scroll.setWidgetResizable(True)
-		self.content = QWidget()
-		scroll.setWidget(self.content)
-		self.lay = QVBoxLayout(self.content)
-
-		self.button_list = []
-		for el in _list:
-			self.button_list.append(ButtonClass(el, _panel))
-			self.lay.addWidget(self.button_list[-1])
-
-		self.setStyleSheet("QScrollArea{min-width:300 px; min-height: 400px}")
-		self.setWindowTitle("Classes Selection")
-
-	def Selection_classes_show(self):
-		self.show()
-
-
-class ButtonClass(QWidget):
-	def __init__(self, _name, _panel, parent = None):
-		super(ButtonClass, self).__init__( parent )
-		self.name = _name
-		self.panel = _panel
-
-		self.line_layout = QHBoxLayout()
-		self.name_class = QLabel(str(self.name), alignment=Qt.AlignCenter)
-		self.name_class.setFixedHeight(30)
-
-		self.button = QPushButton("+")
-		self.button.setFixedWidth(30)
-		self.button.setFixedHeight(30)
-		self.button.setStyleSheet("background-color: green")
-		self.line_layout.addWidget(self.name_class)
-		self.line_layout.addWidget(self.button)
-		
-		self.button.clicked.connect(lambda: self.panel.add_item(self.name))
-		self.setLayout(self.line_layout)
-
-	def set_name(self, _name):
-		self.name = _name
-
-	_name = "test"
 
 
 
