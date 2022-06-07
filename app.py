@@ -9,11 +9,13 @@ from classe_line import ClassRow
 from find_com import *
 
 from chrono_class import Chrono_widget
-#from image_panel import *
 from time import sleep
 from file_manager import *
 import pyqtgraph as pg
-import datetime
+import traitement as tr
+import numpy as np
+from random import randint
+
 
 #from image_panel import Image_Panel
 
@@ -87,13 +89,13 @@ class RecordPanel(QWidget):
 		self.selectClasses_button.setMaximumWidth(200)		
 		self.selectClasses_button.setFixedHeight(30)
 
-
 		self.btnRemoveAll = QPushButton("Remove all")
 		self.btnRemoveAll.setStyleSheet("background-color: red")
 		self.btnRemoveAll.setMaximumWidth(100)
 		self.btnRemoveAll.setFixedHeight(35)
 
 		self.comboBox_layout.addWidget(self.selectClasses_button)
+		#self.comboBox_layout.addWidget(self.b_generateClassRow)
 		self.comboBox_layout.addWidget(self.btnRemoveAll)
 
 		self.main_layout.setSpacing(15)
@@ -139,6 +141,7 @@ class RecordPanel(QWidget):
 		self.main_layout.addWidget(self.frame)
 		self.setLayout(self.main_layout)
 
+		#self.b_generateClassRow.clicked.connect(lambda: self.panel.generate_rowClass(self.comboBox))
 		self.btnRemoveAll.clicked.connect(lambda:self.msg_box("Are you sure you want to remove all lines ?"))
 
 
@@ -162,11 +165,6 @@ class RecordPanel(QWidget):
 			self.panel.remove_all_lines()
 		else:
 			msg.done(1)
-
-	
-	def remove_file(self, name):
-		filename = name + ".txt"
-		os.remove(name)
 
 		
 
@@ -210,17 +208,14 @@ class Image_Panel(QWidget):
 		
 		self.lay = QVBoxLayout(self)
 		self.lay_ = QHBoxLayout(self)
-		self._lay = QHBoxLayout(self)
 
-		self.info = QLabel("Please press on Ready to start the countdown. The recording will start right after.", alignment=QtCore.Qt.AlignCenter)
+		self.info = QLabel("Are you ready ?", alignment=QtCore.Qt.AlignCenter)
 		self.info.setFont(QFont('Arial', 22))
-		self.info.setFixedHeight(100)
+		self.info.setFixedHeight(50)
 		
-		self.ser = _serial
-		
-		#self.graph = Graph(self.ser)
+
 		self.name = ""
-		self.chrono_w = Chrono_widget(self.name, self.ser, rec_panel, self)
+		self.chrono_w = Chrono_widget(self.name, _serial, rec_panel, self)
 
 		self.stop_button = QPushButton("Stop")
 		self.stop_button.setStyleSheet("background-color: red")
@@ -241,20 +236,19 @@ class Image_Panel(QWidget):
 		self.shape_label.setPixmap(self.shape_pic)
 
 
+		#self.lay_.addWidget(self.graph, alignment=QtCore.Qt.AlignRight)	#JE SAIS PAS OU LES METTRE 
 		self.lay.addWidget(self.info)	
 		self.lay.addWidget(self.chrono_w, alignment=QtCore.Qt.AlignCenter)
-		#self._lay.addWidget(self.graph, alignment=QtCore.Qt.AlignRight)	#JE SAIS PAS OU LES METTRE 
-		self._lay.addWidget(self.shape_label)
 		self.lay_.addWidget(self.stop_button, alignment=QtCore.Qt.AlignCenter)
+		self.lay_.addWidget(self.shape_label, alignment=QtCore.Qt.AlignCenter)
 		self.lay_.addWidget(self.ready_button, alignment=QtCore.Qt.AlignCenter)
-		self.lay.addLayout(self._lay)
 		self.lay.addLayout(self.lay_)
+		self.lay.addWidget(_serial.graph, alignment=QtCore.Qt.AlignCenter)
 		
 		self.ready_button.clicked.connect(lambda:self.chrono_w.countdown(self.info))
 		self.ready_button.clicked.connect(lambda:self.ready_button.setEnabled(False))
-		#self.ready_button.clicked.connect(self.print_)
-		
-		self.stop_button.clicked.connect(self.chrono_w.stop_chrono)
+		#self.stop_button.clicked.connect(self.chrono_w.stop_chrono)
+
 		self.stop_button.clicked.connect(lambda:self.msg_box("Are you sure you want to quit ?"))
 		
 
@@ -279,13 +273,7 @@ class Image_Panel(QWidget):
 			switch_widget(True, False)
 		else:
 			msg.done(1)
-			#remettre en marche le chrono
-			self.chrono_w.start_chrono()
 
-	def print_(self):
-		print(self.ser.SERIAL_SAVING_FLAG)
-		print(self.ser.headline_write)
-		print(self.ser.RUNNING_FLAG)
 
 class Preferences(QWidget):
 	def __init__(self, _file, parent = None):
@@ -344,110 +332,6 @@ class Preferences(QWidget):
 		self.show()
 
 
-"""class Graph(QWidget):
-	def __init__(self, _serial, parent = None):
-		super(Graph, self).__init__( parent )
-		
-		self.serial = _serial
-
-		self.acc_graph = self.create_graph('w', "Acceleration", "Acceleration (mg)")
-		self.gyr_graph = self.create_graph('w', "Gyroscope", "Gyroscope (dps)")
-
-		self.lay = QVBoxLayout(self)
-
-		self.init_plot()
-
-		getData_thr = threading.Thread(target=self.run_thread, args=())
-		getData_thr.start()
-
-		self.lay.addWidget(self.acc_graph)
-		self.lay.addWidget(self.gyr_graph)
-
-		self.setLayout(self.lay)
-		#self.show()
-
-	def create_graph(self, bg_color, title, label_y):
-		styles = {"color": "#f00", "font-size": "20px"}
-		graph = pg.PlotWidget()
-		graph.setBackground(bg_color)
-		graph.setTitle(title)
-		graph.addLegend()
-		graph.setLabel("left", label_y, **styles)
-		graph.setLabel("bottom", "Time (s)", **styles)
-		graph.setFixedHeight(300)
-		return graph
-
-	def run_thread(self):
-		while True:
-			if self.serial.SERIAL_SAVING_FLAG == 2:
-				self.start_time = datetime.datetime.now()
-			while self.serial.SERIAL_SAVING_FLAG == 1: 
-				print("Zero")
-				temp = self.serial.serial.readline() #Capture serial output as a decoded stringata = temp.decode()
-				data = temp.decode()
-				data_str = str(data)
-				print("Zero bis")
-
-				if data_str :#Check if we have data
-					print("First")
-					data_split_ch = data_str.split(' > ')
-					if len(data_split_ch) > 1:
-						print("Second")
-						data_split_tab = data_str.split('\t')
-						if len(data_split_tab) == 6:
-							print("Third")
-							self.acc[0].append(data_split_tab[0])
-							self.acc[1].append(data_split_tab[1])
-							self.acc[2].append(data_split_tab[2])
-
-							self.gyr[0].append(data_split_tab[3])
-							self.gyr[1].append(data_split_tab[4])
-							self.gyr[2].append(data_split_tab[5])
-							curr_time = datetime.datetime.now()
-							
-							print(data_split_tab)
-							self.t.append(curr_time - self.start_time)
-							self.update_all_plot(self.t, self.acc[0], self.acc[1], self.acc[2], self.gyr[0], self.gyr[1], self.gyr[2])
-
-				#sleep(0.038)
-	def init_plot(self):
-
-		self.acc_x_line = self.acc_plot("Acc_X", 'r')
-		self.acc_y_line = self.acc_plot("Acc_Y", 'g')
-		self.acc_z_line = self.acc_plot("Acc_Z", 'b')
-
-		self.gyr_x_line = self.gyr_plot("Gyr_X", 'r')
-		self.gyr_y_line = self.gyr_plot("Gyr_Y", 'g')
-		self.gyr_z_line = self.gyr_plot("Gyr_Z", 'b')
-
-	def acc_plot(self, plotname, color):
-		pen = pg.mkPen(color=color)
-		return self.acc_graph.plot(name=plotname, pen=pen)
-
-	def gyr_plot(self, plotname, color):
-		pen = pg.mkPen(color=color)
-		return self.gyr_graph.plot(name=plotname, pen=pen)
-
-	def update_set_data(self, plot_line, x, y):
-		plot_line.setData(x, y)
-		#plot_line.plot(x,y)
-
-	def update_all_plot(self, t, acc_X, acc_Y, acc_Z, gyr_X, gyr_Y, gyr_Z):
-		self.update_set_data(self.acc_x_line, t, acc_X)
-		self.update_set_data(self.acc_y_line, t, acc_Y)
-		self.update_set_data(self.acc_z_line, t, acc_Z)
-
-		self.update_set_data(self.gyr_x_line, t, gyr_X)
-		self.update_set_data(self.gyr_y_line, t, gyr_Y)
-		self.update_set_data(self.gyr_z_line, t, gyr_Z)
-	
-	acc = [[0], [0], [0]]
-	gyr = [[0], [0], [0]]
-	start_time = 0
-	t = [0]
-"""
-
-
 
 
 class Window(QMainWindow):
@@ -461,33 +345,24 @@ class Window(QMainWindow):
 		self.logo_pic = self.logo_pic.scaled(100, 72, QtCore.Qt.KeepAspectRatio)
 		self.logo_label.setPixmap(self.logo_pic)
 		self.logo_label.setFixedHeight(100)
-
-		
 		
 		self.current_file = File_manager()
 
 		self._createActions()
 		self._createMenuBar()
 		self._importCSV()
-		
 		self.ser = Serial_COM(self.current_file, self.findPorts)
-
+		
 		self.preference_onglet = Preferences(self.current_file)
 		self.preferences.triggered.connect(self.preference_onglet.show_preferences)
 
-		self.isConnected = QLabel("Connected", alignment=QtCore.Qt.AlignCenter)
-		self.isConnected.setFixedWidth(100)
-		self.isConnected.setStyleSheet("border: 3px; border-radius: 5px; min-height:40px; min-width:40px; background-color: gray")
-		self.isConnected.setFixedHeight(20)
-		
-
 
 		#Thread de serial
-		self.x = threading.Thread(target=self.ser.thread_run, args=())
-		self.x.start()
+		#self.ser.set_SERIAL_SAVING_FLAG(0) #initialisation à 0 obligatoire ?
+		x = threading.Thread(target=self.ser.thread_run, args=())
+		x.start()
 
 		self.lay = QVBoxLayout()
-		self.lay_ = QHBoxLayout()
 		centralWidget = QWidget()
 		centralWidget.setLayout(self.lay)
 		self.setCentralWidget(centralWidget)
@@ -498,49 +373,27 @@ class Window(QMainWindow):
 		rec_panel = RecordPanel(self.ser, self.listeClasses, self.current_file)
 		img_panel = Image_Panel(self.ser)
 
-		self.lay_.setSpacing(200)
 		self.lay.setSpacing(0) 
 
-		self.lay_.addWidget(self.isConnected)
-		self.lay_.addWidget(self.logo_label)
-		
-		self.lay.addLayout(self.lay_)
+
+		self.lay.addWidget(self.logo_label)
 		self.lay.addWidget(img_panel)
 		self.lay.addWidget(rec_panel)
 		rec_panel.setVisible(True)
 		img_panel.setVisible(False)
-
-
-		if(self.ser.isConnected_flag == True):
-			self.isConnected.setStyleSheet("border: 3px; border-radius: 5px; min-height:40px; min-width:40px; background: #c7ea46")
-		else:
-			self.isConnected.setStyleSheet("border: 3px; border-radius: 5px; min-height:40px; min-width:40px; background-color: gray")
-		
-
-		#app.aboutToQuit.connect(self.closeEvent)
 	
-
 		
-	"""def closeEvent(self):
-		#Your desired functionality here
-		print('Close button pressed')
-		self.ser.thread_terminate()
-		sys.exit(0)"""
 		
 
 	def _createActions(self):
 		# Creating action using the first constructor
-		self.newAction = QAction(self)
-		self.newAction.setText("&New")
 		# Creating actions using the second constructor
-		self.openAction = QAction("&Open...", self)
-		self.importAction = QAction("&Import...", self)
 		self.preferences = QAction("&Preferences...", self)
 
 		self.exitAction = QAction("&Exit", self)
 		self.copyAction = QAction("&Copy", self)
 		self.pasteAction = QAction("&Paste", self)
-		self.cutAction = QAction("&Cut", self)
+		self.cutAction = QAction("C&ut", self)
 		self.helpContentAction = QAction("&Help Content", self)
 		self.aboutAction = QAction("&About", self)
 
@@ -552,11 +405,8 @@ class Window(QMainWindow):
 		menuBar.addMenu(fileMenu)
 		fileMenu.addAction(self.preferences)
 		fileMenu.addAction(self.exitAction)
-		
 		# Edit menu
 		toolsMenu = menuBar.addMenu("&Tools")
-		#editMenu.addAction(self.copyAction)
-		# Find and Replace submenu in the Edit menu
 		self.findPorts = toolsMenu.addMenu("PORT:")
 		self.findPorts.setStatusTip('Choose the card\'s port')
 
@@ -594,7 +444,9 @@ class Window(QMainWindow):
 			switch_widget(True, False)
 		else:
 			msg.done(1)
-	
+			
+
+		
 
 def switch_widget(state1, state2):
 	rec_panel.setVisible(state1)

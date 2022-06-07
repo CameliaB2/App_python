@@ -55,6 +55,8 @@ class ClassRow(QWidget):
         self.suffix = ""
 
 
+
+
         lay.setSpacing(70)        
         lay.addWidget(self.set_size(self.class_name_text,160,30))
         lay.addWidget(self.set_size(self.textbox,65,30))
@@ -67,8 +69,7 @@ class ClassRow(QWidget):
         self.record_button.clicked.connect(self._record_button_clicked)
 
         self.delete_line_button.clicked.connect(lambda:self.msg_box("Are you sure you want to delete this line ?", self.id))
-        
-        self.clear_recording_button.clicked.connect(self._clear_recording_button_clicked)
+       
     
 
     def _record_button_clicked(self):
@@ -80,21 +81,10 @@ class ClassRow(QWidget):
         self.file.set_current_shape(self.name)
         self.update_name()
         self.img_panel.ready_button.setEnabled(True)
-        
-
-    def _clear_recording_button_clicked(self):
-        self.record_button.setEnabled(True)
-        self.status_button.setStyleSheet("background-color: lightgray")
-        self.get_suffix()
-        self.file.set_current_shape(self.name)
-        self.file.remove_file()
-        self._ser.set_SERIAL_SAVING_FLAG(0)
-        self._ser.set_headline_flag(False)
-        print(self._ser.headline_write) 
 
     def get_suffix(self):
         self.suffix = self.textbox.text()
-        #print(self.suffix)
+        print(self.suffix)
         self.file.set_suffix(self.suffix)
 
 
@@ -106,14 +96,15 @@ class ClassRow(QWidget):
 
     def set_name(self):
         self.img_panel.set_name_(self.name)
-        
+        self.record_button.setEnabled(False)
 
     def switch_w(self, state1, state2):
         self.rec_panel.setVisible(state1)
         self.img_panel.setVisible(state2)
     
     def update_name(self):
-        file_name_ = self.generate_date() + self.name + "-" + self.suffix + ".csv"
+        print("la on rentre ici")
+        file_name_ = self.generate_date() + "-" + self.name + "-" + self.suffix + ".csv"
         self.record_filename_text.setText(file_name_)
 
 
@@ -134,6 +125,7 @@ class ClassRow(QWidget):
         self.status_button.setStyleSheet("background-color: green")
 
     def generate_date(self):
+        #today = date.today()
         now = datetime.now()
         date = now.strftime("%Y_%m_%d-%H_%M_%S-")
         return str(date)

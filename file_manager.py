@@ -2,7 +2,8 @@
 import find_com
 from time import sleep
 from datetime import datetime
-import os
+from time import sleep
+import find_com
 
 class File_manager():
 	def __init__(self, parent=None):
@@ -31,29 +32,17 @@ class File_manager():
 
 	def set_current_shape(self, _name):
 		self.name_curr_shape = _name
+		print("self.name_curr_shape : ", self.name_curr_shape)
 
 	def set_full_path(self):
 		self.full_path = self.path_file + "/"  + self.generate_date() + self.name_curr_shape + "-" + self.suffix_ + ".csv"
-		print("self full_path : ", self.full_path)
 		self.full_path_average = self.path_file + "/"  + self.generate_date() + self.name_curr_shape + "-" + self.suffix_ + "-average.csv"
-
 
 	def set_file_path(self, _path):
 		self.path_file = _path
-		print("self path : ", self.path_file)
-
-		
-
-	def remove_file(self):
-		print(self.full_path)
-		if os.path.exists(self.full_path):
-  			os.remove(self.full_path)
-		else:
-			print("The file does not exist") 
 
 	name_curr_shape = ""
 	full_path = ""
 	full_path_average = ""
-	
 	path_file = ""
 	suffix_ = ""
