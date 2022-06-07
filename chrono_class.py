@@ -10,7 +10,7 @@ from find_com import *
 from classe_line import *
 
 DURATION_INT = 5
-TIME_RECORD = 61
+TIME_RECORD = 60
 
 class Chrono_widget(QWidget):
     def __init__(self, name, _serial, rec, im ,parent=None):
@@ -46,6 +46,7 @@ class Chrono_widget(QWidget):
 
     def countdown(self, txt):
         self.serial.set_SERIAL_SAVING_FLAG(2)
+
         self.first_counter = DURATION_INT
 
         self.timer_ = QtCore.QTimer(self)
@@ -70,22 +71,21 @@ class Chrono_widget(QWidget):
             self.timer_.timeout.connect(self.timer_timeout2)
             self.timer_2.start(1000)
 
-
         self.update_gui_1()
 
     def timer_timeout2(self):
         if(self.second_counter > 0):
             self.second_counter -= 1
 
-        if(self.second_counter == 0): #FIN de l'enregistrement
-            print("on salut ici")
+        if(self.second_counter == 0): #FIN de l'enregistrement*
             self.serial.set_SERIAL_SAVING_FLAG(0)
             self.serial_flag = self.serial.SERIAL_SAVING_FLAG #il vaut bien 0
+            #print(self.ID_class)
             self.rec_panel.panel.l_classRow[self.ID_class].update_gui()
             self.switch_w(True, False)
             self.timer_2.stop()
             self.timer_.stop()
-            #txt.setText("Reboot !")
+            self.serial.graph.set_graph_flag(0)
 
         self.update_gui_2()
 
@@ -106,9 +106,7 @@ class Chrono_widget(QWidget):
         self.timer_.stop()
         self.timer_2.stop()
         
-    def start_chrono(self):
-        self.timer_.start()
-        self.timer_2.start()
+    
 
     file = "" 
     ID_class = 100 #créer la variable globale permet de ne pas prendre en argument img_panel
