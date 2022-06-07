@@ -13,7 +13,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import * 
 
-
+#test
 class Serial_COM():
 	def __init__(self, _file, _menuBar, parent = None):
 
