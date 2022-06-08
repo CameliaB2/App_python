@@ -45,21 +45,13 @@ class Graph(QWidget):
 		self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[2], pen=pen) )
 
 
-		#self.gyr_graph = self.create_graph('w', "Gyroscope", "Gyroscope (dps)")
-
 		self.lay = QHBoxLayout(self)
 
 		self.update_graph_thr = threading.Thread(target=self.update_plot_data, args=())
 		self.update_graph_thr.start()
-		#self.init_plot()
-
-
-
+		
 		self.lay.addWidget(self.acc_graph)
 		self.lay.addWidget(self.gyr_graph)
-
-
-
 
 		self.setLayout(self.lay)
 

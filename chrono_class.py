@@ -7,13 +7,12 @@ from PySide6.QtGui import *
 from PySide6.QtCore import * 
 from file_manager import *
 from find_com import *
-from classe_line import *
 
 DURATION_INT = 5
-TIME_RECORD = 60
+TIME_RECORD = 6
 
 class Chrono_widget(QWidget):
-    def __init__(self, name, _serial, rec, im ,parent=None):
+    def __init__(self, name, _rec, _im, _serial, parent=None):
         QWidget.__init__(self, parent=parent)
 
         lay = QVBoxLayout(self)
@@ -27,10 +26,9 @@ class Chrono_widget(QWidget):
 
         self.serial = _serial
         self.serial_flag = _serial.SERIAL_SAVING_FLAG
-        self.rec_panel = rec
-        self.img_panel = im #ajouté pour stopper le chrono quand on clique sur stop 
+        self.rec_panel = _rec
+        self.img_panel = _im #ajouté pour stopper le chrono quand on clique sur stop 
         
-
         self.chrono_label = QLabel(name, alignment=QtCore.Qt.AlignCenter)
         self.chrono_pic = QPixmap("Figures/index_.png")
         self.chrono_pic = self.chrono_pic.scaled(100, 121, QtCore.Qt.KeepAspectRatio)
@@ -46,7 +44,6 @@ class Chrono_widget(QWidget):
 
     def countdown(self, txt):
         self.serial.set_SERIAL_SAVING_FLAG(2)
-
         self.first_counter = DURATION_INT
 
         self.timer_ = QtCore.QTimer(self)
@@ -71,21 +68,22 @@ class Chrono_widget(QWidget):
             self.timer_.timeout.connect(self.timer_timeout2)
             self.timer_2.start(1000)
 
+
         self.update_gui_1()
 
     def timer_timeout2(self):
         if(self.second_counter > 0):
             self.second_counter -= 1
 
-        if(self.second_counter == 0): #FIN de l'enregistrement*
+        if(self.second_counter == 0): #FIN de l'enregistrement
+            print("on salut ici")
             self.serial.set_SERIAL_SAVING_FLAG(0)
             self.serial_flag = self.serial.SERIAL_SAVING_FLAG #il vaut bien 0
-            #print(self.ID_class)
             self.rec_panel.panel.l_classRow[self.ID_class].update_gui()
             self.switch_w(True, False)
             self.timer_2.stop()
             self.timer_.stop()
-            self.serial.graph.set_graph_flag(0)
+            #txt.setText("Reboot !")
 
         self.update_gui_2()
 
@@ -95,7 +93,7 @@ class Chrono_widget(QWidget):
     def update_gui_2(self):
         self.time_passed_qll.setText(str(self.second_counter))
 
-    def get_id(self, ind): #créer la variable globale permet de ne pas prendre en argument img_panel
+    def set_id(self, ind): #créer la variable globale permet de ne pas prendre en argument img_panel
         self.ID_class = ind
 
     def switch_w(self, state1, state2):
@@ -106,9 +104,10 @@ class Chrono_widget(QWidget):
         self.timer_.stop()
         self.timer_2.stop()
         
-    
+    def start_chrono(self):
+        self.timer_.start()
+        self.timer_2.start()
 
     file = "" 
     ID_class = 100 #créer la variable globale permet de ne pas prendre en argument img_panel
-    
     
