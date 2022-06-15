@@ -9,16 +9,17 @@ from PySide6.QtGui import *
 from PySide6.QtCore import * 
 from find_com import *
 
-
+img_panel = ''
+rec_panel = ''
 
 class ClassRow(QWidget):
-    def __init__(self, _name, _serial, _id , _file, img_pan, rec_pan, parent=None):
-        QWidget.__init__(self, parent=parent)
+    def __init__(self, _name=None, _serial=None, _id=None, _file=None, parent=None):
+        super(ClassRow, self).__init__( parent )
 
         lay = QHBoxLayout(self)  
 
-        self.img_panel = img_pan
-        self.rec_panel = rec_pan
+        global img_panel, rec_panel
+        
 
         self.id = _id
 
@@ -69,17 +70,17 @@ class ClassRow(QWidget):
         self.delete_line_button.clicked.connect(lambda:self.msg_box("Are you sure you want to delete this line ?", self.id))
         
         self.clear_recording_button.clicked.connect(self._clear_recording_button_clicked)
-    
-
+        
+        
     def _record_button_clicked(self):
         self.record_button.setEnabled(False)
         self.set_name()
-        self.img_panel.chrono_w.get_id(self.id)
+        img_panel.chrono_w.set_id(self.id)
         self.get_suffix()
         self.switch_w(False,True)
         self.file.set_current_shape(self.name)
         self.update_name()
-        self.img_panel.ready_button.setEnabled(True)
+        img_panel.ready_button.setEnabled(True)
         
 
     def _clear_recording_button_clicked(self):
@@ -90,7 +91,7 @@ class ClassRow(QWidget):
         self.file.remove_file()
         self._ser.set_SERIAL_SAVING_FLAG(0)
         self._ser.set_headline_flag(False)
-        print(self._ser.headline_write) 
+        #print(self._ser.headline_write) 
 
     def get_suffix(self):
         self.suffix = self.textbox.text()
@@ -105,12 +106,12 @@ class ClassRow(QWidget):
 
 
     def set_name(self):
-        self.img_panel.set_name_(self.name)
+        img_panel.set_name_(self.name)
         
 
     def switch_w(self, state1, state2):
-        self.rec_panel.setVisible(state1)
-        self.img_panel.setVisible(state2)
+        rec_panel.setVisible(state1)
+        img_panel.setVisible(state2)
     
     def update_name(self):
         file_name_ = self.generate_date() + self.name + "-" + self.suffix + ".csv"
@@ -125,7 +126,7 @@ class ClassRow(QWidget):
         result = msg.exec_()
         if result == QMessageBox.Yes:
             #Supprimer la ligne
-            self.rec_panel.panel.remove_line(_id)
+            rec_panel.panel.remove_line(_id)
         else:
             msg.done(1)
 
@@ -139,3 +140,12 @@ class ClassRow(QWidget):
         return str(date)
 
     
+def set_img_panel(val):
+    global img_panel
+    img_panel = val
+    print(img_panel)
+
+def set_rec_panel(val):
+    global rec_panel
+    rec_panel = val
+    print(rec_panel)

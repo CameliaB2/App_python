@@ -1,4 +1,3 @@
-#from find_com import *
 import find_com
 from time import sleep
 from datetime import datetime
