@@ -111,7 +111,7 @@ class Serial_COM():
 							#self.data_imu.append(data_split[1])	
 
 							self.data_imu = data_split[1]
-							self.current_file.write_data_imu(self.current_file.full_path, self.data_imu)
+							self.current_file.write_data_imu(self.current_file.full_path, self.data_imu) #Write imu data
 
 							#self.time_to_wait = time.time()-start
 							#if(self.time_to_wait < self.RECORD_PERIOD):

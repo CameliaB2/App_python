@@ -198,6 +198,7 @@ class Image_Panel(QWidget):
 		
 		self.ready_button.clicked.connect(lambda:self.chrono_w.countdown(self.info))
 		self.ready_button.clicked.connect(lambda:self.ready_button.setEnabled(False))
+		self.ready_button.clicked.connect(lambda:self.info.setText("Record will begin in :"))
 		#self.stop_button.clicked.connect(self.chrono_w.stop_chrono)
 
 		self.stop_button.clicked.connect(lambda:self.msg_box("Are you sure you want to quit ?"))
