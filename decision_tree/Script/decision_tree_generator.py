@@ -139,6 +139,7 @@ def generateDecisionTree( arff_filename, dectree_filename):
     X = data_set[feature_cols]  # Features
     y = data_set[col_names[-1]]  # Target variable
 
+        #Cross validation a voir
     # Split dataset into training set and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3,
                                                         random_state=1)  # 70% training and 30% test
@@ -154,7 +155,7 @@ def generateDecisionTree( arff_filename, dectree_filename):
 
     # Model Accuracy, how often is the classifier correct?
     dectree_accuracy = metrics.accuracy_score(y_test, y_pred)
-
+    
     dot_tree = tree.export_graphviz(clf, out_file=None, class_names=clf.classes_, label="none", impurity=False,
                                     feature_names=feature_cols)
 

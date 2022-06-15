@@ -10,7 +10,7 @@ class File_manager():
 		self.name_curr_shape = "test"
 
 	def write_headLine(self, _path):
-		head_line = "AccX[mg]\tAccY[mg]\tAccZ[mg]\tGyrX[dps]\tGyrY[dps]\tGyrZ[dps]\t\n"
+		head_line = "A_X[mg]\tA_Y[mg]\tA_Z[mg]\tG_X[dps]\tG_Y[dps]\tG_Z[dps]\t\n"
 
 		data_file = open(_path, "a")
 		data_file.write(head_line)
