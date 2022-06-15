@@ -35,23 +35,31 @@ class Graph(QWidget):
 		self.gyr_graph.setFixedHeight(200)
 
 		pen = pg.mkPen(color='r')
-		self.acc_line.append( self.acc_graph.plot(self.t, self.acc[0], pen=pen) )
-		self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[0], pen=pen) )
+		self.acc_line.append( self.acc_graph.plot(self.t, self.acc[0], pen=pen, name="Acc X") )
+		self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[0], pen=pen, name="Gyr X") )
 		pen = pg.mkPen(color='g')
-		self.acc_line.append( self.acc_graph.plot(self.t, self.acc[1], pen=pen) )
-		self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[1], pen=pen) )
+		self.acc_line.append( self.acc_graph.plot(self.t, self.acc[1], pen=pen, name="Acc Y") )
+		self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[1], pen=pen, name="Gyr Y") )
 		pen = pg.mkPen(color='b')
-		self.acc_line.append( self.acc_graph.plot(self.t, self.acc[2], pen=pen) )
-		self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[2], pen=pen) )
+		self.acc_line.append( self.acc_graph.plot(self.t, self.acc[2], pen=pen, name="Acc Z") )
+		self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[2], pen=pen, name="Gyr Z") )
 
+
+		#self.gyr_graph = self.create_graph('w', "Gyroscope", "Gyroscope (dps)")
 
 		self.lay = QHBoxLayout(self)
 
 		self.update_graph_thr = threading.Thread(target=self.update_plot_data, args=())
 		self.update_graph_thr.start()
-		
+		#self.init_plot()
+
+
+
 		self.lay.addWidget(self.acc_graph)
 		self.lay.addWidget(self.gyr_graph)
+
+
+
 
 		self.setLayout(self.lay)
 

@@ -63,7 +63,6 @@ class Serial_COM():
 			self.find_USB_devices()	#SEARCH A POTENTIAL NEW CARD
 
 
-
 	def check_if_create_flag(self):
 		sleep(1)
 		if self.SERIAL_SAVING_FLAG == 2 and not self.headline_write:
@@ -92,16 +91,14 @@ class Serial_COM():
 			self.check_if_write_headline_in_file(self.current_file.full_path)
 
 			while self.SERIAL_SAVING_FLAG == 1:#LORSQUE L'ON CLIQUE SUR READY, CE FLAG PASSE A 1 JUSQU'A CE QUE CA ATTEIGNE 0 DE COMPTE A REBOURS
-				start = time.time()
-
+	
 				if(self.old_flag == 2):
 					self.start_time = time.time()
 
-				if(time.time() - self.start_time < self.RECORD_TIME):
+				if(self.FLAG_RECORD == 1):
 					self.old_flag = self.SERIAL_SAVING_FLAG
-					self.serial.flushInput()
-					temp = self.serial.readline()	#Capture serial output as a decoded string
-					#temp = self.serial.read(1)
+					
+					temp = self.serial.readline()
 					data = str(temp.decode())
 					
 					if data:	#Check if we have data
@@ -110,11 +107,12 @@ class Serial_COM():
 							#self.data_imu.append(data_split[1])	
 
 							self.data_imu = data_split[1]
-							self.current_file.write_data_imu(self.current_file.full_path, self.data_imu)
+							self.current_file.write_data_imu(self.current_file.full_path, self.data_imu) #Write imu data
 
-							self.time_to_wait = time.time()-start
-							if(self.time_to_wait < self.RECORD_PERIOD):
-								sleep( self.RECORD_PERIOD - self.time_to_wait )	#Wait 38ms ~= 26Hz
+							#self.time_to_wait = time.time()-start
+							#if(self.time_to_wait < self.RECORD_PERIOD):
+							#	sleep( self.RECORD_PERIOD - self.time_to_wait )	#Wait 38ms ~= 26Hz
+						
 				else:
 					self.set_SERIAL_SAVING_FLAG(0)
 
@@ -130,6 +128,9 @@ class Serial_COM():
 	def set_SERIAL_SAVING_FLAG(self, _value):
 		self.SERIAL_SAVING_FLAG = _value
 				
+	def set_FLAG_RECORD(self, _value):
+		self.FLAG_RECORD = _value
+	
 	def get_com(self):
 		return self.COM
 
@@ -157,4 +158,5 @@ class Serial_COM():
 
 	RECORD_TIME = 60
 	RECORD_PERIOD = 0.038
+	FLAG_RECORD = 0
 

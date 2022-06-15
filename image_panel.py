@@ -28,7 +28,6 @@ class Image_Panel(QWidget):
 		
 		self.ser = _serial
 		
-		#self.graph = Graph(self.ser)
 		self.name = ""
 		self.chrono_w = Chrono_widget(self.name, _rec, self, self.ser)
 		
@@ -54,12 +53,13 @@ class Image_Panel(QWidget):
 
 		self.lay.addWidget(self.info)	
 		self.lay.addWidget(self.chrono_w, alignment=QtCore.Qt.AlignCenter)
-		#self._lay.addWidget(self.graph, alignment=QtCore.Qt.AlignRight)	#JE SAIS PAS OU LES METTRE 
 		self._lay.addWidget(self.shape_label)
 		self.lay_.addWidget(self.stop_button, alignment=QtCore.Qt.AlignCenter)
 		self.lay_.addWidget(self.ready_button, alignment=QtCore.Qt.AlignCenter)
 		self.lay.addLayout(self._lay)
 		self.lay.addLayout(self.lay_)
+		self.lay.addWidget(_serial.graph, alignment=QtCore.Qt.AlignCenter)
+		
 		
 		self.ready_button.clicked.connect(lambda:self.chrono_w.countdown(self.info))
 		self.ready_button.clicked.connect(lambda:self.ready_button.setEnabled(False))
