@@ -20,8 +20,6 @@ class ClassRow(QWidget):
 
         global img_panel, rec_panel
         
-        """self.img_pan = ""
-        self.rec_pan = """""
 
         self.id = _id
 

@@ -55,6 +55,7 @@ class Window(QMainWindow):
 		
 		self.rec_pan = RecordPanel(self.ser, self.listeClasses, self.current_file)
 		self.img_pan = Image_Panel(self.rec_pan, self.ser)
+		#Pour contrer le str object has no attribute blabla dans classRow
 		set_img_panel(self.img_pan)
 		set_rec_panel(self.rec_pan)
 		

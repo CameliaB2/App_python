@@ -2,7 +2,6 @@ from PySide6.QtWidgets import *
 import numpy as np
 from file_panel import *
 from Selection_classes import *
-from Serial import Serial as parent
 
 
 class RecordPanel(QWidget):
