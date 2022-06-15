@@ -1,0 +1,19 @@
+
+F27_VAR_on_GY_Z <= 0.007
+|   F20_MAX_on_GY_X <= 0.662: Idle
+|   F20_MAX_on_GY_X > 0.662: Up_Down
+F27_VAR_on_GY_Z > 0.007
+|   F7_VAR_on_ACC_Y <= 0.009
+|   |   F15_MAX_on_ACC_Z <= 1.32
+|   |   |   F18_PeakToPeak_on_GY_X <= 0.708: Idle
+|   |   |   F18_PeakToPeak_on_GY_X > 0.708: Forward_Backward
+|   |   F15_MAX_on_ACC_Z > 1.32
+|   |   |   F30_MAX_on_GY_Z <= 0.605: Up_Down
+|   |   |   F30_MAX_on_GY_Z > 0.605
+|   |   |   |   F8_PeakToPeak_on_ACC_Y <= 0.407: Forward_Backward
+|   |   |   |   F8_PeakToPeak_on_ACC_Y > 0.407: Up_Down
+|   F7_VAR_on_ACC_Y > 0.009: Lateral
+
+Number of Leaves  : 	 8
+
+Size of the Tree : 	 15

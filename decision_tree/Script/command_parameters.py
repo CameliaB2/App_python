@@ -54,7 +54,7 @@ class cmd_parameters:
 			self.window_length = self.args.Window_length
 		else:
 			logging.error("ERROR: Window_length initialized by default (\"" + WINDOW_LENGTH + \
-        					"\"). WL must be updated to a value in the interval [1;255]")
+        					"\"). WL must be updated to a value in the interval [1;255]\n")
 
 	def init_mlc_odr(self):
 		mcl_odr_config = [12.5, 26, 52, 104]
@@ -62,7 +62,7 @@ class cmd_parameters:
 			self.mlc_odr = str(self.args.Mlc_odr) + " Hz" if self.args.Mlc_odr == 12.5 else str(int(self.args.Mlc_odr)) + " Hz" 
 		else:
 			logging.error("ERROR: mlc_odr initialized by default (\"" + MLC_ODR + \
-							"\"). mlc_odr must be : 12.5 for (12.5 Hz), 26, 52, 104")
+							"\"). mlc_odr must be : 12.5 for (12.5 Hz), 26, 52, 104\n")
 
 	def init_acc_odr(self):
 		acc_odr_config = [12.5, 26, 52, 104, 208, 416, 833, 1666, 3332, 6664]
@@ -71,7 +71,7 @@ class cmd_parameters:
 		else:
 			logging.error("ERROR: acc_odr initialized by default (\"" + ACCELEROMETER_ODR + \
 							"\"). acc_odr must be : 12.5 for (12.5 Hz), 26, 52, 104, \
-							208, 416, 833, 1666, 3332, 6664")
+							208, 416, 833, 1666, 3332, 6664\n")
 
 	def init_acc_fs(self):
 		acc_fs_config = [2, 4, 8, 16]
@@ -79,7 +79,7 @@ class cmd_parameters:
 			self.acc_fs = str(self.args.Accelerometer_fs) + " g"
 		else:
 			logging.error("ERROR: acc_fs initialized by default (\"" + ACCELEROMETER_FS + \
-							"\"). acc_fs must be : 2 for (2 g), 4, 8, 16")
+							"\"). acc_fs must be : 2 for (2 g), 4, 8, 16\n")
 
 	def init_gyr_fs(self):
 		gyr_fs_config = [125, 250, 500, 1000, 2000]
@@ -87,7 +87,7 @@ class cmd_parameters:
 			self.gyr_fs = str(self.args.Gyroscope_fs) + " dps"
 		else:
 			logging.error("ERROR: gyr_fs initialized by default (\"" + GYROSCOPE_FS + \
-							"\"). gyr_fs must be : 125 for (125 g), 250, 500, 1000, 2000")
+							"\"). gyr_fs must be : 125 for (125 g), 250, 500, 1000, 2000\n")
 
 	def init_gyr_odr(self):
 		gyr_odr_config = [12.5, 26, 52, 104, 208, 416, 833, 1666, 3332, 6664]
@@ -96,7 +96,7 @@ class cmd_parameters:
 		else:
 			logging.error("ERROR: gyr_odr initialized by default (\"" + GYROSCOPE_ODR + \
 							"\"). gyr_odr must be : 12.5 for (12.5 Hz), 26, 52, 104, \
-							208, 416, 833, 1666, 3332, 6664")
+							208, 416, 833, 1666, 3332, 6664\n")
 
 	def init_input_type(self):
 		if(self.args.Input_type == 1):
@@ -105,9 +105,12 @@ class cmd_parameters:
 			self.input_type = "accelerometer_only"
 		else:
 			logging.error("ERROR: input_type initialized by default (\"" + INPUT_TYPE + \
-							"\"). input_type must be : 1 for the mode \"accelerometer+gyroscope\", or 2 for \"accelerometer_only\"")
+							"\"). input_type must be : 1 for the mode \"accelerometer+gyroscope\", or 2 for \"accelerometer_only\"\n")
 
 	def check_args_value(self):
+
+		logging.info("\n\n\tMachine Learning Core Configuration :\n\n")
+
 		if self.args.Window_length:
 			self.init_window_length()
 		if self.args.Mlc_odr:
@@ -123,13 +126,14 @@ class cmd_parameters:
 		if self.args.Input_type:
 			self.init_input_type()
 
-		logging.info("window_length initialized to \"" + str(self.window_length) + "\"")
-		logging.info("mlc_odr initialized to \"" + self.mlc_odr + "\"")
-		logging.info("acc_odr initialized to \"" + self.acc_odr + "\"")
-		logging.info("acc_fs initialized to \"" + self.acc_fs + "\"")
-		logging.info("gyr_fs initialized to \"" + self.gyr_fs + "\"")
-		logging.info("gyr_odr initialized to \"" + self.gyr_odr + "\"")
-		logging.info("input_type initialized to \"" + self.input_type + "\"")
+		logging.info("\n\n\tCurrent Machine Learning Core Configuration :\n")
+		logging.info("window_length initialized to: \t\"" + str(self.window_length) + "\"")
+		logging.info("mlc_odr initialized to: \t\t\"" + self.mlc_odr + "\"")
+		logging.info("acc_odr initialized to: \t\t\"" + self.acc_odr + "\"")
+		logging.info("acc_fs initialized to: \t\t\"" + self.acc_fs + "\"")
+		logging.info("gyr_fs initialized to: \t\t\"" + self.gyr_fs + "\"")
+		logging.info("gyr_odr initialized to: \t\t\"" + self.gyr_odr + "\"")
+		logging.info("input_type initialized to: \t\"" + self.input_type + "\"\n\n")
 
 		return self.window_length, self.mlc_odr, self.acc_odr, self.acc_fs, self.gyr_fs, self.gyr_odr, self.input_type
 
