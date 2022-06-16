@@ -51,7 +51,6 @@ class Window(QMainWindow):
 		self.ser.set_SERIAL_SAVING_FLAG(0) #initialisation à 0 obligatoire ?
 		x = threading.Thread(target=self.ser.thread_run, args=())
 		x.start()
-
 		
 		self.rec_pan = RecordPanel(self.ser, self.listeClasses, self.current_file)
 		self.img_pan = Image_Panel(self.rec_pan, self.ser)
@@ -76,6 +75,14 @@ class Window(QMainWindow):
 		self.img_pan.setVisible(False)
 	
 
+	def update_port_menu(self):
+		self.findPorts.clear()
+		for row, port in enumerate(self.ser.get_list_ports(), 1):
+			recent_action = self.findPorts.addAction('&{}. {}'.format(
+				row, port))
+			recent_action.setData(port)
+			recent_action.triggered.connect(lambda x=1, n=port: self.ser.change_port(n))
+
 	def _createActions(self):
 		# Creating action using the first constructor
 		# Creating actions using the second constructor
@@ -84,7 +91,7 @@ class Window(QMainWindow):
 		self.exitAction = QAction("&Exit", self)
 		self.copyAction = QAction("&Copy", self)
 		self.pasteAction = QAction("&Paste", self)
-		self.cutAction = QAction("C&ut", self)
+		self.cutAction = QAction("&Cut", self)
 		self.helpContentAction = QAction("&Help Content", self)
 		self.aboutAction = QAction("&About", self)
 
@@ -100,6 +107,9 @@ class Window(QMainWindow):
 		toolsMenu = menuBar.addMenu("&Tools")
 		self.findPorts = toolsMenu.addMenu("PORT:")
 		self.findPorts.setStatusTip('Choose the card\'s port')
+
+		self.findPorts.aboutToShow.connect(self.update_port_menu)
+		self.settings = {}
 
 		# Help menu
 		helpMenu = menuBar.addMenu("&Help")
@@ -149,4 +159,4 @@ if __name__ == "__main__":
 	app = QApplication(sys.argv)
 	win = Window()
 	win.show()
-	sys.exit(app.exec_())
+	sys.exit(app.exec())

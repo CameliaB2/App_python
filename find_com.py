@@ -29,16 +29,21 @@ class Serial_COM():
 	def find_USB_devices(self):
 			# Gérer SI on est sur windows ou pas 
 		ports = serial.tools.list_ports.comports()
+		ports_device = []
+		diff_before_after = []
 		for p in ports:
+			ports_device.append(p.device)
 			if( not str(p.device) in self.list_ports ):
 				self.list_ports.append( str(p.device ))
 
-				self.findPorts.addAction( self.list_ports[-1] )	#Add to menu Bar
-				self.findPorts.triggered.connect( lambda: self.change_port(self.list_ports[-1]) )
+		diff_before_after = list(set(self.list_ports) - set(ports_device))
+		if(len(diff_before_after) > 0):
+			for e in diff_before_after:
+				self.list_ports.remove(e)
 
 	def find_card(self):
 		for port in self.list_ports:
-			self.serial_verification( port )
+			self.serial_verification(port)
 
 
 	def change_port(self, _port):
@@ -55,7 +60,8 @@ class Serial_COM():
 			if( data.find('main > ') and data.find('[INFO]')):
 				self.COM = _port
 				self.set_serial(ser)
-				self.findPorts.setTitle('PORT:' + str(self.COM))
+
+				self.findPorts.setTitle('PORT: ' + str(self.COM))
 				return
 
 	def thread_search_cards(self):
@@ -140,6 +146,8 @@ class Serial_COM():
 	def get_serial(self):
 		return self.serial
 
+	def get_list_ports(self):
+		return self.list_ports
 
 	time_to_wait = 0
 	start_time = 0

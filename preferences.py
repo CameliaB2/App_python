@@ -3,6 +3,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import * 
 
+import os
 
 
 class Preferences(QWidget):
@@ -15,13 +16,25 @@ class Preferences(QWidget):
 		self.height = 100
 		self.file = _file
 
-		self.path_lineEdit = QLineEdit("Recordings")
+		self.path_lineEdit = QLineEdit()
+		self.path_lineEdit.setMaxLength(3000)
+		f = open("config.json", "r")
+		if(f.read() == 'to_define'):
+			str_desktop_path = os.path.realpath(__file__)
+			str_desktop_path = str_desktop_path.replace('preferences.py', 'Recordings')
+			self.write_path_file(str_desktop_path)
+			f.close()
+		
+		f = open("config.json", "r")
+		self.path_lineEdit.setText(str(f.read()))
+		f.close()
+
 		self.file.set_file_path(self.get_path())
+		self.create_recording_path()
 
 	def initUI(self):
 		self.setWindowTitle(self.title)
 		self.setGeometry(self.left, self.top, self.width, self.height)
-		self.create_recording_path()
 
 	def create_recording_path(self):
 		self.browser_lay = QVBoxLayout()
@@ -41,6 +54,7 @@ class Preferences(QWidget):
 
 		self.setLayout(self.browser_lay)
 
+
 	def openFileNameDialog(self):
 		options = QFileDialog.Options()
 		options |= QFileDialog.DontUseNativeDialog
@@ -51,8 +65,14 @@ class Preferences(QWidget):
 	def search_directory(self):
 		directory = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
 		if(directory != ""):
-			self.path_lineEdit.setText(directory)
-			self.file.set_file_path(self.get_path())
+			self.file.set_file_path(directory)
+			self.path_lineEdit.setText(str(directory))
+			self.write_path_file(directory)
+
+	def write_path_file(self, _dir):
+		f = open("config.json", "w")
+		f.write(_dir)
+		f.close()
 
 	def get_path(self):
 		return self.path_lineEdit.text()
@@ -60,5 +80,8 @@ class Preferences(QWidget):
 	def show_preferences(self):
 		self.initUI()
 		self.show()
+	
+	def close_preferences(self):
+		self.close()
 
 
