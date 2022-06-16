@@ -1,0 +1,49 @@
+J48 pruned tree
+------------------
+
+F21_MIN_on_ACC_Z <= 0.90332
+|   F12_VAR_on_GY_Z <= 0.167725
+|   |   F9_VAR_on_ACC_Z <= 0.015625
+|   |   |   F13_PeakToPeak_on_ACC_X <= 0.527344
+|   |   |   |   F19_MIN_on_ACC_X <= -0.125122: Square (19.0/2.0)
+|   |   |   |   F19_MIN_on_ACC_X > -0.125122
+|   |   |   |   |   F3_MEAN_on_ACC_Z <= 1.01074: Triangle (7.0)
+|   |   |   |   |   F3_MEAN_on_ACC_Z > 1.01074: Circle (6.0/1.0)
+|   |   |   F13_PeakToPeak_on_ACC_X > 0.527344: Circle (10.0)
+|   |   F9_VAR_on_ACC_Z > 0.015625
+|   |   |   F2_MEAN_on_ACC_Y <= -0.005276: Triangle (121.0)
+|   |   |   F2_MEAN_on_ACC_Y > -0.005276
+|   |   |   |   F3_MEAN_on_ACC_Z <= 0.994629: Triangle (2.0)
+|   |   |   |   F3_MEAN_on_ACC_Z > 0.994629: Square (4.0)
+|   F12_VAR_on_GY_Z > 0.167725
+|   |   F9_VAR_on_ACC_Z <= 0.02832
+|   |   |   F13_PeakToPeak_on_ACC_X <= 0.533691: Square (17.0)
+|   |   |   F13_PeakToPeak_on_ACC_X > 0.533691
+|   |   |   |   F30_MAX_on_GY_Z <= 0.61084
+|   |   |   |   |   F9_VAR_on_ACC_Z <= 0.011719: Circle (2.0)
+|   |   |   |   |   F9_VAR_on_ACC_Z > 0.011719: Square (7.0)
+|   |   |   |   F30_MAX_on_GY_Z > 0.61084
+|   |   |   |   |   F7_VAR_on_ACC_X <= 0.02301: Square (2.0)
+|   |   |   |   |   F7_VAR_on_ACC_X > 0.02301: Circle (68.0)
+|   |   F9_VAR_on_ACC_Z > 0.02832
+|   |   |   F4_MEAN_on_GY_X <= -0.00153
+|   |   |   |   F6_MEAN_on_GY_Z <= -0.06131: Square (2.0)
+|   |   |   |   F6_MEAN_on_GY_Z > -0.06131: Triangle (10.0)
+|   |   |   F4_MEAN_on_GY_X > -0.00153
+|   |   |   |   F11_VAR_on_GY_Y <= 0.512695: Square (86.0)
+|   |   |   |   F11_VAR_on_GY_Y > 0.512695
+|   |   |   |   |   F12_VAR_on_GY_Z <= 0.257568: Triangle (7.0/1.0)
+|   |   |   |   |   F12_VAR_on_GY_Z > 0.257568: Square (9.0/1.0)
+F21_MIN_on_ACC_Z > 0.90332
+|   F1_MEAN_on_ACC_X <= -0.006645: Idle (146.0/1.0)
+|   F1_MEAN_on_ACC_X > -0.006645
+|   |   F19_MIN_on_ACC_X <= -0.040619
+|   |   |   F6_MEAN_on_GY_Z <= -0.035767: Triangle (2.0/1.0)
+|   |   |   F6_MEAN_on_GY_Z > -0.035767: Square (9.0/1.0)
+|   |   F19_MIN_on_ACC_X > -0.040619
+|   |   |   F5_MEAN_on_GY_Y <= 0.009285: Triangle (3.0)
+|   |   |   F5_MEAN_on_GY_Y > 0.009285: Circle (5.0)
+
+Number of Leaves  : 	22
+
+Size of the tree : 	43

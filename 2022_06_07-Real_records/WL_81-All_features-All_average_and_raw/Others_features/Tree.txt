@@ -1,0 +1,51 @@
+J48 pruned tree
+------------------
+
+F16_ENERGY_on_GY_Z <= 1.25098
+|   F1_MEAN_on_ACC_X <= 0.001084: Idle (131.0)
+|   F1_MEAN_on_ACC_X > 0.001084: Triangle (5.0/1.0)
+F16_ENERGY_on_GY_Z > 1.25098
+|   F7_VAR_on_ACC_X <= 0.001511
+|   |   F1_MEAN_on_ACC_X <= -0.016495: Idle (13.0)
+|   |   F1_MEAN_on_ACC_X > -0.016495: Circle (3.0/1.0)
+|   F7_VAR_on_ACC_X > 0.001511
+|   |   F10_VAR_on_GY_Z <= 0.167725
+|   |   |   F8_VAR_on_ACC_Z <= 0.015625
+|   |   |   |   F17_PeakToPeak_on_ACC_X <= 0.527344
+|   |   |   |   |   F6_MEAN_on_GY_Z <= 0.093628
+|   |   |   |   |   |   F12_ENERGY_on_ACC_Y <= 0.201172
+|   |   |   |   |   |   |   F23_ZeroCross_on_GY_Z <= 10: Square (4.0)
+|   |   |   |   |   |   |   F23_ZeroCross_on_GY_Z > 10: Circle (6.0/1.0)
+|   |   |   |   |   |   F12_ENERGY_on_ACC_Y > 0.201172
+|   |   |   |   |   |   |   F26_PeaKDet_on_ACC_Z <= 24: Square (14.0)
+|   |   |   |   |   |   |   F26_PeaKDet_on_ACC_Z > 24
+|   |   |   |   |   |   |   |   F6_MEAN_on_GY_Z <= -0.026001: Triangle (8.0)
+|   |   |   |   |   |   |   |   F6_MEAN_on_GY_Z > -0.026001
+|   |   |   |   |   |   |   |   |   F1_MEAN_on_ACC_X <= 0.001708: Idle (2.0/1.0)
+|   |   |   |   |   |   |   |   |   F1_MEAN_on_ACC_X > 0.001708: Square (6.0)
+|   |   |   |   |   F6_MEAN_on_GY_Z > 0.093628: Circle (5.0)
+|   |   |   |   F17_PeakToPeak_on_ACC_X > 0.527344: Circle (10.0)
+|   |   |   F8_VAR_on_ACC_Z > 0.015625
+|   |   |   |   F2_MEAN_on_ACC_Y <= -0.005276: Triangle (121.0)
+|   |   |   |   F2_MEAN_on_ACC_Y > -0.005276
+|   |   |   |   |   F3_MEAN_on_ACC_Z <= 0.994629: Triangle (2.0)
+|   |   |   |   |   F3_MEAN_on_ACC_Z > 0.994629: Square (4.0)
+|   |   F10_VAR_on_GY_Z > 0.167725
+|   |   |   F23_ZeroCross_on_GY_Z <= 30
+|   |   |   |   F8_VAR_on_ACC_Z <= 0.030762
+|   |   |   |   |   F11_ENERGY_on_ACC_X <= 2.49219: Square (20.0)
+|   |   |   |   |   F11_ENERGY_on_ACC_X > 2.49219
+|   |   |   |   |   |   F26_PeaKDet_on_ACC_Z <= 12
+|   |   |   |   |   |   |   F18_ZeroCross_on_ACC_X <= 4: Square (9.0/1.0)
+|   |   |   |   |   |   |   F18_ZeroCross_on_ACC_X > 4: Circle (2.0)
+|   |   |   |   |   |   F26_PeaKDet_on_ACC_Z > 12: Circle (68.0)
+|   |   |   |   F8_VAR_on_ACC_Z > 0.030762
+|   |   |   |   |   F4_MEAN_on_GY_X <= -0.003897: Triangle (6.0/1.0)
+|   |   |   |   |   F4_MEAN_on_GY_X > -0.003897: Square (91.0/1.0)
+|   |   |   F23_ZeroCross_on_GY_Z > 30
+|   |   |   |   F10_VAR_on_GY_Z <= 0.257568: Triangle (11.0)
+|   |   |   |   F10_VAR_on_GY_Z > 0.257568: Square (3.0)
+
+Number of Leaves  : 	23
+
+Size of the tree : 	45

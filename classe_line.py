@@ -114,7 +114,11 @@ class ClassRow(QWidget):
         img_panel.setVisible(state2)
     
     def update_name(self):
+<<<<<<< HEAD
+        file_name_ = self.generate_date() + "-" + self.name + "-" + self.suffix + ".csv"
+=======
         file_name_ = self.generate_date() + self.name + "-" + self.suffix + ".csv"
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
         self.record_filename_text.setText(file_name_)
 
 
@@ -136,7 +140,7 @@ class ClassRow(QWidget):
 
     def generate_date(self):
         now = datetime.now()
-        date = now.strftime("%Y_%m_%d-%H_%M_%S-")
+        date = now.strftime("%Y_%m_%d-%H_%M_%S")
         return str(date)
 
     

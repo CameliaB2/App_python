@@ -82,6 +82,8 @@ class Serial_COM():
 			self.current_file.write_headLine(_path)
 			self.set_headline_flag(True)
 			self.graph.set_graph_flag(1)
+			self.serial.flushInput()
+			self.start = time.time()
 
 	def check_if_write_data_in_file(self, _path): # To use if we want to save all the line in one time, not in real time
 		if( self.old_flag == 1 and self.SERIAL_SAVING_FLAG == 0 ):
@@ -92,12 +94,16 @@ class Serial_COM():
 
 	def thread_run(self):
 		while self.RUNNING_FLAG == 1:	
-			#self.check_if_write_data_in_file()	# To use if we want to save all the line in one time, not in real time
+			#self.check_if_write_data_in_file(self.current_file.full_path)	# To use if we want to save all the line in one time, not in real time
 			self.check_if_create_flag()
 			self.check_if_write_headline_in_file(self.current_file.full_path)
 
 			while self.SERIAL_SAVING_FLAG == 1:#LORSQUE L'ON CLIQUE SUR READY, CE FLAG PASSE A 1 JUSQU'A CE QUE CA ATTEIGNE 0 DE COMPTE A REBOURS
 	
+<<<<<<< HEAD
+
+=======
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
 				if(self.old_flag == 2):
 					self.start_time = time.time()
 
@@ -119,8 +125,11 @@ class Serial_COM():
 							#if(self.time_to_wait < self.RECORD_PERIOD):
 							#	sleep( self.RECORD_PERIOD - self.time_to_wait )	#Wait 38ms ~= 26Hz
 						
+<<<<<<< HEAD
+=======
 				else:
 					self.set_SERIAL_SAVING_FLAG(0)
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
 
 			if(self.SERIAL_SAVING_FLAG == 0):
 				self.set_headline_flag(False)
@@ -136,7 +145,11 @@ class Serial_COM():
 				
 	def set_FLAG_RECORD(self, _value):
 		self.FLAG_RECORD = _value
+<<<<<<< HEAD
+
+=======
 	
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
 	def get_com(self):
 		return self.COM
 
@@ -167,4 +180,7 @@ class Serial_COM():
 	RECORD_TIME = 60
 	RECORD_PERIOD = 0.038
 	FLAG_RECORD = 0
+<<<<<<< HEAD
+=======
 
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
