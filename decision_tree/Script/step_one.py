@@ -13,7 +13,6 @@ logging.info("Current directory: " + current_directory)
 import external_tools
 
 arff_filename = os.path.join(current_directory, "features.arff")
-ucf_filename = os.path.join(current_directory, "MLC_configuration.ucf")
 
 # private import:
 import mlc_configurator
@@ -41,10 +40,11 @@ device_name = "LSM6DSOX"    ## list of supported devices available with mlc_conf
 # ARGUMENTS MANAGE
 # Parsing argument
 cmd_checking = cmd_parameters()
-window_length, mlc_odr, accelerometer_odr, accelerometer_fs, gyroscope_fs, gyroscope_odr, input_type = cmd_checking.check_args_value()
+window_length, mlc_odr, accelerometer_odr, accelerometer_fs, gyroscope_fs, gyroscope_odr, input_type, _name = cmd_checking.check_args_value()
 
 
 #############################
+ucf_filename = os.path.join(current_directory, _name +".ucf")
 
 
 
@@ -213,3 +213,4 @@ mlc_configurator.ucf_generator( device_name = device_name,
                                 metaclassifier_values = metaclassifier_values, 
                                 ucf_filename = ucf_filename, 
                                 current_directory = current_directory )
+ucf_converter(_name)
