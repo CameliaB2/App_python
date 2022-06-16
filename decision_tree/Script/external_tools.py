@@ -2,14 +2,14 @@ from mlc_script_log import *
 import platform
 
 # Unico version check: 
-if(platform.system() == "Windows"):
-	from win32com.client import Dispatch
-	
-	logging.info("platform: ", platform.system())
+#if(platform.system() == "Windows"):
+from win32com.client import Dispatch
 
-	ver_parser = Dispatch('Scripting.FileSystemObject')
-	mlc_app = "C:/Program Files (x86)/STMicroelectronics/Unico-GUI/unico.exe"  ## Windows
+#logging.info("platform: ", platform.system())
 
+ver_parser = Dispatch('Scripting.FileSystemObject')
+mlc_app = "C:/Program Files (x86)/STMicroelectronics/Unico-GUI/unico.exe"  ## Windows
+"""
 elif(platform.system() == "Darwin"): #Mac OS
 	logging.info("platform: ", platform.system())
 
@@ -17,7 +17,7 @@ elif(platform.system() == "Linux"): #Linux
 	logging.info("platform: ", platform.system())
 else:
 	logging.error("This application not available on this platform")
-
+"""
 
 app_version = "0.0.0.0"
 if os.path.isfile(mlc_app):

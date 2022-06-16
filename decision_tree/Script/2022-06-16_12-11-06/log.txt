@@ -1,0 +1,43 @@
+2022-06-16 12:11:07,014 [INFO] Current directory: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-16_12-11-06
+2022-06-16 12:11:07,105 [INFO] app version: 9.12.0.0
+2022-06-16 12:11:10,276 [INFO] 
+
+	Machine Learning Core Configuration :
+
+
+2022-06-16 12:11:10,277 [INFO] 
+
+	Current Machine Learning Core Configuration :
+
+2022-06-16 12:11:10,278 [INFO] window_length initialized to: 	"60"
+2022-06-16 12:11:10,278 [INFO] mlc_odr initialized to: 		"12.5 Hz"
+2022-06-16 12:11:10,278 [INFO] acc_odr initialized to: 		"26 Hz"
+2022-06-16 12:11:10,279 [INFO] acc_fs initialized to: 		"2 g"
+2022-06-16 12:11:10,279 [INFO] gyr_fs initialized to: 		"2000 dps"
+2022-06-16 12:11:10,280 [INFO] gyr_odr initialized to: 		"26 Hz"
+2022-06-16 12:11:10,281 [INFO] input_type initialized to: 	"accelerometer+gyroscope"
+
+
+2022-06-16 12:11:10,284 [INFO] n_decision_trees = 1
+2022-06-16 12:11:10,314 [INFO] 
+Calling MLC app for features computation and ARFF generation...
+2022-06-16 12:11:39,717 [INFO] 
+ARFF generated successfully: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-16_12-11-06\features.arff
+2022-06-16 12:11:39,832 [INFO] Accuracy:1.0
+2022-06-16 12:11:39,832 [INFO] 
+F12_VAR_on_ACC_Z <= 0.019
+|   F27_VAR_on_GY_Z <= 0.014: Idle
+|   F27_VAR_on_GY_Z > 0.014
+|   |   F7_VAR_on_ACC_Y <= 0.007: Forward_Backward
+|   |   F7_VAR_on_ACC_Y > 0.007: Lateral
+F12_VAR_on_ACC_Z > 0.019: Up_Down
+
+Number of Leaves  : 	 4
+
+Size of the Tree : 	 7
+
+2022-06-16 12:11:39,836 [INFO] Classes from ARFF: Forward_Backward, Idle, Lateral, Up_Down
+2022-06-16 12:11:39,858 [INFO] 
+Calling MLC app for .ucf file generation...
+2022-06-16 12:12:07,426 [INFO] 
+.ucf file generated successfully: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-16_12-11-06\MLC_configuration.ucf

@@ -5,39 +5,38 @@ from PySide6 import QtCore, QtWidgets, QtGui
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import * 
-from classe_line import ClassRow
+from classe_line import *
 from find_com import *
 
 from chrono_class import Chrono_widget
 from time import sleep
-from file_manager import *
 
 
 
 class Image_Panel(QWidget):
 
-	def __init__(self, _serial, parent = None):
+	def __init__(self, _rec=None, _serial = None, parent = None):
 		super(Image_Panel, self).__init__( parent )
 		
 		self.lay = QVBoxLayout(self)
 		self.lay_ = QHBoxLayout(self)
 		self._lay = QHBoxLayout(self)
 
-
 		self.info = QLabel("Please press on Ready to start the countdown. The recording will start right after.", alignment=QtCore.Qt.AlignCenter)
 		self.info.setFont(QFont('Arial', 22))
 		self.info.setFixedHeight(100)
 		
 		self.ser = _serial
-
+		
 		self.name = ""
-		self.chrono_w = Chrono_widget(self.name, self.ser, rec_panel, self)
-
+		self.chrono_w = Chrono_widget(self.name, _rec, self, self.ser)
+		
 		self.stop_button = QPushButton("Stop")
 		self.stop_button.setStyleSheet("background-color: red")
 		self.stop_button.setMaximumWidth(250)
 		self.stop_button.setMinimumHeight(100)
 
+		
 		#self.font_ = QFont('Arial', 50)
 		#self.ready_button = QPushButton(self.font_)
 		self.ready_button = QPushButton("Ready")
@@ -51,19 +50,21 @@ class Image_Panel(QWidget):
 		self.shape_pic = self.shape_pic.scaled(250, 354, QtCore.Qt.KeepAspectRatio)
 		self.shape_label.setPixmap(self.shape_pic)
 
+
 		self.lay.addWidget(self.info)	
 		self.lay.addWidget(self.chrono_w, alignment=QtCore.Qt.AlignCenter)
-		self.lay.addWidget(self.shape_label)
+		self._lay.addWidget(self.shape_label)
 		self.lay_.addWidget(self.stop_button, alignment=QtCore.Qt.AlignCenter)
 		self.lay_.addWidget(self.ready_button, alignment=QtCore.Qt.AlignCenter)
 		self.lay.addLayout(self._lay)
 		self.lay.addLayout(self.lay_)
+		self.lay.addWidget(_serial.graph, alignment=QtCore.Qt.AlignCenter)
+		
 		
 		self.ready_button.clicked.connect(lambda:self.chrono_w.countdown(self.info))
 		self.ready_button.clicked.connect(lambda:self.ready_button.setEnabled(False))
-		self.ready_button.clicked.connect(self.print_)
-		self.stop_button.clicked.connect(self.chrono_w.timer_.stop)
-
+		#self.ready_button.clicked.connect(self.print_)
+		
 		self.stop_button.clicked.connect(self.chrono_w.stop_chrono)
 		self.stop_button.clicked.connect(lambda:self.msg_box("Are you sure you want to quit ?"))
 		
@@ -77,6 +78,7 @@ class Image_Panel(QWidget):
 		self.shape_pic = self.shape_pic.scaled(250, 354, QtCore.Qt.KeepAspectRatio)
 		self.shape_label.setPixmap(self.shape_pic)
 
+
 	def msg_box(self, text):
 		msg = QMessageBox()
 		msg.setText(text)
@@ -85,13 +87,10 @@ class Image_Panel(QWidget):
 		#msg.buttonClicked.connect(lambda:self.switch_widget(True, False))
 		result = msg.exec_()
 		if result == QMessageBox.Yes:
-			switch_widget(True, False)
+			self.chrono_w.switch_w(True, False)
 		else:
 			msg.done(1)
 			#remettre en marche le chrono
 			self.chrono_w.start_chrono()
 
-	def print_(self):
-		print(self.ser.SERIAL_SAVING_FLAG)
-		print(self.ser.headline_write)
-		print(self.ser.RUNNING_FLAG)
+	

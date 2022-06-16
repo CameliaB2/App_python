@@ -1,0 +1,2 @@
+2022-06-16 12:49:49,994 [INFO] Current directory: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-16_12-49-49
+2022-06-16 12:49:50,042 [INFO] app version: 9.12.0.0

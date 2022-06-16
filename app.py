@@ -4,20 +4,29 @@ from numpy.lib import recfunctions as rfn
 from PySide6 import QtCore, QtWidgets, QtGui
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
-from PySide6.QtCore import * 
-from classe_line import ClassRow
+from PySide6.QtCore import *
+
+from classe_line import *
+from classe_line import set_img_panel
+from classe_line import set_rec_panel
 from find_com import *
 from Selection_classes import *
 
 from chrono_class import Chrono_widget
 from time import sleep
 from file_manager import *
+from record_panel import *
+from file_panel import *
+from image_panel import *
+from preferences import *
+
 import pyqtgraph as pg
 import traitement as tr
 import numpy as np
 from random import randint
 
 
+<<<<<<< HEAD
 #from image_panel import Image_Panel
 
 img_panel = ""
@@ -286,6 +295,8 @@ class Preferences(QWidget):
 
 
 
+=======
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
 class Window(QMainWindow):
 	def __init__(self, parent = None):
 		super(Window, self).__init__( parent )
@@ -308,34 +319,41 @@ class Window(QMainWindow):
 		self.preference_onglet = Preferences(self.current_file)
 		self.preferences.triggered.connect(self.preference_onglet.show_preferences)
 
-
 		#Thread de serial
-		#self.ser.set_SERIAL_SAVING_FLAG(0) #initialisation à 0 obligatoire ?
+		self.ser.set_SERIAL_SAVING_FLAG(0) #initialisation à 0 obligatoire ?
 		x = threading.Thread(target=self.ser.thread_run, args=())
 		x.start()
+		
+		self.rec_pan = RecordPanel(self.ser, self.listeClasses, self.current_file)
+		self.img_pan = Image_Panel(self.rec_pan, self.ser)
+		#Pour contrer le str object has no attribute blabla dans classRow
+		set_img_panel(self.img_pan)
+		set_rec_panel(self.rec_pan)
+		
+		
 
 		self.lay = QVBoxLayout()
 		centralWidget = QWidget()
 		centralWidget.setLayout(self.lay)
 		self.setCentralWidget(centralWidget)
 
-		global img_panel, rec_panel
-
 		
-		rec_panel = RecordPanel(self.ser, self.listeClasses, self.current_file)
-		img_panel = Image_Panel(self.ser)
-
 		self.lay.setSpacing(0) 
 
-
 		self.lay.addWidget(self.logo_label)
-		self.lay.addWidget(img_panel)
-		self.lay.addWidget(rec_panel)
-		rec_panel.setVisible(True)
-		img_panel.setVisible(False)
+		self.lay.addWidget(self.img_pan)
+		self.lay.addWidget(self.rec_pan)
+		self.rec_pan.setVisible(True)
+		self.img_pan.setVisible(False)
 	
-		
-		
+
+	def update_port_menu(self):
+		self.findPorts.clear()
+		for row, port in enumerate(self.ser.get_list_ports(), 1):
+			recent_action = self.findPorts.addAction('&{}. {}'.format(
+				row, port))
+			recent_action.setData(port)
+			recent_action.triggered.connect(lambda x=1, n=port: self.ser.change_port(n))
 
 	def _createActions(self):
 		# Creating action using the first constructor
@@ -345,7 +363,7 @@ class Window(QMainWindow):
 		self.exitAction = QAction("&Exit", self)
 		self.copyAction = QAction("&Copy", self)
 		self.pasteAction = QAction("&Paste", self)
-		self.cutAction = QAction("C&ut", self)
+		self.cutAction = QAction("&Cut", self)
 		self.helpContentAction = QAction("&Help Content", self)
 		self.aboutAction = QAction("&About", self)
 
@@ -361,6 +379,9 @@ class Window(QMainWindow):
 		toolsMenu = menuBar.addMenu("&Tools")
 		self.findPorts = toolsMenu.addMenu("PORT:")
 		self.findPorts.setStatusTip('Choose the card\'s port')
+
+		self.findPorts.aboutToShow.connect(self.update_port_menu)
+		self.settings = {}
 
 		# Help menu
 		helpMenu = menuBar.addMenu("&Help")
@@ -380,8 +401,7 @@ class Window(QMainWindow):
 		for line in Lines:
 			self.countClasses += 1
 			self.listeClasses.append(line.strip().split("\t")[0])
-			#self.listeImgClasses.append(line.strip().split("\t")[1])
-
+			
 		file1.close()
 
 	
@@ -397,14 +417,13 @@ class Window(QMainWindow):
 		else:
 			msg.done(1)
 			
-
 		
 
 def switch_widget(state1, state2):
-	rec_panel.setVisible(state1)
-	img_panel.setVisible(state2)
+	self.rec_pan.setVisible(state1)
+	self.img_pan.setVisible(state2)
 	if(state1):
-		img_panel.ready_button.setEnabled(True)
+		self.img_pan.ready_button.setEnabled(True)
 
 
 
@@ -412,4 +431,4 @@ if __name__ == "__main__":
 	app = QApplication(sys.argv)
 	win = Window()
 	win.show()
-	sys.exit(app.exec_())
+	sys.exit(app.exec())

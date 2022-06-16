@@ -8,6 +8,8 @@ ACCELEROMETER_FS = "2 g"
 GYROSCOPE_FS = "2000 dps"
 GYROSCOPE_ODR = "26 Hz" 
 INPUT_TYPE = "accelerometer+gyroscope"
+
+
 class cmd_parameters:
 
 	def __init__(self):
@@ -22,6 +24,7 @@ class cmd_parameters:
 		self.gyr_fs = GYROSCOPE_FS
 		self.gyr_odr = GYROSCOPE_ODR
 		self.input_type = INPUT_TYPE
+		self.name_ucf = "test"
 
 	def add_args(self):
 		self.parser.add_argument("-wl", "--Window_length", type=int, required=False, \
@@ -45,15 +48,18 @@ class cmd_parameters:
 		self.parser.add_argument("-it", "--Input_type", type=int, required=False, \
 			help="Change the module use for input data. Must be initialized to : 1 for the mode \"accelerometer+gyroscope\", or 2 for \"accelerometer_only\"")
 
+		self.parser.add_argument("-n", "--Name", type=str, required=True, \
+			help="Name of the .ucf and .h file")
+
 		self.args = self.parser.parse_args()
 
 
 
 	def init_window_length(self):
-		if(self.args.Window_length > 0 and self.args.Window_length < 255):
-			self.window_length = self.args.Window_length
+		if(int(self.args.Window_length) > 0 and int(self.args.Window_length) < 255):
+			self.window_length = int(self.args.Window_length)
 		else:
-			logging.error("ERROR: Window_length initialized by default (\"" + WINDOW_LENGTH + \
+			logging.error("ERROR: Window_length initialized by default (\"" + str(WINDOW_LENGTH) + \
         					"\"). WL must be updated to a value in the interval [1;255]\n")
 
 	def init_mlc_odr(self):
@@ -107,6 +113,19 @@ class cmd_parameters:
 			logging.error("ERROR: input_type initialized by default (\"" + INPUT_TYPE + \
 							"\"). input_type must be : 1 for the mode \"accelerometer+gyroscope\", or 2 for \"accelerometer_only\"\n")
 
+	def init_namefile(self):
+		self.name_ucf = self.args.Name.strip().replace('-', '_')
+
+		"""
+		if(FileManager.is_path_exists_or_creatable(self.args.Name)):    
+    		return re.sub(r'(?u)[^-\w.]', '', s) 
+			self.name_ucf = self.args.Name
+		else:
+			logging.error("ERROR: the name is wrong")
+			raise SettingInvalidException("The file seems to be invalid: %s" % self.args.Name)
+
+"""
+
 	def check_args_value(self):
 
 		logging.info("\n\n\tMachine Learning Core Configuration :\n\n")
@@ -125,6 +144,7 @@ class cmd_parameters:
 			self.init_gyr_odr()
 		if self.args.Input_type:
 			self.init_input_type()
+		self.init_namefile()
 
 		logging.info("\n\n\tCurrent Machine Learning Core Configuration :\n")
 		logging.info("window_length initialized to: \t\"" + str(self.window_length) + "\"")
@@ -134,7 +154,8 @@ class cmd_parameters:
 		logging.info("gyr_fs initialized to: \t\t\"" + self.gyr_fs + "\"")
 		logging.info("gyr_odr initialized to: \t\t\"" + self.gyr_odr + "\"")
 		logging.info("input_type initialized to: \t\"" + self.input_type + "\"\n\n")
+		logging.info("ucf and h script Name will be: \t\"" + self.name_ucf + ".ucf and " + self.name_ucf + ".h\"\n\n")
 
-		return self.window_length, self.mlc_odr, self.acc_odr, self.acc_fs, self.gyr_fs, self.gyr_odr, self.input_type
+		return self.window_length, self.mlc_odr, self.acc_odr, self.acc_fs, self.gyr_fs, self.gyr_odr, self.input_type, self.name_ucf
 
 

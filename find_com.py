@@ -29,16 +29,21 @@ class Serial_COM():
 	def find_USB_devices(self):
 			# Gérer SI on est sur windows ou pas 
 		ports = serial.tools.list_ports.comports()
+		ports_device = []
+		diff_before_after = []
 		for p in ports:
+			ports_device.append(p.device)
 			if( not str(p.device) in self.list_ports ):
 				self.list_ports.append( str(p.device ))
 
-				self.findPorts.addAction( self.list_ports[-1] )	#Add to menu Bar
-				self.findPorts.triggered.connect( lambda: self.change_port(self.list_ports[-1]) )
+		diff_before_after = list(set(self.list_ports) - set(ports_device))
+		if(len(diff_before_after) > 0):
+			for e in diff_before_after:
+				self.list_ports.remove(e)
 
 	def find_card(self):
 		for port in self.list_ports:
-			self.serial_verification( port )
+			self.serial_verification(port)
 
 
 	def change_port(self, _port):
@@ -55,13 +60,13 @@ class Serial_COM():
 			if( data.find('main > ') and data.find('[INFO]')):
 				self.COM = _port
 				self.set_serial(ser)
-				self.findPorts.setTitle('PORT:' + str(self.COM))
+
+				self.findPorts.setTitle('PORT: ' + str(self.COM))
 				return
 
 	def thread_search_cards(self):
 		while(self.THREAD_USB_CARDS_FLAG):
 			self.find_USB_devices()	#SEARCH A POTENTIAL NEW CARD
-
 
 
 	def check_if_create_flag(self):
@@ -95,7 +100,10 @@ class Serial_COM():
 
 			while self.SERIAL_SAVING_FLAG == 1:#LORSQUE L'ON CLIQUE SUR READY, CE FLAG PASSE A 1 JUSQU'A CE QUE CA ATTEIGNE 0 DE COMPTE A REBOURS
 	
+<<<<<<< HEAD
 
+=======
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
 				if(self.old_flag == 2):
 					self.start_time = time.time()
 
@@ -117,6 +125,11 @@ class Serial_COM():
 							#if(self.time_to_wait < self.RECORD_PERIOD):
 							#	sleep( self.RECORD_PERIOD - self.time_to_wait )	#Wait 38ms ~= 26Hz
 						
+<<<<<<< HEAD
+=======
+				else:
+					self.set_SERIAL_SAVING_FLAG(0)
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
 
 			if(self.SERIAL_SAVING_FLAG == 0):
 				self.set_headline_flag(False)
@@ -132,7 +145,11 @@ class Serial_COM():
 				
 	def set_FLAG_RECORD(self, _value):
 		self.FLAG_RECORD = _value
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
 	def get_com(self):
 		return self.COM
 
@@ -142,6 +159,8 @@ class Serial_COM():
 	def get_serial(self):
 		return self.serial
 
+	def get_list_ports(self):
+		return self.list_ports
 
 	time_to_wait = 0
 	start_time = 0
@@ -161,3 +180,7 @@ class Serial_COM():
 	RECORD_TIME = 60
 	RECORD_PERIOD = 0.038
 	FLAG_RECORD = 0
+<<<<<<< HEAD
+=======
+
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f

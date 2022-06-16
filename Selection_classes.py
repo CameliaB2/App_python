@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
 from PySide6 import QtCore, QtWidgets, QtGui
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 

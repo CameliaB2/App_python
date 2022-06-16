@@ -1,0 +1,56 @@
+2022-06-16 12:45:32,319 [INFO] Current directory: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-16_12-45-32
+2022-06-16 12:45:32,367 [INFO] app version: 9.12.0.0
+2022-06-16 12:45:33,982 [INFO] 
+
+	Machine Learning Core Configuration :
+
+
+2022-06-16 12:45:33,982 [INFO] 
+
+	Current Machine Learning Core Configuration :
+
+2022-06-16 12:45:33,982 [INFO] window_length initialized to: 	"50"
+2022-06-16 12:45:33,982 [INFO] mlc_odr initialized to: 		"26 Hz"
+2022-06-16 12:45:33,983 [INFO] acc_odr initialized to: 		"26 Hz"
+2022-06-16 12:45:33,983 [INFO] acc_fs initialized to: 		"2 g"
+2022-06-16 12:45:33,983 [INFO] gyr_fs initialized to: 		"2000 dps"
+2022-06-16 12:45:33,983 [INFO] gyr_odr initialized to: 		"26 Hz"
+2022-06-16 12:45:33,985 [INFO] input_type initialized to: 	"accelerometer+gyroscope"
+
+
+2022-06-16 12:45:33,985 [INFO] ucf and h script Name will be: 	"test"
+
+
+2022-06-16 12:45:33,986 [INFO] n_decision_trees = 1
+2022-06-16 12:45:33,998 [INFO] 
+Calling MLC app for features computation and ARFF generation...
+2022-06-16 12:45:55,985 [INFO] 
+ARFF generated successfully: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-16_12-45-32\features.arff
+2022-06-16 12:45:56,088 [INFO] Accuracy:0.9661016949152542
+2022-06-16 12:45:56,089 [INFO] 
+F27_VAR_on_GY_Z <= 0.006
+|   F29_MIN_on_GY_Z <= -0.198: Up_Down
+|   F29_MIN_on_GY_Z > -0.198: Idle
+F27_VAR_on_GY_Z > 0.006
+|   F3_PeakToPeak_on_ACC_X <= 0.396
+|   |   F13_PeakToPeak_on_ACC_Z <= 0.547
+|   |   |   F8_PeakToPeak_on_ACC_Y <= 0.221
+|   |   |   |   F30_MAX_on_GY_Z <= 0.374: Idle
+|   |   |   |   F30_MAX_on_GY_Z > 0.374: Forward_Backward
+|   |   |   F8_PeakToPeak_on_ACC_Y > 0.221: Lateral
+|   |   F13_PeakToPeak_on_ACC_Z > 0.547
+|   |   |   F25_MAX_on_GY_Y <= 0.392: Forward_Backward
+|   |   |   F25_MAX_on_GY_Y > 0.392: Up_Down
+|   F3_PeakToPeak_on_ACC_X > 0.396
+|   |   F17_VAR_on_GY_X <= 0.018: Lateral
+|   |   F17_VAR_on_GY_X > 0.018: Forward_Backward
+
+Number of Leaves  : 	 9
+
+Size of the Tree : 	 17
+
+2022-06-16 12:45:56,092 [INFO] Classes from ARFF: Forward_Backward, Idle, Lateral, Up_Down
+2022-06-16 12:45:56,152 [INFO] 
+Calling MLC app for .ucf file generation...
+2022-06-16 12:46:16,524 [INFO] 
+.ucf file generated successfully: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-16_12-45-32\MLC_configuration.ucf

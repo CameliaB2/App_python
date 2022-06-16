@@ -3,6 +3,11 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import * 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
 class ButtonClass(QWidget):
 	def __init__(self, _name, _panel, parent = None):
 		super(ButtonClass, self).__init__( parent )
