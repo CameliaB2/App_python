@@ -1,0 +1,15 @@
+2022-06-15 20:21:06,019 [INFO] Current directory: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-15_20-21-06
+2022-06-15 20:21:06,250 [INFO] app version: 9.12.0.0
+2022-06-15 20:21:12,916 [INFO] 
+
+window_length initialized to "50"
+2022-06-15 20:21:12,917 [INFO] mlc_odr initialized to "26 Hz"
+2022-06-15 20:21:12,917 [INFO] acc_odr initialized to "26 Hz"
+2022-06-15 20:21:12,919 [INFO] acc_fs initialized to "2 g"
+2022-06-15 20:21:12,919 [INFO] gyr_fs initialized to "2000 dps"
+2022-06-15 20:21:12,920 [INFO] gyr_odr initialized to "26 Hz"
+2022-06-15 20:21:12,921 [INFO] input_type initialized to "accelerometer_only"
+
+
+2022-06-15 20:21:12,927 [INFO] n_decision_trees = 1
+2022-06-15 20:21:12,934 [ERROR] ERROR: feature input "Gyr_X" not supported

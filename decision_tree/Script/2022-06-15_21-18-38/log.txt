@@ -1,0 +1,48 @@
+2022-06-15 21:18:38,072 [INFO] Current directory: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-15_21-18-38
+2022-06-15 21:18:38,150 [INFO] app version: 9.12.0.0
+2022-06-15 21:18:40,800 [INFO] 
+
+	Machine Learning Core Configuration :
+
+
+2022-06-15 21:18:40,801 [ERROR] ERROR: mlc_odr initialized by default ("26 Hz"). mlc_odr must be : 12.5 for (12.5 Hz), 26, 52, 104
+
+2022-06-15 21:18:40,801 [INFO] 
+
+	Current Machine Learning Core Configuration :
+
+2022-06-15 21:18:40,802 [INFO] window_length initialized to: 	"60"
+2022-06-15 21:18:40,802 [INFO] mlc_odr initialized to: 		"26 Hz"
+2022-06-15 21:18:40,803 [INFO] acc_odr initialized to: 		"26 Hz"
+2022-06-15 21:18:40,803 [INFO] acc_fs initialized to: 		"2 g"
+2022-06-15 21:18:40,804 [INFO] gyr_fs initialized to: 		"2000 dps"
+2022-06-15 21:18:40,805 [INFO] gyr_odr initialized to: 		"26 Hz"
+2022-06-15 21:18:40,805 [INFO] input_type initialized to: 	"accelerometer+gyroscope"
+
+
+2022-06-15 21:18:40,809 [INFO] n_decision_trees = 1
+2022-06-15 21:18:40,814 [INFO] 
+Calling MLC app for features computation and ARFF generation...
+2022-06-15 21:19:21,330 [INFO] 
+ARFF generated successfully: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-15_21-18-38\features.arff
+2022-06-15 21:19:21,370 [INFO] Accuracy:0.9494949494949495
+2022-06-15 21:19:21,371 [INFO] 
+F27_VAR_on_GY_Z <= 0.007
+|   F20_MAX_on_GY_X <= 0.662: Idle
+|   F20_MAX_on_GY_X > 0.662: Up_Down
+F27_VAR_on_GY_Z > 0.007
+|   F7_VAR_on_ACC_Y <= 0.009
+|   |   F15_MAX_on_ACC_Z <= 1.32
+|   |   |   F18_PeakToPeak_on_GY_X <= 0.708: Idle
+|   |   |   F18_PeakToPeak_on_GY_X > 0.708: Forward_Backward
+|   |   F15_MAX_on_ACC_Z > 1.32
+|   |   |   F30_MAX_on_GY_Z <= 0.605: Up_Down
+|   |   |   F30_MAX_on_GY_Z > 0.605
+|   |   |   |   F8_PeakToPeak_on_ACC_Y <= 0.407: Forward_Backward
+|   |   |   |   F8_PeakToPeak_on_ACC_Y > 0.407: Up_Down
+|   F7_VAR_on_ACC_Y > 0.009: Lateral
+
+Number of Leaves  : 	 8
+
+Size of the Tree : 	 15
+

@@ -1,0 +1,22 @@
+2022-06-15 21:13:23,664 [INFO] Current directory: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-15_21-13-23
+2022-06-15 21:13:23,746 [INFO] app version: 9.12.0.0
+2022-06-15 21:13:27,001 [INFO] 
+
+	Machine Learning Core Configuration :
+
+2022-06-15 21:13:27,003 [ERROR] ERROR: mlc_odr initialized by default ("26 Hz"). mlc_odr must be : 12.5 for (12.5 Hz), 26, 52, 104
+2022-06-15 21:13:27,003 [INFO] 
+	Current Machine Learning Core Configuration :
+
+2022-06-15 21:13:27,003 [INFO] window_length initialized to "50"
+2022-06-15 21:13:27,003 [INFO] mlc_odr initialized to "26 Hz"
+2022-06-15 21:13:27,004 [INFO] acc_odr initialized to "26 Hz"
+2022-06-15 21:13:27,004 [INFO] acc_fs initialized to "2 g"
+2022-06-15 21:13:27,005 [INFO] gyr_fs initialized to "2000 dps"
+2022-06-15 21:13:27,006 [INFO] gyr_odr initialized to "26 Hz"
+2022-06-15 21:13:27,007 [INFO] input_type initialized to "accelerometer+gyroscope"
+
+
+2022-06-15 21:13:27,010 [INFO] n_decision_trees = 1
+2022-06-15 21:13:27,013 [INFO] 
+Calling MLC app for features computation and ARFF generation...
