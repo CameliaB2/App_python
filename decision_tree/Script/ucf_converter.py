@@ -1,12 +1,7 @@
 from time import sleep	
 import numpy as np
-import ucf_converter
 
-def convert_ucf_to_h(_name):
-	name = _name
-	path_h = name + ".h"
-	path_ucf = name + ".ucf"
-	path_test = "ucf_test_file.txt"
+def convert_ucf_to_h(_name, _path_ucf, _path_h):
 
 	data = ['/* Define to prevent recursive inclusion -------- */\n',
 			'#ifndef MLC_CONFIGURATION_H\n',
@@ -16,7 +11,7 @@ def convert_ucf_to_h(_name):
 			'#endif\n\n'
 	]
 
-	data_file = open(path_h, "a")
+	data_file = open(_path_h, "a")
 	
 	for d in data:
 		data_file.write(d)
@@ -42,7 +37,7 @@ def convert_ucf_to_h(_name):
 		data_file.write(s)
 
 
-	ucf_file = open(path_test, "r")
+	ucf_file = open(_path_ucf, "r")
 	data_ucf = ucf_file.readlines()
 	data_struct_ucf = []
 	data_struct_num = []
@@ -52,15 +47,8 @@ def convert_ucf_to_h(_name):
 		data_struct_ucf.append(data_ucf[i].split(" ")) #243,3
 		data_struct_ucf_f = np.delete(data_struct_ucf, 0,1) #243,2
 		
-	"""
-	#Convert the str to hex values
-	for h, i in enumerate(data_struct_ucf_f):
-		for j, k in enumerate(i):
-			data_struct_ucf_f[h][j] = int(k,16)
-	"""
 
-
-	reg_struct = "const ucf_line_t" + " " + name +"[] = {" + '\n'
+	reg_struct = "const ucf_line_t" + " " + _name +"[] = {" + '\n'
 	proto_struct = "/** Configuration array generated from Unico Tool **/\n"
 	start_struct = [proto_struct, reg_struct]
 

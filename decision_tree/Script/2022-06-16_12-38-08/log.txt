@@ -1,7 +1,0 @@
-2022-06-16 12:38:08,931 [INFO] Current directory: D:\Stage\Interface_enregsitrement\App_python\decision_tree\Script\2022-06-16_12-38-08
-2022-06-16 12:38:08,977 [INFO] app version: 9.12.0.0
-2022-06-16 12:38:10,277 [INFO] 
-
-	Machine Learning Core Configuration :
-
-
