@@ -45,3 +45,26 @@ def calculate_average_all_data(aX, aY, aZ, gX, gY, gZ, _range):
 		#aver_datas = np.concatenate(aver_acc_x, aver_acc_y, aver_acc_z, aver_gyr_x, aver_gyr_y, aver_gyr_z)
 	"""
 	return aver_data
+
+def generate(_full_path, _range):
+	data = read_file(_path)
+	aver_datas = calculate_average_all_data(data[0], data[1], data[2], data[3], data[4], data[5], _range)
+
+	full_path_average = _full_path.split('.')[0] + '-average-Range_' + str(_range) + '.csv'
+
+	data_file = open(full_path_average, "a")
+	head_line = "A_X[mg]\tA_Y[mg]\tA_Z[mg]\tG_X[dps]\tG_Y[dps]\tG_Z[dps]\t\n"
+	data_file.write(head_line)
+	for i in range(len(self.aver_datas[0])):
+		data_file.write(str(self.aver_datas[0][i]) + '\t' + 
+						str(self.aver_datas[1][i]) + '\t' + 
+						str(self.aver_datas[2][i]) + '\t' + 
+						str(self.aver_datas[3][i]) + '\t' + 
+						str(self.aver_datas[4][i]) + '\t' +
+						str(self.aver_datas[5][i]) + '\n')
+	data_file.close()
+
+def generate_multiple(_full_path):
+	_range = [4, 8, 16]
+	for val in _range:
+		generate(_full_path, _range)

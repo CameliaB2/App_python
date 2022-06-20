@@ -7,10 +7,10 @@ from classe_line import ClassRow
 
 
 class FilePanel(QWidget):
-    def __init__(self, _frame, _ser, _file, parent = None):
+    def __init__(self, _ser, _file, parent = None):
         super(FilePanel, self).__init__( parent )
 
-        self.lay = QVBoxLayout(_frame)  
+        self.lay = QVBoxLayout()  
         self.lay.setAlignment(Qt.AlignTop)
 
         self.file = _file
@@ -18,6 +18,9 @@ class FilePanel(QWidget):
         self.id = 0
         self.classR = ''
     
+
+        self.setLayout(self.lay)
+
 
     def add_item(self, _name):
         self.classR = ClassRow(_name, self.ser, self.id, self.file)

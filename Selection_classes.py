@@ -28,3 +28,7 @@ class Selection_classes(QWidget):
 
 	def Selection_classes_show(self):
 		self.show()
+
+	def close_selection_classes(self):
+		self.close()
+

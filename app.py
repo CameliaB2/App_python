@@ -7,8 +7,6 @@ from PySide6.QtGui import *
 from PySide6.QtCore import *
 
 from classe_line import *
-from classe_line import set_img_panel
-from classe_line import set_rec_panel
 from find_com import *
 
 from chrono_class import Chrono_widget
@@ -29,10 +27,9 @@ class Window(QMainWindow):
 	def __init__(self, parent = None):
 		super(Window, self).__init__( parent )
 		self.setWindowTitle("Leka - Interface d'enregistrement")
-		self.resize(1280, 720)
 
 		self.logo_label = QLabel("Logo_label", alignment=QtCore.Qt.AlignRight)
-		self.logo_pic = QPixmap("Figures/leka_logo.png")
+		self.logo_pic = QPixmap("Ressources/Images/leka_logo.png")
 		self.logo_pic = self.logo_pic.scaled(100, 72, QtCore.Qt.KeepAspectRatio)
 		self.logo_label.setPixmap(self.logo_pic)
 		self.logo_label.setFixedHeight(100)
@@ -46,11 +43,14 @@ class Window(QMainWindow):
 		
 		self.preference_onglet = Preferences(self.current_file)
 		self.preferences.triggered.connect(self.preference_onglet.show_preferences)
+		self.exitAction.triggered.connect(self.closeAll)
+
 
 		#Thread de serial
 		self.ser.set_SERIAL_SAVING_FLAG(0) #initialisation à 0 obligatoire ?
-		x = threading.Thread(target=self.ser.thread_run, args=())
-		x.start()
+		
+		self.imu_data_thr = threading.Thread(target=self.ser.thread_run, args=())
+		self.imu_data_thr.start()
 		
 		self.rec_pan = RecordPanel(self.ser, self.listeClasses, self.current_file)
 		self.img_pan = Image_Panel(self.rec_pan, self.ser)
@@ -73,6 +73,7 @@ class Window(QMainWindow):
 		self.lay.addWidget(self.rec_pan)
 		self.rec_pan.setVisible(True)
 		self.img_pan.setVisible(False)
+		self.generate_classes()
 	
 
 	def update_port_menu(self):
@@ -87,11 +88,8 @@ class Window(QMainWindow):
 		# Creating action using the first constructor
 		# Creating actions using the second constructor
 		self.preferences = QAction("&Preferences...", self)
-
 		self.exitAction = QAction("&Exit", self)
-		self.copyAction = QAction("&Copy", self)
-		self.pasteAction = QAction("&Paste", self)
-		self.cutAction = QAction("&Cut", self)
+
 		self.helpContentAction = QAction("&Help Content", self)
 		self.aboutAction = QAction("&About", self)
 
@@ -116,10 +114,20 @@ class Window(QMainWindow):
 		helpMenu.addAction(self.helpContentAction)
 		helpMenu.addAction(self.aboutAction)
 
+	def generate_classes(self):
+		self.formatbar = QToolBar(self)
+		self.addToolBar(Qt.TopToolBarArea, self.formatbar)
+
+		for e in self.listeClasses:
+			toolButton = QToolButton(self)
+			toolButton.setIcon(QtGui.QIcon('Ressources/Classes/Images/' + e + '.png'))
+			toolButton.setToolTip(e)
+			toolButton.clicked.connect(lambda x=1, n=e: self.rec_pan.panel.add_item(n))
+			self.formatbar.addWidget(toolButton)
 
 
 	def _importCSV(self):
-		file1 = open('Figures/class_list.csv', 'r')
+		file1 = open('Ressources/Classes/class_list.csv', 'r')
 		Lines = file1.readlines()
 		 
 		self.listeClasses = []
@@ -144,11 +152,39 @@ class Window(QMainWindow):
 			switch_widget(True, False)
 		else:
 			msg.done(1)
-			
-		
+
+
+	def keyPressEvent(self, e):
+		if e.key() == Qt.Key_Escape:
+			self.closeAll()
+
+	def closeEvent(self, event):
+		if self.closeAll():
+			#Stop all threads
+			event.Accept()
+		else:
+			event.ignore()
+
+	def closeAll(self):
+		close = QtWidgets.QMessageBox.question(self, "QUIT", "Are you sure want to stop process?", QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+		if close == QtWidgets.QMessageBox.Yes:
+			self.close_thread_app()
+			self.close_windows()	
+			quit()
+			return true
+		return False
+
+	def close_thread_app(self):
+			self.ser.get_data_imu_thread_stop()
+			self.ser.search_usb_thread_stop()
+			self.ser.graph.update_graph_thread_stop()
+	
+	def close_windows(self):
+		self.preference_onglet.close_preferences()
 
 def switch_widget(state1, state2):
 	self.rec_pan.setVisible(state1)
+	self.formatbar.setVisible(state1)
 	self.img_pan.setVisible(state2)
 	if(state1):
 		self.img_pan.ready_button.setEnabled(True)
@@ -158,5 +194,5 @@ def switch_widget(state1, state2):
 if __name__ == "__main__":
 	app = QApplication(sys.argv)
 	win = Window()
-	win.show()
+	win.showMaximized()
 	sys.exit(app.exec())

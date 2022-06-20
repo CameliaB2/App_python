@@ -16,55 +16,41 @@ class Graph(QWidget):
 
 		#self.acc_graph = self.create_graph('w', "Acceleration", "Acceleration (mg)")
 
-		styles = {"color": "#f00", "font-size": "10px"}
 
-		self.acc_graph = pg.PlotWidget()   
-		self.acc_graph.setBackground('w')
-		self.acc_graph.setTitle("Acceleration")
-		self.acc_graph.addLegend()
-		self.acc_graph.setLabel("left", "Acc (mg)", **styles)
-		self.acc_graph.setLabel("bottom", "Time (s)", **styles)
-		self.acc_graph.setFixedHeight(200)
+		self.acc_graph = self.create_graph('w', "Acceleration", "Acc (mg)", "Time (s)", 200)
+		self.gyr_graph = self.create_graph('w', "Gyroscope", "Gyr (dps)", "Time (s)", 200)
 
-		self.gyr_graph = pg.PlotWidget()
-		self.gyr_graph.setBackground('w')
-		self.gyr_graph.setTitle("Gyroscope")
-		self.gyr_graph.addLegend()
-		self.gyr_graph.setLabel("left", "Gyr (dps)", **styles)
-		self.gyr_graph.setLabel("bottom", "Time (s)", **styles)
-		self.gyr_graph.setFixedHeight(200)
+		self.curves = ["Acc X", "Acc Y", "Acc Z", "Gyr X", "Gyr Y", "Gyr Z"]
+		self.colors = ['r', 'g', 'b']
+		for i in range(3):
+			pen = pg.mkPen(color=self.colors[i])
+			self.acc_line.append( self.acc_graph.plot(self.t, self.acc[i], pen=pen, name=self.curves[i]) )
+			self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[i], pen=pen, name=self.curves[i+3]) )
 
-		pen = pg.mkPen(color='r')
-		self.acc_line.append( self.acc_graph.plot(self.t, self.acc[0], pen=pen, name="Acc X") )
-		self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[0], pen=pen, name="Gyr X") )
-		pen = pg.mkPen(color='g')
-		self.acc_line.append( self.acc_graph.plot(self.t, self.acc[1], pen=pen, name="Acc Y") )
-		self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[1], pen=pen, name="Gyr Y") )
-		pen = pg.mkPen(color='b')
-		self.acc_line.append( self.acc_graph.plot(self.t, self.acc[2], pen=pen, name="Acc Z") )
-		self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[2], pen=pen, name="Gyr Z") )
-
-
-		#self.gyr_graph = self.create_graph('w', "Gyroscope", "Gyroscope (dps)")
 
 		self.lay = QHBoxLayout(self)
 
 		self.update_graph_thr = threading.Thread(target=self.update_plot_data, args=())
 		self.update_graph_thr.start()
-		#self.init_plot()
-
-
 
 		self.lay.addWidget(self.acc_graph)
 		self.lay.addWidget(self.gyr_graph)
 
-
-
-
 		self.setLayout(self.lay)
 
+	def create_graph(self, _bg, _title, _abs, _ord, _h):
+		styles = {"color": "#f00", "font-size": "10px"}
+		graph = pg.PlotWidget()   
+		graph.setBackground(_bg)
+		graph.setTitle(_title)
+		graph.addLegend()
+		graph.setLabel("left", _abs, **styles)
+		graph.setLabel("bottom", _ord, **styles)
+		graph.setFixedHeight(_h)
+		return graph
+
 	def update_plot_data(self):
-		while(True):
+		while(self.UPDATE_GRAPH_FLAG):
 			while(self.FLAG_GRAPH == 1):
 				while(self.serial.SERIAL_SAVING_FLAG == 1 and len(self.serial.data_imu)>0 ):
 					start = time.time()
@@ -99,18 +85,31 @@ class Graph(QWidget):
 						self.time_to_wait = time.time()-start
 						if(self.time_to_wait < 0.038):
 							sleep(0.038-self.time_to_wait)
+		print("Update graphs - thread terminate..")
+
 	def reset_graph(self):
 		self.t = list([0])	
 		self.acc = [[0], [0], [0]]
 		self.gyr = [[0], [0], [0]]
+		for i in range(3):
+			pen = pg.mkPen(color=self.colors[i])
+			self.acc_line.append( self.acc_graph.plot(self.t, self.acc[i], pen=pen, name=self.curves[i]) )
+			self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[i], pen=pen, name=self.curves[i+3]) )
+		print("on reset tout")
 
 		
 
 	def set_graph_flag(self, _value):
 		self.FLAG_GRAPH = _value
 
+	def update_graph_thread_stop(self):
+		self.set_graph_flag(0)
+		self.UPDATE_GRAPH_FLAG = False	
+
 	acc = [[0], [0], [0]]
 	gyr = [[0], [0], [0]]
 	acc_line = []
 	gyr_line = []
 	FLAG_GRAPH = 0
+
+	UPDATE_GRAPH_FLAG = True

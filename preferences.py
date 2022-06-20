@@ -21,7 +21,7 @@ class Preferences(QWidget):
 		f = open("config.json", "r")
 		if(f.read() == 'to_define'):
 			str_desktop_path = os.path.realpath(__file__)
-			str_desktop_path = str_desktop_path.replace('preferences.py', 'Recordings')
+			str_desktop_path = str_desktop_path.replace('preferences.py', 'Logs')
 			self.write_path_file(str_desktop_path)
 			f.close()
 		
@@ -40,7 +40,7 @@ class Preferences(QWidget):
 		self.browser_lay = QVBoxLayout()
 		self.browser_line = QHBoxLayout()
 
-		self.indication_text = QLabel("Recording path :", alignment=Qt.AlignLeft)		
+		self.indication_text = QLabel("Logs path :", alignment=Qt.AlignLeft)		
 		self.indication_text.setStyleSheet("font-weight: bold")
 
 		self.browser_button = QPushButton("Browse")
@@ -60,7 +60,7 @@ class Preferences(QWidget):
 		options |= QFileDialog.DontUseNativeDialog
 		fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "", "All Files (*);;CSV Files (*.py);; TXT Files(*.txt)", options=options)
 		if fileName:
-			print(fileName)
+			print("FileName: ", fileName)
 
 	def search_directory(self):
 		directory = str(QFileDialog.getExistingDirectory(self, "Select Directory"))

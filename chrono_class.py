@@ -9,11 +9,16 @@ from file_manager import *
 from find_com import *
 
 DURATION_INT = 5
-TIME_RECORD = 60
+TIME_RECORD = 5
 
 class Chrono_widget(QWidget):
     def __init__(self, name, _rec, _im, _serial, parent=None):
         QWidget.__init__(self, parent=parent)
+
+        self.serial = _serial
+        self.serial_flag = _serial.SERIAL_SAVING_FLAG
+        self.rec_panel = _rec
+        self.img_panel = _im #ajouté pour stopper le chrono quand on clique sur stop 
 
         lay = QVBoxLayout(self)
 
@@ -24,13 +29,9 @@ class Chrono_widget(QWidget):
         self.pages_qsw = QtWidgets.QStackedWidget()
         self.time_passed_qll = QtWidgets.QLabel(name, alignment=QtCore.Qt.AlignCenter)
 
-        self.serial = _serial
-        self.serial_flag = _serial.SERIAL_SAVING_FLAG
-        self.rec_panel = _rec
-        self.img_panel = _im #ajouté pour stopper le chrono quand on clique sur stop 
         
         self.chrono_label = QLabel(name, alignment=QtCore.Qt.AlignCenter)
-        self.chrono_pic = QPixmap("Figures/index_.png")
+        self.chrono_pic = QPixmap("Ressources/Images/chrono.png")
         self.chrono_pic = self.chrono_pic.scaled(100, 121, QtCore.Qt.KeepAspectRatio)
        
         self.time_passed_qll.setFont(QFont('Arial', 22))
@@ -75,8 +76,15 @@ class Chrono_widget(QWidget):
             self.serial.set_SERIAL_SAVING_FLAG(0)
             self.serial_flag = self.serial.SERIAL_SAVING_FLAG #il vaut bien 0
             self.FLAG_TIMER = 0
+            self.reset_counter()
 
         self.update_gui()
+
+    def reset_counter(self):
+        self.first_counter = DURATION_INT
+        self.second_counter = TIME_RECORD
+        self.serial.set_SERIAL_SAVING_FLAG(2)
+        self.img_panel.info.setText("Please press on Ready to start the countdown. The recording will start right after.")
 
 
     def update_gui(self):
