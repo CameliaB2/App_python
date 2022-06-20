@@ -20,40 +20,21 @@ class ClassRow(QWidget):
 
         global img_panel, rec_panel
         
-
         self.id = _id
-
-        self.class_name_text = QLabel(_name, alignment=QtCore.Qt.AlignCenter)
-
-        self.record_button = QPushButton("REC")        
-        self.record_button.setIcon(QIcon('Figures/logo.png'))
-        self.record_filename_text = QLabel("Unregistered", alignment=QtCore.Qt.AlignCenter)
-
-        self.status_button = QPushButton("")
-        self.status_button.setStyleSheet("background-color: lightgray")
-        self.status_button.setIcon(QIcon('Figures/check.png'))
-
-        self.clear_recording_button = QPushButton("")
-        self.clear_recording_button.setStyleSheet("background-color: blue")
-        self.clear_recording_button.setIcon(QIcon('Figures/restart.png'))
-        self.clear_recording_button.setToolTip('This button is for deleting the following recording and start another one')
-        
-
-        self.delete_line_button = QPushButton("")
-        self.delete_line_button.setIcon(QIcon('Figures/cross.png'))
-        self.setStyleSheet(" QToolTip{ border: 1px solid white; background-color: white ; color: k ; font: 12pt}")
-        self.delete_line_button.setToolTip('This button is for deleting this line')
-        self.delete_line_button.setStyleSheet("background-color: red")
-        
         self.name = _name
         self.file = _file
         self._ser = _serial
-
-        self.textbox = QLineEdit(self)
-        self.textbox.move(20, 20)
-        self.textbox.resize(40,40)
-
         self.suffix = ""
+
+        self.class_name_text = self.create_className(self.name, 'The name of the class to record', 'white')
+        self.textbox = self.create_inputField('white', 'Write a suffix which will be added at the end of the filename')
+
+        self.record_filename_text = QLabel("Unregistered", alignment=QtCore.Qt.AlignCenter)
+        
+        self.record_button = self.create_button('REC', 'Ressources/Images/rec_logo.png', 'white', 'Press the button to launch the recording')
+        self.status_button = self.create_button('', 'Ressources/Images/check.png', 'lightgray', 'Pass to the color green if the recording is successfull')
+        self.clear_recording_button = self.create_button('', 'Ressources/Images/restart.png', 'blue', 'This button is for deleting the following recording and start another one')
+        self.delete_line_button = self.create_button('', 'Ressources/Images/cross.png', 'red', 'This button is for deleting this line')
 
 
         lay.setSpacing(70)        
@@ -66,12 +47,31 @@ class ClassRow(QWidget):
         lay.addWidget(self.set_size(self.delete_line_button, 70, 30))
 
         self.record_button.clicked.connect(self._record_button_clicked)
-
-        self.delete_line_button.clicked.connect(lambda:self.msg_box("Are you sure you want to delete this line ?", self.id))
-        
+        self.delete_line_button.clicked.connect(lambda:self.msg_box("Are you sure you want to delete this line ?", self.id))        
         self.clear_recording_button.clicked.connect(self._clear_recording_button_clicked)
         
-        
+
+    def create_className(self, _text, _text_info, _bg):
+        label = QLabel(_text, alignment=QtCore.Qt.AlignCenter)
+        label.setToolTip(_text_info)
+        #label.setStyleSheet("background-color: " + _bg)
+        return label
+
+    def create_button(self, _text, _icon, _bg, _text_info):
+        btn = QPushButton(_text)
+        btn.setIcon(QIcon(_icon))
+        btn.setToolTip(_text_info)
+        btn.setStyleSheet("background-color: " + _bg)
+        return btn
+
+    def create_inputField(self, _bg, _text_info):
+        inputField = QLineEdit(self)
+        inputField.move(20, 20)
+        inputField.resize(40,40)
+        inputField.setStyleSheet("background-color: " + _bg)
+        inputField.setToolTip(_text_info)
+        return inputField
+
     def _record_button_clicked(self):
         self.record_button.setEnabled(False)
         self.set_name()
@@ -91,11 +91,9 @@ class ClassRow(QWidget):
         self.file.remove_file()
         self._ser.set_SERIAL_SAVING_FLAG(0)
         self._ser.set_headline_flag(False)
-        #print(self._ser.headline_write) 
 
     def get_suffix(self):
         self.suffix = self.textbox.text()
-        #print(self.suffix)
         self.file.set_suffix(self.suffix)
 
 
@@ -114,11 +112,15 @@ class ClassRow(QWidget):
         img_panel.setVisible(state2)
     
     def update_name(self):
-<<<<<<< HEAD
+
         file_name_ = self.generate_date() + "-" + self.name + "-" + self.suffix + ".csv"
-=======
+
         file_name_ = self.generate_date() + self.name + "-" + self.suffix + ".csv"
->>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
+
+        if(self.suffix != ""):
+            file_name_ = self.generate_date() + self.name + "-" + self.suffix + ".csv"
+        else:
+            file_name_ = self.generate_date() + self.name + ".csv"
         self.record_filename_text.setText(file_name_)
 
 
@@ -147,9 +149,7 @@ class ClassRow(QWidget):
 def set_img_panel(val):
     global img_panel
     img_panel = val
-    print(img_panel)
 
 def set_rec_panel(val):
     global rec_panel
     rec_panel = val
-    print(rec_panel)

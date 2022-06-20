@@ -2,11 +2,12 @@ from serial.tools import list_ports
 from file_manager import *
 from time import sleep
 from graph import *
-import numpy as np
 import threading
 import serial
 import time
 import sys
+
+import traitement as tr
 
 
 class Serial_COM():
@@ -22,8 +23,8 @@ class Serial_COM():
 
 		self.RUNNING_FLAG = True
 
-		find_usb_thr = threading.Thread(target=self.thread_search_cards, args=())
-		find_usb_thr.start()
+		self.find_usb_thr = threading.Thread(target=self.thread_search_cards, args=())
+		self.find_usb_thr.start()
 
 
 	def find_USB_devices(self):
@@ -67,6 +68,7 @@ class Serial_COM():
 	def thread_search_cards(self):
 		while(self.THREAD_USB_CARDS_FLAG):
 			self.find_USB_devices()	#SEARCH A POTENTIAL NEW CARD
+		print("Search cards - thread terminate..")
 
 
 	def check_if_create_flag(self):
@@ -91,19 +93,23 @@ class Serial_COM():
 			for el in self.data_imu:
 				self.current_file.write_data_imu(_path, str(el))
 			self.set_headline_flag(False)
+			
+	def check_if_end_recording(self):
+		if( self.old_flag == 1 and self.SERIAL_SAVING_FLAG == 0 ):
+			data_file.close()
+			self.set_headline_flag(False)
+			#Ecriture du file moyenne glissante
+			tr.generate_multiple(self.current_file.full_path)
 
 	def thread_run(self):
 		while self.RUNNING_FLAG == 1:	
 			#self.check_if_write_data_in_file(self.current_file.full_path)	# To use if we want to save all the line in one time, not in real time
+			self.check_if_end_recording()
 			self.check_if_create_flag()
 			self.check_if_write_headline_in_file(self.current_file.full_path)
 
 			while self.SERIAL_SAVING_FLAG == 1:#LORSQUE L'ON CLIQUE SUR READY, CE FLAG PASSE A 1 JUSQU'A CE QUE CA ATTEIGNE 0 DE COMPTE A REBOURS
 	
-<<<<<<< HEAD
-
-=======
->>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
 				if(self.old_flag == 2):
 					self.start_time = time.time()
 
@@ -125,17 +131,22 @@ class Serial_COM():
 							#if(self.time_to_wait < self.RECORD_PERIOD):
 							#	sleep( self.RECORD_PERIOD - self.time_to_wait )	#Wait 38ms ~= 26Hz
 						
-<<<<<<< HEAD
-=======
+
 				else:
 					self.set_SERIAL_SAVING_FLAG(0)
->>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
 
 			if(self.SERIAL_SAVING_FLAG == 0):
 				self.set_headline_flag(False)
 
-	def thread_terminate():
-		self.RUNNING_FLAG = False
+		print("Imu get data - thread terminate..")
+
+		
+
+	def get_data_imu_thread_stop(self):
+		self.RUNNING_FLAG = False	
+
+	def search_usb_thread_stop(self):
+		self.THREAD_USB_CARDS_FLAG = False
 
 	def set_headline_flag(self, _value):
 		self.headline_write = _value
@@ -145,11 +156,8 @@ class Serial_COM():
 				
 	def set_FLAG_RECORD(self, _value):
 		self.FLAG_RECORD = _value
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
+				
 	def get_com(self):
 		return self.COM
 
@@ -172,7 +180,7 @@ class Serial_COM():
 	bauds = 115200
 	headline_write = False
 
-	THREAD_USB_CARDS_FLAG = 1
+	THREAD_USB_CARDS_FLAG = True
 	list_ports = []
 	serial = ""
 	COM = ""
@@ -180,7 +188,3 @@ class Serial_COM():
 	RECORD_TIME = 60
 	RECORD_PERIOD = 0.038
 	FLAG_RECORD = 0
-<<<<<<< HEAD
-=======
-
->>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f

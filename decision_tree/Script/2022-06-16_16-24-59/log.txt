@@ -1,1 +1,0 @@
-2022-06-16 16:24:59,944 [INFO] Current directory: /home/camelia/Bureau/app_git/App_python/decision_tree/Script/2022-06-16_16-24-59
