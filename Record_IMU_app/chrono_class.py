@@ -9,8 +9,8 @@ from file_manager import *
 from time import sleep
 from find_com import *
 
-DURATION_INT = 5
-TIME_RECORD = 10
+DURATION_INT = 10
+TIME_RECORD = 60
 
 class Chrono_widget(QWidget):
     def __init__(self, name, _rec, _im, _serial, parent=None):
