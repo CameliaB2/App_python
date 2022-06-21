@@ -1,5 +1,4 @@
 import os, datetime
-from ucf_converter import *
 
 import command_parameters
 from command_parameters import *
@@ -14,6 +13,7 @@ logging.info("Current directory: " + current_directory)
 import external_tools
 
 arff_filename = os.path.join(current_directory, "features.arff")
+ucf_filename = os.path.join(current_directory, "MLC_configuration.ucf")
 
 # private import:
 import mlc_configurator
@@ -41,12 +41,10 @@ device_name = "LSM6DSOX"    ## list of supported devices available with mlc_conf
 # ARGUMENTS MANAGE
 # Parsing argument
 cmd_checking = cmd_parameters()
-window_length, mlc_odr, accelerometer_odr, accelerometer_fs, gyroscope_fs, gyroscope_odr, input_type, _name = cmd_checking.check_args_value()
+window_length, mlc_odr, accelerometer_odr, accelerometer_fs, gyroscope_fs, gyroscope_odr, input_type = cmd_checking.check_args_value()
 
 
 #############################
-ucf_filename = os.path.join(current_directory, _name +".ucf")
-h_filename = os.path.join(current_directory, _name +".h")
 
 
 
@@ -206,6 +204,7 @@ metaclassifier6_values = "0,0,0,0,0,0,0,0"
 metaclassifier7_values = "0,0,0,0,0,0,0,0"
 metaclassifier8_values = "0,0,0,0,0,0,0,0"
 metaclassifier_values = [metaclassifier1_values, metaclassifier2_values, metaclassifier3_values, metaclassifier4_values, metaclassifier5_values, metaclassifier6_values, metaclassifier7_values, metaclassifier8_values]
+
 mlc_configurator.ucf_generator( device_name = device_name, 
                                 arff_filename = arff_filename, 
                                 dectree_filenames = dectree_filenames,
@@ -214,5 +213,3 @@ mlc_configurator.ucf_generator( device_name = device_name,
                                 metaclassifier_values = metaclassifier_values, 
                                 ucf_filename = ucf_filename, 
                                 current_directory = current_directory )
-                                
-convert_ucf_to_h(_name, ucf_filename, h_filename)

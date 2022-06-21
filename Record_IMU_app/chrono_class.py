@@ -9,17 +9,8 @@ from file_manager import *
 from time import sleep
 from find_com import *
 
-<<<<<<< HEAD
-DURATION_INT = 10
-TIME_RECORD = 60
-=======
 DURATION_INT = 5
-<<<<<<< HEAD:chrono_class.py
-TIME_RECORD = 5
->>>>>>> 5597ec3 (file)
-=======
 TIME_RECORD = 10
->>>>>>> 66fa3fb (image_panel maj):Record_IMU_app/chrono_class.py
 
 class Chrono_widget(QWidget):
     def __init__(self, name, _rec, _im, _serial, parent=None):
@@ -68,10 +59,6 @@ class Chrono_widget(QWidget):
         if(self.first_counter > 0):
             self.first_counter -= 1
 
-<<<<<<< HEAD
-        #mode manuel
-=======
->>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
         elif(self.first_counter == 0 and self.FLAG_TIMER == 0): 
             #self.serial.set_FLAG_RECORD(1)
             self.serial.set_SERIAL_SAVING_FLAG(1)
@@ -81,11 +68,7 @@ class Chrono_widget(QWidget):
 
             self.first_counter = TIME_RECORD
             self.FLAG_TIMER = 1
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
         elif(self.first_counter == 0 and self.FLAG_TIMER == 1):
             self.rec_panel.panel.l_classRow[self.ID_class].update_gui()
             self.switch_w(True, False)
@@ -101,21 +84,12 @@ class Chrono_widget(QWidget):
 
         self.update_gui()
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def update_gui(self):
-        self.time_passed_qll.setText(str(self.first_counter))
-
-    def get_id(self, ind): #créer la variable globale permet de ne pas prendre en argument img_panel
-=======
-=======
     def reset_counter(self):
         self.first_counter = DURATION_INT
         self.second_counter = TIME_RECORD
         self.serial.set_SERIAL_SAVING_FLAG(0)
         self.img_panel.info.setText("Please press on Ready to start the countdown. The recording will start right after.")
 
->>>>>>> 5597ec3 (file)
 
     def update_gui(self):
         self.countdown_timer.setText(str(self.first_counter))
@@ -129,7 +103,6 @@ class Chrono_widget(QWidget):
         
 
     def set_id(self, ind): #créer la variable globale permet de ne pas prendre en argument img_panel
->>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f
         self.ID_class = ind
 
     def switch_w(self, state1, state2):
@@ -138,15 +111,6 @@ class Chrono_widget(QWidget):
 
     def stop_chrono(self):
         self.timer_.stop()
-<<<<<<< HEAD
-        
-
-    file = "" 
-    ID_class = 100 #créer la variable globale permet de ne pas prendre en argument img_panel
-    FLAG_TIMER = 0
-    
-    
-=======
 
     def start_chrono(self):
         self.timer_.start()
@@ -154,4 +118,3 @@ class Chrono_widget(QWidget):
     file = "" 
     ID_class = 100 #créer la variable globale permet de ne pas prendre en argument img_panel
     FLAG_TIMER = 0
->>>>>>> bb4e5d92446d3c0410b830ea5eca518fc6fdd09f

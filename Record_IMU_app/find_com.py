@@ -79,15 +79,11 @@ class Serial_COM():
 			self.set_headline_flag(True)
 			self.graph.set_graph_flag(1)
 			self.serial.flushInput()
-<<<<<<< HEAD:find_com.py
-			self.start = time.time()
-=======
 
 	def end_recording(self):
 		self.current_file.data_file.close()
 		self.set_headline_flag(False)
 		tr.generate_multiple(self.current_file.full_path)  #Ecriture du file moyenne glissante
->>>>>>> 66fa3fb (image_panel maj):Record_IMU_app/find_com.py
 
 
 	def thread_run(self):
@@ -108,20 +104,6 @@ class Serial_COM():
 							self.serial.flushInput()
 
 
-<<<<<<< HEAD:find_com.py
-							#self.time_to_wait = time.time()-start
-							#if(self.time_to_wait < self.RECORD_PERIOD):
-							#	sleep( self.RECORD_PERIOD - self.time_to_wait )	#Wait 38ms ~= 26Hz
-						
-
-				else:
-					self.set_SERIAL_SAVING_FLAG(0)
-
-			if(self.SERIAL_SAVING_FLAG == 0):
-				self.set_headline_flag(False)
-
-=======
->>>>>>> 66fa3fb (image_panel maj):Record_IMU_app/find_com.py
 		print("Imu get data - thread terminate..")
 
 		
@@ -140,8 +122,8 @@ class Serial_COM():
 				
 	def set_FLAG_RECORD(self, _value):
 		self.FLAG_RECORD = _value
-
 				
+	
 	def get_com(self):
 		return self.COM
 
@@ -189,3 +171,4 @@ class Serial_COM():
 	RECORD_TIME = 60
 	RECORD_PERIOD = 0.038
 	FLAG_RECORD = 0
+

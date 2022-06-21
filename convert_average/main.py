@@ -131,11 +131,7 @@ class Window(QMainWindow):
 
 				self.data = tr.read_file(self.file_to_transform.path_qlineEdit.text())
 				self.aver_datas = tr.calculate_average_all_data(self.data[0], self.data[1], self.data[2], self.data[3], self.data[4], self.data[5], _range)
-<<<<<<< HEAD
-
-=======
 				print(self.data)
->>>>>>> 9b43056 (convert_app)
 				self.set_name(_range)
 				_path =  self.path_file_to_reg.path_qlineEdit.text() + '/' + self.name_file
 

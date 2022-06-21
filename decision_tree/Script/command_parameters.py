@@ -9,7 +9,6 @@ GYROSCOPE_FS = "2000 dps"
 GYROSCOPE_ODR = "26 Hz" 
 INPUT_TYPE = "accelerometer+gyroscope"
 
-
 class cmd_parameters:
 
 	def __init__(self):
@@ -156,6 +155,6 @@ class cmd_parameters:
 		logging.info("input_type initialized to: \t\"" + self.input_type + "\"\n\n")
 		logging.info("ucf and h script Name will be: \t\"" + self.name_ucf + ".ucf and " + self.name_ucf + ".h\"\n\n")
 
-		return self.window_length, self.mlc_odr, self.acc_odr, self.acc_fs, self.gyr_fs, self.gyr_odr, self.input_type, self.name_ucf
+		return self.window_length, self.mlc_odr, self.acc_odr, self.acc_fs, self.gyr_fs, self.gyr_odr, self.input_type
 
 
