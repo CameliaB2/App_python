@@ -101,6 +101,8 @@ class Serial_COM():
 						if len(data_split[1].split('\t')) == 6:
 							self.data_imu = data_split[1]
 							self.current_file.write_data_imu(self.current_file.full_path, self.data_imu) #Write imu data
+							self.serial.flushInput()
+
 
 		print("Imu get data - thread terminate..")
 
