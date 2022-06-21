@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split  # Import train_test_split 
 from sklearn import metrics  # Import scikit-learn metrics module for accuracy calculation
 from sklearn import tree
 from scipy.io import arff
+from sklearn.model_selection import cross_validate # Import cross_validate
 import re
 import sys
 import numpy as np
@@ -139,7 +140,24 @@ def generateDecisionTree( arff_filename, dectree_filename):
     X = data_set[feature_cols]  # Features
     y = data_set[col_names[-1]]  # Target variable
 
-        #Cross validation a voir
+    #Cross validation 
+    label_encoder = LabelEncoder()
+    encoded_y = label_encoder.fit_transform(y)
+
+    decision_tree_model = DecisionTreeClassifier(criterion="entropy",
+                                    random_state=0)
+    decision_tree_result = cross_validation(decision_tree_model, X, encoded_y, 5)
+    print(decision_tree_result)
+
+    model_name = "Decision Tree"
+    plot_result(model_name,
+            "Accuracy",
+            "Accuracy scores in 5 Folds",
+            decision_tree_result["Training Accuracy scores"],
+            decision_tree_result["Validation Accuracy scores"])
+
+    
+
     # Split dataset into training set and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3,
                                                         random_state=1)  # 70% training and 30% test
