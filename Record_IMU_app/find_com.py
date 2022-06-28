@@ -82,6 +82,7 @@ class Serial_COM():
 
 	def end_recording(self):
 		self.current_file.data_file.close()
+		self.graph.reset_graph()
 		self.set_headline_flag(False)
 		tr.generate_multiple(self.current_file.full_path)  #Ecriture du file moyenne glissante
 

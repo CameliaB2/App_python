@@ -14,8 +14,8 @@ class Graph(QWidget):
 		self.serial = _serial
 		self.t = list([0])	
 
-		self.acc_graph = self.create_graph('w', "Acceleration", "Acc (mg)", "Time (s)", 100, 100)
-		self.gyr_graph = self.create_graph('w', "Gyroscope", "Gyr (dps)", "Time (s)", 100, 100)
+		self.acc_graph = self.create_graph('w', "Acceleration", "Acc (mg)", "Time (s)", 400, 120)
+		self.gyr_graph = self.create_graph('w', "Gyroscope", "Gyr (dps)", "Time (s)", 400, 120)
 
 		self.curves = ["Acc X", "Acc Y", "Acc Z", "Gyr X", "Gyr Y", "Gyr Z"]
 		self.colors = ['r', 'g', 'b']
@@ -43,8 +43,8 @@ class Graph(QWidget):
 		graph.addLegend()
 		graph.setLabel("left", _abs, **styles)
 		graph.setLabel("bottom", _ord, **styles)
-		graph.setMinimumWidth(_width)
-		graph.setMinimumHeight(_height)
+		graph.setFixedWidth(_width)
+		graph.setFixedHeight(_height)
 		return graph
 
 	def update_plot_data(self):
@@ -90,11 +90,9 @@ class Graph(QWidget):
 		self.acc = [[0], [0], [0]]
 		self.gyr = [[0], [0], [0]]
 		for i in range(3):
-			pen = pg.mkPen(color=self.colors[i])
-			self.acc_line.append( self.acc_graph.plot(self.t, self.acc[i], pen=pen, name=self.curves[i]) )
-			self.gyr_line.append( self.gyr_graph.plot(self.t, self.gyr[i], pen=pen, name=self.curves[i+3]) )
-		print("on reset tout")
-
+			self.acc_line[i].setData(self.t, self.acc[i])  # Update the data.
+			self.gyr_line[i].setData(self.t, self.gyr[i])  # Update the data.
+		
 		
 
 	def set_graph_flag(self, _value):

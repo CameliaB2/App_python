@@ -31,7 +31,7 @@ class Image_Panel(QWidget):
 		
 		self.name = ""
 		self.chrono_w = Chrono_widget(self.name, _rec, self, self.ser)
-		
+		self.chrono_w.setFixedHeight(75)
 		self.stop_button = self.create_button("Stop", 'red', 150, 50)
 		self.ready_button = self.create_button("Ready", 'green', 150, 50)
 		self.stop_button.setObjectName("White")

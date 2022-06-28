@@ -87,6 +87,7 @@ class ClassRow(QWidget):
 
     def _clear_recording_button_clicked(self):
         self.record_button.setEnabled(True)
+        self.record_filename_text.setText('Unregistered')
         self.status_button.setStyleSheet("background-color: lightgray")
         self.get_suffix()
         self.file.set_current_shape(self.name)
