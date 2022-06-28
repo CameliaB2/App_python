@@ -1,0 +1,7 @@
+Record_IMU_app/Logs
+Record_IMU_app/__pycache__
+Record_IMU_app/config.json
+decision_tree/Logs
+decision_tree/Trees
+decision_tree/Script/__pycache__
+convert_average/Script/__pycache__

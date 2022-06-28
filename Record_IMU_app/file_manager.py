@@ -16,7 +16,12 @@ class File_manager():
 
 	def write_data_imu(self, _path, _data_imu):
 		#data_file = open(_path, "a")
-		self.data_file.write(str(_data_imu))
+		if self.data_file.closed == False:
+			# Print the success message
+			self.data_file.write(str(_data_imu))
+		else:
+			# Print the error message
+			print("File has closed.")
 		#data_file.close()
 
 	def set_suffix(self, suffix):
@@ -51,6 +56,7 @@ class File_manager():
 
 		
 	def remove_file(self):
+		self.data_file.close()
 		print(self.full_path)
 		if os.path.exists(self.full_path):
   			os.remove(self.full_path)
