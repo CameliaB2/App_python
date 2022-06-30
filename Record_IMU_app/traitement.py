@@ -65,7 +65,8 @@ def generate(_full_path, _range):
 							str(aver_datas[5][i]) + '\n')
 		data_file.close()
 
-def generate_multiple(_full_path):
+def generate_multiple(_full_paths):
 	_range = [4, 8, 16]
-	for val in _range:
-		generate(_full_path, val)
+	for full_path in _full_paths:
+		for val in _range:
+			generate(full_path, val)
