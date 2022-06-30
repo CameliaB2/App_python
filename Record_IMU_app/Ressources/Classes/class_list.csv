@@ -5,6 +5,14 @@ Vertical
 Square
 Circle
 Triangle
+Up
+Right
+Down
+Left
+Diagonale_Up_Right
+Diagonale_Down_Right
+Diagonale_Down_Left
+Diagonale_Up_Left
 One
 Two
 Three
@@ -14,3 +22,6 @@ Six
 Seven
 Eight
 Nine
+Left_&_Right
+Up_&_Down
+Left_&_Up_&_Right_&_Down

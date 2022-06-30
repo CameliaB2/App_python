@@ -1,9 +1,11 @@
 import os, datetime
+from ucf_converter import *
 
 import command_parameters
 from command_parameters import *
 
-current_directory = os.path.join(os.getcwd(), datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+current_directory = os.getcwd().replace('Script', 'Trees')
+current_directory = os.path.join(current_directory, datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
 os.makedirs(current_directory)
 
 from mlc_script_log import *
@@ -13,7 +15,6 @@ logging.info("Current directory: " + current_directory)
 import external_tools
 
 arff_filename = os.path.join(current_directory, "features.arff")
-ucf_filename = os.path.join(current_directory, "MLC_configuration.ucf")
 
 # private import:
 import mlc_configurator
@@ -41,10 +42,12 @@ device_name = "LSM6DSOX"    ## list of supported devices available with mlc_conf
 # ARGUMENTS MANAGE
 # Parsing argument
 cmd_checking = cmd_parameters()
-window_length, mlc_odr, accelerometer_odr, accelerometer_fs, gyroscope_fs, gyroscope_odr, input_type = cmd_checking.check_args_value()
+window_length, mlc_odr, accelerometer_odr, accelerometer_fs, gyroscope_fs, gyroscope_odr, input_type, _name = cmd_checking.check_args_value()
 
 
 #############################
+ucf_filename = os.path.join(current_directory, _name +".ucf")
+h_filename = os.path.join(current_directory, _name +".h")
 
 
 
@@ -118,7 +121,12 @@ filters_list = []
 # full list of available features can be obtained with mlc_configurator.get_feature_names()
 # full list of available inputs can be obtained with   mlc_configurator.get_mlc_inputs(device_name, input_type)
 features_list = []
+
+
 composantes = ["Acc_X", "Acc_Y", "Acc_Z", "Gyr_X", "Gyr_Y", "Gyr_Z"]
+if input_type == 'accelerometer_only':
+    composantes = ["Acc_X", "Acc_Y", "Acc_Z"]
+
 
 for c in composantes:
   features_list.append(mlc_configurator.mlc_feature("MEAN", c))
@@ -126,7 +134,7 @@ for c in composantes:
   features_list.append(mlc_configurator.mlc_feature("PEAK_TO_PEAK", c))
   features_list.append(mlc_configurator.mlc_feature("MINIMUM", c))
   features_list.append(mlc_configurator.mlc_feature("MAXIMUM", c))
-  #features_list.append(mlc_configurator.mlc_feature("ENERGY", c))
+  features_list.append(mlc_configurator.mlc_feature("ENERGY", c))
 
 """
 features_list.append(mlc_configurator.mlc_feature("ZERO_CROSSING", "Acc_V", 0.5))
@@ -204,7 +212,6 @@ metaclassifier6_values = "0,0,0,0,0,0,0,0"
 metaclassifier7_values = "0,0,0,0,0,0,0,0"
 metaclassifier8_values = "0,0,0,0,0,0,0,0"
 metaclassifier_values = [metaclassifier1_values, metaclassifier2_values, metaclassifier3_values, metaclassifier4_values, metaclassifier5_values, metaclassifier6_values, metaclassifier7_values, metaclassifier8_values]
-
 mlc_configurator.ucf_generator( device_name = device_name, 
                                 arff_filename = arff_filename, 
                                 dectree_filenames = dectree_filenames,
@@ -213,3 +220,5 @@ mlc_configurator.ucf_generator( device_name = device_name,
                                 metaclassifier_values = metaclassifier_values, 
                                 ucf_filename = ucf_filename, 
                                 current_directory = current_directory )
+                                
+convert_ucf_to_h(_name, ucf_filename, h_filename)

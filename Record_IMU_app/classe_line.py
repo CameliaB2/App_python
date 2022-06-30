@@ -13,7 +13,7 @@ img_panel = ''
 rec_panel = ''
 
 class ClassRow(QWidget):
-    def __init__(self, _name=None, _serial=None, _id=None, _file=None, parent=None):
+    def __init__(self, _name=None, serial=None, _id=None, _file=None, parent=None):
         super(ClassRow, self).__init__( parent )
 
         lay = QHBoxLayout(self)  
@@ -23,7 +23,7 @@ class ClassRow(QWidget):
         self.id = _id
         self.name = _name
         self.file = _file
-        self._ser = _serial
+        self.ser = serial
         self.suffix = ""
 
         self.class_name_text = self.create_className(self.name, 'The name of the class to record', 'white')
@@ -76,23 +76,31 @@ class ClassRow(QWidget):
 
     def _record_button_clicked(self):
         self.record_button.setEnabled(False)
-        self.set_name()
         img_panel.chrono_w.set_id(self.id)
-        self.get_suffix()
         self.switch_w(False,True)
-        self.file.set_current_shape(self.name)
-        self.update_name()
+        self.get_suffix()
+        self.set_name()
+        if(self.name.find("_&_") != -1):
+            self.file.set_current_shapes(self.name)
+            self.record_filename_text.setText(self.get_name_file(self.file.name_curr_shapes[0]) + \
+                                             "\n" + \
+                                              self.get_name_file(self.file.name_curr_shapes[1]))
+        else:
+            self.file.set_current_shape(self.name)
+            self.record_filename_text.setText(self.get_name_file(self.name))
+
         img_panel.ready_button.setEnabled(True)
         
 
     def _clear_recording_button_clicked(self):
         self.record_button.setEnabled(True)
+        self.record_filename_text.setText('Unregistered')
         self.status_button.setStyleSheet("background-color: lightgray")
         self.get_suffix()
         self.file.set_current_shape(self.name)
         self.file.remove_file()
-        self._ser.set_SERIAL_SAVING_FLAG(0)
-        self._ser.set_headline_flag(False)
+        self.ser.setserIAL_SAVING_FLAG(0)
+        self.ser.set_headline_flag(False)
 
     def get_suffix(self):
         self.suffix = self.textbox.text()
@@ -113,12 +121,12 @@ class ClassRow(QWidget):
         rec_panel.setVisible(state1)
         img_panel.setVisible(state2)
     
-    def update_name(self):
+    def get_name_file(self, _name):
         if(self.suffix != ""):
-            file_name_ = self.generate_date() + self.name + "-" + self.suffix + ".csv"
+            file_name_ = self.generate_date() + _name + "-" + self.suffix + ".csv"
         else:
-            file_name_ = self.generate_date() + self.name + ".csv"
-        self.record_filename_text.setText(file_name_)
+            file_name_ = self.generate_date() + _name + ".csv"
+        return file_name_
 
 
     def msg_box(self, text, _id):

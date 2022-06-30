@@ -7,43 +7,51 @@ class File_manager():
 	def __init__(self, parent=None):
 		self.name_curr_shape = "test"
 
-	def write_headLine(self, _path):
-		head_line = "A_X[mg]\tA_Y[mg]\tA_Z[mg]\tG_X[dps]\tG_Y[dps]\tG_Z[dps]\t\n"
+	def write_headLine(self):
+		self.data_files = []
+		for i in range(len(self.full_paths)):
+			head_line = "A_X[mg]\tA_Y[mg]\tA_Z[mg]\tG_X[dps]\tG_Y[dps]\tG_Z[dps]\t\n"
 
-		self.data_file = open(_path, "a")
-		self.data_file.write(head_line)
-		#data_file.close()
+			self.data_files.append(open(self.full_paths[i], "a"))
+			self.data_files[i].write(head_line)
 
-	def write_data_imu(self, _path, _data_imu):
-		#data_file = open(_path, "a")
-		self.data_file.write(str(_data_imu))
-		#data_file.close()
+	def write_data_imu(self, _index, _data_imu):
+		if self.data_files[_index].closed == False:
+			self.data_files[_index].write(str(_data_imu))
+		else:
+			print("File has closed.")
 
 	def set_suffix(self, suffix):
 		self.suffix_ = suffix
 
 	def generate_date(self):
-		#today = date.today()
 		now = datetime.now()
 		date = now.strftime("%Y_%m_%d-%H_%M_%S-")
 		return str(date)
 
 	def set_current_shape(self, _name):
-		self.name_curr_shape = _name
+		self.name_curr_shapes = [_name]
+		print(self.name_curr_shapes)
 
-	def set_full_path(self):
-		path = self.path_file + "/" + self.name_curr_shape 
-		isExist = os.path.exists(path)
-		if not isExist:
-			os.makedirs(path)
-			print("The new directory is created!")
 
-		if(self.suffix_ != ""):
-			self.full_path = path + "/"  + self.generate_date() + self.name_curr_shape + "-" + self.suffix_ + ".csv"
-			self.full_path_average = self.path_file + "/"  + self.generate_date() + self.name_curr_shape + "-" + self.suffix_ + "-average.csv"
-		else:
-			self.full_path = path + "/"  + self.generate_date() + self.name_curr_shape + ".csv"
-			self.full_path_average = self.path_file + "/"  + self.generate_date() + self.name_curr_shape + "-average.csv"
+	def set_current_shapes(self, _name):
+		self.name_curr_shape = []
+		self.name_curr_shapes = _name.split("_&_")
+		print(self.name_curr_shapes)
+
+	def set_full_paths(self):
+		self.full_paths = []
+		for shape in self.name_curr_shapes:
+			path = self.path_file + "/" + shape 
+			isExist = os.path.exists(path)
+			if not isExist:
+				os.makedirs(path)
+				print("The new directory is created!")
+
+			if(self.suffix_ != ""):
+				self.full_paths.append(path + "/"  + self.generate_date() + shape + "-" + self.suffix_ + ".csv")
+			else:
+				self.full_paths.append(path + "/"  + self.generate_date() + shape + ".csv")
 
 
 	def set_file_path(self, _path):
@@ -51,15 +59,22 @@ class File_manager():
 
 		
 	def remove_file(self):
-		print(self.full_path)
-		if os.path.exists(self.full_path):
-  			os.remove(self.full_path)
-		else:
-			print("The file does not exist") 
+		self.close_all_data_files()
+		for i in range(len(self.data_files)):
+			print(self.full_paths[i])
+			if os.path.exists(self.full_paths[i]):
+				os.remove(self.full_paths[i])
+			else:
+				print("The file does not exist") 
+
+	def close_all_data_files(self):
+		for file in self.data_files:
+			file.close()
 
 	name_curr_shape = ""
-	full_path = ""
-	full_path_average = ""
+	name_curr_shapes = []
+	data_files = []
+	full_paths = []
 	
 	path_file = ""
 	suffix_ = ""
