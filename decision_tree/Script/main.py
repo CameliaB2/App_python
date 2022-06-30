@@ -134,7 +134,7 @@ for c in composantes:
   features_list.append(mlc_configurator.mlc_feature("PEAK_TO_PEAK", c))
   features_list.append(mlc_configurator.mlc_feature("MINIMUM", c))
   features_list.append(mlc_configurator.mlc_feature("MAXIMUM", c))
-  #features_list.append(mlc_configurator.mlc_feature("ENERGY", c))
+  features_list.append(mlc_configurator.mlc_feature("ENERGY", c))
 
 """
 features_list.append(mlc_configurator.mlc_feature("ZERO_CROSSING", "Acc_V", 0.5))

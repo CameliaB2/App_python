@@ -74,17 +74,17 @@ class Serial_COM():
 
 	def check_if_write_headline_in_file(self,):
 		if self.SERIAL_SAVING_FLAG == 2 and not self.headline_write:
-			self.current_file.set_full_path()
-			self.current_file.write_headLine(self.current_file.full_path)
+			self.current_file.set_full_paths()
+			self.current_file.write_headLine()
 			self.set_headline_flag(True)
 			self.graph.set_graph_flag(1)
 			self.serial.flushInput()
 
 	def end_recording(self):
-		self.current_file.data_file.close()
+		self.current_file.close_all_data_files()
 		self.graph.reset_graph()
 		self.set_headline_flag(False)
-		tr.generate_multiple(self.current_file.full_path)  #Ecriture du file moyenne glissante
+		tr.generate_multiple(self.current_file.full_paths)  #Ecriture du file moyenne glissante
 
 
 	def thread_run(self):
@@ -101,8 +101,9 @@ class Serial_COM():
 					if len(data_split) > 1:
 						if len(data_split[1].split('\t')) == 6:
 							self.data_imu = data_split[1]
-							self.current_file.write_data_imu(self.current_file.full_path, self.data_imu) #Write imu data
+							self.current_file.write_data_imu(self.INDEX_SHAPE, self.data_imu) #Write imu data
 							self.serial.flushInput()
+			
 
 
 		print("Imu get data - thread terminate..")
@@ -118,12 +119,9 @@ class Serial_COM():
 	def set_headline_flag(self, _value):
 		self.headline_write = _value
 
+
 	def set_SERIAL_SAVING_FLAG(self, _value):
 		self.SERIAL_SAVING_FLAG = _value
-				
-	def set_FLAG_RECORD(self, _value):
-		self.FLAG_RECORD = _value
-				
 	
 	def get_com(self):
 		return self.COM
@@ -137,30 +135,11 @@ class Serial_COM():
 	def get_list_ports(self):
 		return self.list_ports
 
-	"""
-	def check_if_create_flag(self):
-		sleep(1)
-		if self.SERIAL_SAVING_FLAG == 2 and not self.headline_write:
-			self.old_flag = self.SERIAL_SAVING_FLAG
-			#self.current_file.set_current_shape(self.current_shape)
-			#self.graph.reset_graph()
-			self.current_file.set_full_path()
-			
-	def check_if_write_data_in_file(self, _path): # To use if we want to save all the line in one time, not in real time
-		if( self.old_flag == 1 and self.SERIAL_SAVING_FLAG == 0 ):
-			self.old_flag = self.SERIAL_SAVING_FLAG
-			for el in self.data_imu:
-				self.current_file.write_data_imu(_path, str(el))
-			self.set_headline_flag(False)
-			
-	"""
-	time_to_wait = 0
-	start_time = 0
-	old_flag = 0
+
 	data_imu = []
-	path_file = ""
 	SERIAL_SAVING_FLAG = 6
-	current_shape = ""
+	INDEX_SHAPE = 0
+
 	bauds = 115200
 	headline_write = False
 
@@ -169,7 +148,4 @@ class Serial_COM():
 	serial = ""
 	COM = ""
 
-	RECORD_TIME = 60
-	RECORD_PERIOD = 0.038
-	FLAG_RECORD = 0
 
