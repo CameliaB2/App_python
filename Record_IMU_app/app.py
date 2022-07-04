@@ -5,6 +5,8 @@ from PySide6 import QtCore, QtWidgets, QtGui
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import *
+import yaml
+from yaml.loader import SafeLoader
 
 from classe_line import *
 from find_com import *
@@ -39,7 +41,8 @@ class Window(QMainWindow):
 
 		self._createActions()
 		self._createMenuBar()
-		self._importCSV()
+		#self._importCSV()
+		self._importYAML()
 		self.ser = Serial_COM(self.current_file, self.findPorts)
 		
 		self.preference_onglet = Preferences(self.current_file)
@@ -53,7 +56,7 @@ class Window(QMainWindow):
 		self.imu_data_thr = threading.Thread(target=self.ser.thread_run, args=())
 		self.imu_data_thr.start()
 		
-		self.rec_pan = RecordPanel(self.ser, self.listeClasses, self.current_file)
+		self.rec_pan = RecordPanel(self.ser, self.listeAllClasses, self.current_file)
 		self.img_pan = Image_Panel(self.rec_pan, self.ser)
 		#Pour contrer le str object has no attribute blabla dans classRow
 		set_img_panel(self.img_pan)
@@ -118,7 +121,7 @@ class Window(QMainWindow):
 		self.formatbar = QToolBar(self)
 		self.addToolBar(Qt.TopToolBarArea, self.formatbar)
 
-		for e in self.listeClasses:
+		for e in self.listeAllClasses:
 			toolButton = QToolButton(self)
 			toolButton.setIcon(QtGui.QIcon('Ressources/Classes/Images/' + e + '.png'))
 			toolButton.setToolTip(e)
@@ -137,10 +140,42 @@ class Window(QMainWindow):
 		for line in Lines:
 			self.countClasses += 1
 			self.listeClasses.append(line.strip().split("\t")[0])
+			print(self.listeClasses)
 			
 		file1.close()
 
-	
+
+	def _importYAML(self):
+		file1 = open('Ressources/Classes/class_list.yml', 'r')
+		data = yaml.load(file1, Loader=SafeLoader)
+		self.listePureClasses = []
+		self.listeComplexClasses = []
+		self.listeAllClasses = []
+		self.listeImgClasses = []
+		self.countClasses = 0
+
+		for line in data:
+			self.countClasses += 1
+			if(data[line]['id']<12):
+				self.listePureClasses.append(line)
+				
+			else :
+				self.listeComplexClasses.append(line)
+		self.listeAllClasses = self.listePureClasses + self.listeComplexClasses
+		print("Pure classes")
+		print(self.listePureClasses)
+		print("Complex classes")
+		print(self.listeComplexClasses)
+		print("All classes")
+		print(self.listeAllClasses)
+		
+			
+
+		file1.close()
+
+		
+
+
 	def msg_box(self, text):
 		msg = QMessageBox()
 		msg.setText(text)
