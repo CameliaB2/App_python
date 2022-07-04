@@ -1,0 +1,98 @@
+---
+
+#LKA_class_list: version '2.0.0'
+
+#
+# MARK: Pure shapes
+#
+
+Idle :
+  id : 0
+
+Horizontal : 
+  id : 1
+
+F_B : 
+  id : 2
+
+Vertical : 
+  id : 3
+
+Up  : 
+  id : 4
+
+Right :
+  id : 5
+
+Down :
+  id : 6
+
+Left :
+  id : 7
+
+Diagonale_Up_Right :
+  id : 8
+
+Diagonale_Down_Right  : 
+  id : 9
+
+Diagonale_Down_Left  : 
+  id : 10
+
+Diagonale_Up_Left :
+  id : 11
+
+Circle : 
+  id : 15
+
+#
+#MARK : Complex shapes
+#
+
+Square :
+  id : 12
+  ClockWise : [Right, Down, Left, Up]
+  CounterClockWise : [Down, Right, Up, Left]
+
+Triangle : 
+  id : 13
+  ClockWise : [Diagonale_Down_Right, Left, Diagonale_Up_Right]  
+  CounterClockWise: [Diagonale_Down_Left, Right, Diagonale_Up_Left]
+
+Rhombus : 
+  id : 14
+  ClockWise : [Diagonale_Down_Right, Diagonale_Down_Left, Diagonale_Up_Left, Diagonale_Up_Right]
+  CounterClockWise : [Diagonale_Down_Left, Diagonale_Down_Right, Diagonale_Up_Right, Diagonale_Up_Left]
+
+One : 
+  id : 15
+  sequence : [Diagonale_Up_Right, Down]
+
+Two : 
+  id : 16
+  
+Three : 
+  id : 17
+
+Four :
+  id : 18
+  sequence : [Diagonale_Down_Left, Right, Down]
+
+Five :
+  id : 19
+  sequence : [Left, Down, Right, Down, Left]
+
+Six : 
+  id : 20
+  
+Seven :
+  id : 21
+  sequence : [Right, Diagonale_Down_Left]
+
+Eight :
+  id : 22
+
+Nine :
+  id : 23
+
+...
