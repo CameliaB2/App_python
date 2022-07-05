@@ -29,10 +29,6 @@ class File_manager():
 		date = now.strftime("%Y_%m_%d-%H_%M_%S-")
 		return str(date)
 
-	def set_current_shape(self, _name):
-		self.name_curr_shapes = [_name]
-		print(self.name_curr_shapes)
-
 
 	def set_current_shapes(self, _name):
 		self.name_curr_shape = []

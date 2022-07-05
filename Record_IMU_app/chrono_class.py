@@ -23,7 +23,6 @@ class Chrono_widget(QWidget):
 
         self.pages_qsw = QtWidgets.QStackedWidget()
 
-        
         self.chrono_label = QLabel(name, alignment=QtCore.Qt.AlignCenter)
         self.chrono_pic = QPixmap("Ressources/Images/chrono.png")
         self.chrono_pic = self.chrono_pic.scaled(50, 60, QtCore.Qt.KeepAspectRatio)
@@ -42,8 +41,8 @@ class Chrono_widget(QWidget):
     def countdown(self, txt):
         self.serial.set_SERIAL_SAVING_FLAG(2)
         self.counter = DURATION_INT
-
         self.timer_ = QtCore.QTimer(self)
+
         self.timer_.timeout.connect(lambda:self.timer_timeout(txt))
         self.timer_.start(1000)
 
@@ -83,8 +82,9 @@ class Chrono_widget(QWidget):
 
     def update_gui(self):
         self.countdown_timer.setText(str(self.counter))
+        SEC = 2
         if(self.serial.SERIAL_SAVING_FLAG == 1):    #Multiple shape manage
-            if((TIME_RECORD - self.counter) % 3 == 0 and TIME_RECORD != self.counter and self.counter != 0):
+            if((TIME_RECORD - self.counter) % SEC == 0 and TIME_RECORD != self.counter and self.counter != 0):
                 self.serial.INDEX_SHAPE += 1
                 if(self.serial.INDEX_SHAPE == len(self.serial.current_file.name_curr_shapes)):
                     self.serial.INDEX_SHAPE = 0
