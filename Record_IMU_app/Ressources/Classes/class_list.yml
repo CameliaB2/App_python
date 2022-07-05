@@ -6,94 +6,149 @@
 # MARK: Pure shapes
 #
 
-
-Idle :
-  id : 0
-
-Horizontal : 
-  id : 1
-
-F_B : 
-  id : 2
-
-Vertical : 
-  id : 3
-
-Up  : 
-  id : 4
-
-Right :
-  id : 5
-
-Down :
-  id : 6
-
-Left :
-  id : 7
-
-Diagonale_Up_Right :
-  id : 8
-
-Diagonale_Down_Right  : 
-  id : 9
-
-Diagonale_Down_Left  : 
-  id : 10
-
-Diagonale_Up_Left :
-  id : 11
-
-Circle : 
-  id : 15
-
-#
-#MARK : Complex shapes
-#
-
-Square :
-  id : 12
-  ClockWise : [Right, Down, Left, Up]
-  CounterClockWise : [Down, Right, Up, Left]
-
-Triangle : 
-  id : 13
-  ClockWise : [Diagonale_Down_Right, Left, Diagonale_Up_Right]  
-  CounterClockWise: [Diagonale_Down_Left, Right, Diagonale_Up_Left]
-
-Rhombus : 
-  id : 14
-  ClockWise : [Diagonale_Down_Right, Diagonale_Down_Left, Diagonale_Up_Left, Diagonale_Up_Right]
-  CounterClockWise : [Diagonale_Down_Left, Diagonale_Down_Right, Diagonale_Up_Right, Diagonale_Up_Left]
-
-One : 
-  id : 15
-  sequence : [Diagonale_Up_Right, Down]
-
-Two : 
-  id : 16
+Classes:
   
-Three : 
-  id : 17
-
-Four :
-  id : 18
-  sequence : [Diagonale_Down_Left, Right, Down]
-
-Five :
-  id : 19
-  sequence : [Left, Down, Right, Down, Left]
-
-Six : 
-  id : 20
+  Idle : 
+    composite : False
   
-Seven :
-  id : 21
-  sequence : [Right, Diagonale_Down_Left]
+  Horizontal : 
+    composite : False
 
-Eight :
-  id : 22
+  F_B : 
+    composite : False
+  
+  Vertical :
+    composite : False
+  
+  Up :
+    composite : False
+  
+  Right : 
+    composite : False
+  
+  Down :
+    composite : False
+  
+  Left :
+    composite : False
+  
+  Diagonale_Up_Right :
+    composite : False
+  
+  Diagonale_Down_Right :
+    composite : False
+  
+  Diagonale_Down_Left :
+    composite : False
+  
+  Diagonale_Up_Left : 
+    composite : False
+  
+  Circle : 
+    composite : True
 
-Nine :
-  id : 23
+  Square_Clockwise : 
+    sequence : 
+      - Right
+      - Down
+      - Left
+      - Up
 
+  Square_Counter_ClockWise : 
+    sequence : 
+      - Down
+      - Right
+      - Up
+      - Left
+
+    composite : True
+
+  Triangle_Clockwise :
+    sequence : 
+      - Diagonale_Down_Right
+      - Left
+      - Diagonale_Up_Right
+
+    composite : True
+  
+  Triangle_CounterClockwise: 
+    sequence : 
+      - Diagonale_Down_Left
+      - Right
+      - Diagonale_Up_Left
+
+    composite : True
+
+  Rhombus_Clockwise :
+    sequence :
+      - Diagonale_Down_Right
+      - Diagonale_Down_Left
+      - Diagonale_Up_Left
+      - Diagonale_Up_Right
+
+    composite : Triangle_CounterClockwise
+  
+  Rhombus_CounterClockwise : 
+    sequence :
+      - Diagonale_Down_Left
+      - Diagonale_Down_Right
+      - Diagonale_Up_Right
+      - Diagonale_Up_Left
+
+    composite : True
+
+  One :
+    sequence : 
+      - Diagonale_Up_Right
+      - Down
+
+    composite : True
+
+  Two : 
+    composite : True
+
+  Three : 
+    sequence : #to define
+      - Arc_Left
+    composite : True
+
+  Four :
+    sequence : 
+      - Diagonale_Down_Left
+      - Right
+      - Down
+    composite : True
+
+  Five :
+    sequence : 
+    - Left
+    - Down
+    - Right
+    - Down
+    - Left
+
+    composite : True
+
+  Six : 
+    sequence :
+      - Arc_Right
+      - Arc Left
+
+    composite : True
+  
+  Seven :
+    sequence :
+    - Right
+    - Diagonale_Down_Left
+
+  Eight :
+    sequence : #to define 
+      - Circle
+
+  Nine :
+    sequence : #to define
+
+  
+ 
 ...
+
