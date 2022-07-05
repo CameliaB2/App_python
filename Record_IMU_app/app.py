@@ -147,9 +147,9 @@ class Window(QMainWindow):
 		self.listeImgClasses = []
 		self.countClasses = 0
 
-		for line in data:
+		for line in data['Classes']:
 			self.countClasses += 1
-			if(data[line]['id']<12):
+			if(data['Classes'][line]['composite'] is False):
 				self.listePureClasses.append(line)
 				
 			else :

@@ -54,7 +54,9 @@ Classes:
       - Left
       - Up
 
-  Square_Counter_ClockWise : 
+    composite : True
+
+  Square_Counter_Clockwise : 
     sequence : 
       - Down
       - Right
@@ -71,7 +73,7 @@ Classes:
 
     composite : True
   
-  Triangle_CounterClockwise: 
+  Triangle_Counter_Clockwise: 
     sequence : 
       - Diagonale_Down_Left
       - Right
@@ -88,7 +90,7 @@ Classes:
 
     composite : Triangle_CounterClockwise
   
-  Rhombus_CounterClockwise : 
+  Rhombus_Counter_Clockwise : 
     sequence :
       - Diagonale_Down_Left
       - Diagonale_Down_Right
@@ -141,12 +143,20 @@ Classes:
     - Right
     - Diagonale_Down_Left
 
+    composite : True
+
+
   Eight :
     sequence : #to define 
       - Circle
 
+    composite : True
+
+
   Nine :
     sequence : #to define
+
+    composite : True
 
   
  
