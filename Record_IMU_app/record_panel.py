@@ -50,7 +50,8 @@ class RecordPanel(QWidget):
 		self.main_layout.addStretch()
 		self.setLayout(self.main_layout)
 
-
+	def get_layout(self):
+		return self.main_layout
 	def create_button(self, _text, _bg, _w, _h):
 		btn = QPushButton(_text)
 		btn.setStyleSheet('QPushButton {background-color: ' + _bg + ';}')

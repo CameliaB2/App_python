@@ -80,26 +80,32 @@ class ClassRow(QWidget):
         self.switch_w(False,True)
         self.get_suffix()
         self.set_name()
-        if(self.name.find("_&_") != -1):
-            self.file.set_current_shapes(self.name)
-            self.record_filename_text.setText(self.get_name_file(self.file.name_curr_shapes[0]) + \
-                                             "\n" + \
-                                              self.get_name_file(self.file.name_curr_shapes[1]))
-        else:
-            self.file.set_current_shape(self.name)
-            self.record_filename_text.setText(self.get_name_file(self.name))
+        self.file.set_current_shapes(self.name)
+        files_name = self.generate_files_name()
+        self.record_filename_text.setText(files_name)
 
         img_panel.ready_button.setEnabled(True)
-        
+
+    def generate_files_name(self):
+        size = len(self.file.name_curr_shapes)
+        files_name = ''
+        for i in range(size):
+            if(size == 1):
+                files_name += self.get_name_file(self.file.name_curr_shapes[0])
+            elif(i == size-1):
+                files_name += self.get_name_file(self.file.name_curr_shapes[i])
+            else:
+                files_name += self.get_name_file(self.file.name_curr_shapes[i]) + "\n"
+        return files_name
 
     def _clear_recording_button_clicked(self):
         self.record_button.setEnabled(True)
         self.record_filename_text.setText('Unregistered')
         self.status_button.setStyleSheet("background-color: lightgray")
-        self.get_suffix()
-        self.file.set_current_shape(self.name)
+        #self.get_suffix()
+        #self.file.set_current_shapes(self.name) #Pourquoi on utilise ça
         self.file.remove_file()
-        self.ser.setserIAL_SAVING_FLAG(0)
+        self.ser.set_SERIAL_SAVING_FLAG(0)
         self.ser.set_headline_flag(False)
 
     def get_suffix(self):
