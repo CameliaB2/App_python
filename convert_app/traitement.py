@@ -5,7 +5,6 @@ from time import sleep
 def read_file(_filename):
 	data_row = np.empty((0,6), int)
 	data_col = [[], [], [], [], [], []]
-	composantes = np.empty(np.empty((0,6), int))
 
 	f = open(_filename, "r")
 
@@ -29,7 +28,6 @@ def calculate_average(_array, _range):
 	return np.convolve(_array, np.ones(_range), 'valid') / _range
 
 def calculate_average_all_data(aX, aY, aZ, gX, gY, gZ, _range):
-	aver_datas = [[], [], [], [], [], []]
 	aver_data = [[], [], [], [], [], []]
 	aver_data[0] = calculate_average(aX, _range)
 	aver_data[1] = calculate_average(aY, _range)
@@ -39,11 +37,7 @@ def calculate_average_all_data(aX, aY, aZ, gX, gY, gZ, _range):
 	aver_data[4] = calculate_average(gY, _range)
 	aver_data[5] = calculate_average(gZ, _range)	
 	sleep(0.5)
-	"""
-	for i in range(6):
-		aver_datas[i].append(aver_data[i])
-		#aver_datas = np.concatenate(aver_acc_x, aver_acc_y, aver_acc_z, aver_gyr_x, aver_gyr_y, aver_gyr_z)
-	"""
+	
 	return aver_data
 
 

@@ -6,15 +6,14 @@ from sklearn import tree
 from scipy.io import arff
 from sklearn.model_selection import cross_validate # Import cross_validate
 import re
-import sys
 import numpy as np
-import os
+
 import logging
 
 def isLeaf(src_str):
     r = re.match("[0-9]+ \[label=\"", src_str)
     s = re.search("\\\\n", src_str)
-    if (r != None and s == None):
+    if (r is not None and s is None):
         return True
     else:
         return False
@@ -24,20 +23,20 @@ def printClassName(src_str, dt_file):
     r = re.search("[0-9]+ \[label=\"", src_str)
     s = re.search("\"\] ;", src_str)
     t = re.search("\\\\n", src_str)
-    if (r != None and s != None and t == None):
+    if (r is not None and s is not None and t is None):
         print(src_str[r.end():s.start()], end="", file=dt_file)
 
 
 def printCondition(src_str, dt_file):
     r = re.search("[0-9]+ \[label=\"", src_str)
     s = re.search("\\\\n", src_str)
-    if (r != None and s != None):
+    if (r is not None and s is not None):
         print(src_str[r.end():s.start()], end="", file=dt_file)
 
 
 def getNodeNum(src_str):
     r = re.match("[0-9]+", src_str)
-    if (r != None):
+    if (r is not None):
         return int(r.group(0))
     else:
         print("on rentre ici pardi")
@@ -45,7 +44,6 @@ def getNodeNum(src_str):
 
 
 def getNextLineIndex(src_list, node_num):
-    tmp = []
     i = len(src_list) - 1
     for line in reversed(src_list):
         if (getNodeNum(line) == int(node_num)):
@@ -55,7 +53,7 @@ def getNextLineIndex(src_list, node_num):
 
 
 def isNodeInfo(src_str):
-    if (re.match('[0-9]+ -> [0-9]+[ ]+;', src_str) != None):
+    if (re.match('[0-9]+ -> [0-9]+[ ]+;', src_str) is not None):
         return True
     else:
         return False
@@ -111,9 +109,9 @@ def printTree(dot_tree, dt_file):
     for line in dot_tree.split("\n"):
         r = re.search("[0-9]+\\\\n\[([0-9]+[,]?[ ]?)+\]\\\\n", line)
         s = re.search("\[labeldistance=[0-9]+\.?[0-9]*, labelangle=-?[0-9]+, headlabel=\"(False|True)\"\]", line)
-        if (r != None):
+        if (r is not None):
             line = line[:r.start()] + line[r.end():]
-        if (s != None):
+        if (s is not None):
             line = line[:s.start()] + line[s.end():]
         new_tree.append(line)
 

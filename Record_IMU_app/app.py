@@ -1,7 +1,7 @@
 import sys
 import threading
-from numpy.lib import recfunctions as rfn
-from PySide6 import QtCore, QtWidgets, QtGui
+#from numpy.lib import recfunctions as rfn
+
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import *
@@ -11,18 +11,11 @@ from yaml.loader import SafeLoader
 from classe_line import *
 from find_com import *
 
-from chrono_class import Chrono_widget
-from time import sleep
 from file_manager import *
 from record_panel import *
 from file_panel import *
 from image_panel import *
 from preferences import *
-
-import pyqtgraph as pg
-import traitement as tr
-import numpy as np
-from random import randint
 
 
 class Window(QMainWindow):

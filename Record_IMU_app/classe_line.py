@@ -1,9 +1,4 @@
-from PySide6.QtCore import QByteArray, Qt
-from PySide6.QtGui import QGuiApplication
 from PySide6 import QtCore, QtWidgets, QtGui
-from PySide6.QtNetwork import (QAbstractSocket, QHostAddress, QTcpServer,
-                               QTcpSocket)
-
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import * 
@@ -99,7 +94,7 @@ class ClassRow(QWidget):
         self.get_suffix()
         self.file.set_current_shape(self.name)
         self.file.remove_file()
-        self.ser.setserIAL_SAVING_FLAG(0)
+        self.ser.set_SERIAL_SAVING_FLAG(0)
         self.ser.set_headline_flag(False)
 
     def get_suffix(self):
