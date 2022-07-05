@@ -4,8 +4,6 @@ from time import sleep
 from graph import *
 import threading
 import serial
-import time
-import sys
 
 import traitement as tr
 
