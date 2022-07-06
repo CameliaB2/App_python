@@ -49,7 +49,7 @@ class Window(QMainWindow):
 		self.imu_data_thr = threading.Thread(target=self.ser.thread_run, args=())
 		self.imu_data_thr.start()
 		
-		self.rec_pan = RecordPanel(self.ser, self.listeAllClasses, self.current_file)
+		self.rec_pan = RecordPanel(self.ser, self.list_all_classes, self.current_file)
 		self.img_pan = Image_Panel(self.rec_pan, self.ser)
 		#Pour contrer le str object has no attribute blabla dans classRow
 		set_img_panel(self.img_pan)
@@ -114,7 +114,7 @@ class Window(QMainWindow):
 		self.formatbar = QToolBar(self)
 		self.addToolBar(Qt.TopToolBarArea, self.formatbar)
 
-		for e in self.listeAllClasses:
+		for e in self.list_all_classes:
 			toolButton = QToolButton(self)
 			toolButton.setIcon(QtGui.QIcon('Ressources/Classes/Images/' + e + '.png'))
 			toolButton.setToolTip(e)
@@ -126,14 +126,14 @@ class Window(QMainWindow):
 		file1 = open('Ressources/Classes/class_list.csv', 'r')
 		Lines = file1.readlines()
 		 
-		self.listeClasses = []
-		self.listeImgClasses = []
+		self.list_classes = []
+		self.list_img_classes = []
 		self.countClasses = 0
 		# Strips the newline character
-		for line in Lines:
+		for obj in Lines:
 			self.countClasses += 1
-			self.listeClasses.append(line.strip().split("\t")[0])
-			print(self.listeClasses)
+			self.list_classes.append(obj.strip().split("\t")[0])
+			print(self.list_classes)
 			
 		file1.close()
 
@@ -141,29 +141,28 @@ class Window(QMainWindow):
 	def _importYAML(self):
 		file1 = open('Ressources/Classes/class_list.yml', 'r')
 		data = yaml.load(file1, Loader=SafeLoader)
-		self.listePureClasses = []
-		self.listeComplexClasses = []
-		self.listeAllClasses = []
-		self.listeImgClasses = []
+		self.list_pure_classes = []
+		self.list_complex_classes = []
+		self.list_all_classes = []
+		self.list_img_classes = []
 		self.countClasses = 0
 
-		for line in data['Classes']:
+		for obj in data['classes']:
 			self.countClasses += 1
-			if(data['Classes'][line]['composite'] is False):
-				self.listePureClasses.append(line)
+			if(data['classes'][obj]['composite'] is False):
+				self.list_pure_classes.append(obj)
 				
 			else :
-				self.listeComplexClasses.append(line)
-		self.listeAllClasses = self.listePureClasses + self.listeComplexClasses
-		print("Pure classes")
-		print(self.listePureClasses)
-		print("Complex classes")
-		print(self.listeComplexClasses)
-		print("All classes")
-		print(self.listeAllClasses)
+				self.list_complex_classes.append(obj)
 		
-			
-
+		self.list_all_classes = self.list_pure_classes + self.list_complex_classes
+		print("Pure classes")
+		print(self.list_pure_classes)
+		print("Complex classes")
+		print(self.list_complex_classes)
+		print("All classes")
+		print(self.list_all_classes)
+		
 		file1.close()
 
 		

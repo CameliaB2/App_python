@@ -6,159 +6,192 @@
 # MARK: Pure shapes
 #
 
-Classes:
+classes:
   
-  Idle : 
+  idle : 
     composite : False
   
-  Horizontal : 
+
+  horizontal : 
     composite : False
 
-  F_B : 
+
+  forward_backward : 
     composite : False
   
-  Vertical :
+
+  vertical :
     composite : False
   
-  Up :
+
+  up :
     composite : False
   
-  Right : 
+  
+  right : 
     composite : False
   
-  Down :
+
+  down :
     composite : False
   
-  Left :
+
+  left :
     composite : False
   
-  Diagonale_Up_Right :
+
+  diagonal_up_right :
     composite : False
   
-  Diagonale_Down_Right :
+
+  diagonal_down_right :
     composite : False
   
-  Diagonale_Down_Left :
+
+  diagonal_down_left :
     composite : False
   
-  Diagonale_Up_Left : 
+
+  diagonal_up_left : 
+    composite : False
+
+  
+  arc_left:
     composite : False
   
-  Circle : 
+
+  arc_right:
+    composite : False
+
+
+  circle_clockwise : #discuss if composite = True or False
+    #to define
     composite : True
-
-  Square_Clockwise : 
     sequence : 
-      - Right
-      - Down
-      - Left
-      - Up
+      - arc_left
+      - arc_right
 
+
+  circle_counter_clockwise : #discuss if composite = True or False
     composite : True
-
-  Square_Counter_Clockwise : 
     sequence : 
-      - Down
-      - Right
-      - Up
-      - Left
+      - arc_right
+      - arc_left
 
-    composite : True
 
-  Triangle_Clockwise :
+  square_clockwise : 
+    composite : True 
     sequence : 
-      - Diagonale_Down_Right
-      - Left
-      - Diagonale_Up_Right
-
-    composite : True
-  
-  Triangle_Counter_Clockwise: 
-    sequence : 
-      - Diagonale_Down_Left
-      - Right
-      - Diagonale_Up_Left
-
-    composite : True
-
-  Rhombus_Clockwise :
-    sequence :
-      - Diagonale_Down_Right
-      - Diagonale_Down_Left
-      - Diagonale_Up_Left
-      - Diagonale_Up_Right
-
-    composite : Triangle_CounterClockwise
-  
-  Rhombus_Counter_Clockwise : 
-    sequence :
-      - Diagonale_Down_Left
-      - Diagonale_Down_Right
-      - Diagonale_Up_Right
-      - Diagonale_Up_Left
-
-    composite : True
-
-  One :
-    sequence : 
-      - Diagonale_Up_Right
-      - Down
-
-    composite : True
-
-  Two : 
-    composite : True
-
-  Three : 
-    sequence : #to define
-      - Arc_Left
-    composite : True
-
-  Four :
-    sequence : 
-      - Diagonale_Down_Left
-      - Right
-      - Down
-    composite : True
-
-  Five :
-    sequence : 
-    - Left
-    - Down
-    - Right
-    - Down
-    - Left
-
-    composite : True
-
-  Six : 
-    sequence :
-      - Arc_Right
-      - Arc Left
-
-    composite : True
-  
-  Seven :
-    sequence :
-    - Right
-    - Diagonale_Down_Left
-
-    composite : True
-
-
-  Eight :
-    sequence : #to define 
-      - Circle
-
-    composite : True
-
-
-  Nine :
-    sequence : #to define
-
-    composite : True
+      - right
+      - down
+      - left
+      - up
 
   
+  square_counter_clockwise :
+    composite : True 
+    sequence : 
+      - down
+      - right
+      - up
+      - left
+
  
+  triangle_clockwise :
+    composite : True
+    sequence : 
+      - diagonal_down_right
+      - left
+      - diagonal_up_right
+
+  
+  triangle_counter_clockwise: 
+    composite : True
+    sequence : 
+      - diagonal_down_left
+      - right
+      - diagonal_up_left
+
+
+  rhombus_clockwise :
+    composite : True
+    sequence :
+      - diagonal_down_right
+      - diagonal_down_left
+      - diagonal_up_left
+      - diagonal_up_right
+
+ 
+  rhombus_counter_clockwise : 
+    composite : True
+    sequence :
+      - diagonal_down_left
+      - diagonal_down_right
+      - diagonal_up_right
+      - diagonal_up_left
+
+
+
+  one :
+    composite : True
+    sequence : 
+      - diagonal_up_right
+      - down
+ 
+
+  two : 
+    composite : True
+
+
+  three : 
+    composite : True
+    sequence : #to define
+      - arc_left
+    
+
+  four :
+    composite : True
+    sequence : 
+      - diagonal_down_left
+      - right
+      - down
+
+
+  five :
+    composite : True
+    sequence : 
+      - left
+      - down
+      - right
+      - down
+      - left
+
+
+  six : 
+    composite : True
+    sequence :
+      - arc_right
+      - arc_left
+ 
+
+  seven :
+    composite : True
+    sequence :
+      - right
+      - diagonal_down_left
+
+
+  eight :
+    composite : True
+    sequence : #to define 
+      - circle_clockwise
+
+
+  nine :
+    composite : True
+    sequence : #to define
+      - circle_counter_clockwise
+      - arc_left
+
 ...
 
