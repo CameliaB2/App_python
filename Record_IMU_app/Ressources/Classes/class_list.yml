@@ -141,6 +141,9 @@ classes:
 
   two : 
     composite : True
+    sequence : 
+      - arc_left
+      - right
 
 
   three : 

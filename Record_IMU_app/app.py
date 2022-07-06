@@ -54,8 +54,7 @@ class Window(QMainWindow):
 		#Pour contrer le str object has no attribute blabla dans classRow
 		set_img_panel(self.img_pan)
 		set_rec_panel(self.rec_pan)
-		
-		
+
 
 		self.lay = QVBoxLayout()
 		centralWidget = QWidget()
@@ -149,6 +148,7 @@ class Window(QMainWindow):
 
 		for obj in data['classes']:
 			self.countClasses += 1
+			
 			if(data['classes'][obj]['composite'] is False):
 				self.list_pure_classes.append(obj)
 				
@@ -156,16 +156,22 @@ class Window(QMainWindow):
 				self.list_complex_classes.append(obj)
 		
 		self.list_all_classes = self.list_pure_classes + self.list_complex_classes
-		print("Pure classes")
+		"""print("Pure classes")
 		print(self.list_pure_classes)
 		print("Complex classes")
 		print(self.list_complex_classes)
 		print("All classes")
-		print(self.list_all_classes)
-		
-		file1.close()
+		print(self.list_all_classes)"""
 
-		
+		#Checks
+		for obj in self.list_complex_classes:
+			for e in data['classes'][obj]['sequence']:
+				if e not in data['classes']:
+					print("Wrong sequence")
+					s = obj + " -> " + e
+					print(s)
+
+		file1.close()
 
 
 	def msg_box(self, text):
