@@ -23,8 +23,9 @@ import decision_tree_generator
 from decision_tree_generator import generateDecisionTree
 from decision_tree_generator import generate_subset_of_ARFF
 import mlc_test
-from mlc_test import *
-    
+from mlc_test import *    
+from arff_generator import *
+
 device_name = "LSM6DSOX"    ## list of supported devices available with mlc_configurator.get_devices()
 
 # device settings
@@ -64,12 +65,13 @@ datalogs = []
 datalogs_split_by_class = []
 for class_name in class_names:
     datalogs_i = os.listdir("../Logs/" + class_name +"/")
-    print(class_name, " --> data logs: ", datalogs_i, " ici")
+    print(class_name, " --> data logs: ", datalogs_i)
     datalogs_split_by_class.append(datalogs_i)
     for datalog_i in datalogs_i:
         datalogs.append("../Logs/" + class_name + "/" + datalog_i)
         datalog_results.append(class_name);
 print("All data logs: ", datalogs)
+print("All data logs 0: ", datalogs[0])
 
 # Assign results and values for decision tree 1:
 result_names.append(  class_names )
@@ -95,6 +97,8 @@ result_values.append( [] )
 # Assign results and values for decision tree 8:
 result_names.append(  [] )
 result_values.append( [] )
+
+
 
 dectree_filenames = []
 for i in range(0,8): 
@@ -122,19 +126,21 @@ filters_list = []
 # full list of available inputs can be obtained with   mlc_configurator.get_mlc_inputs(device_name, input_type)
 features_list = []
 
+arff_calculus = Arff_generator()
 
 composantes = ["Acc_X", "Acc_Y", "Acc_Z", "Gyr_X", "Gyr_Y", "Gyr_Z"]
 if input_type == 'accelerometer_only':
     composantes = ["Acc_X", "Acc_Y", "Acc_Z"]
+arff_calculus.set_composantes(composantes)
 
 
 for c in composantes:
-  #features_list.append(mlc_configurator.mlc_feature("MEAN", c))
+  features_list.append(mlc_configurator.mlc_feature("MEAN", c))
   #features_list.append(mlc_configurator.mlc_feature("MINIMUM", c))
   #features_list.append(mlc_configurator.mlc_feature("MAXIMUM", c))
   #features_list.append(mlc_configurator.mlc_feature("PEAK_TO_PEAK", c))
-  features_list.append(mlc_configurator.mlc_feature("VARIANCE", c))
-  features_list.append(mlc_configurator.mlc_feature("ENERGY", c))
+  #features_list.append(mlc_configurator.mlc_feature("VARIANCE", c))
+  #features_list.append(mlc_configurator.mlc_feature("ENERGY", c))
 
 """
 features_list.append(mlc_configurator.mlc_feature("ZERO_CROSSING", "Acc_V", 0.5))
@@ -156,7 +162,10 @@ features_list.append(mlc_configurator.mlc_feature("NEGATIVE_PEAK_DETECTOR", "Gyr
 #features_list.append(mlc_configurator.mlc_feature("ENERGY", "Acc_V_filter_2"))
 #features_list.append(mlc_configurator.mlc_feature("ZERO_CROSSING", "Acc_V_filter_3", 0.5))
 
-mlc_configurator.arff_generator( device_name = device_name, 
+
+
+mlc_configurator.arff_generator( arff_calculus=arff_calculus,
+               device_name = device_name, 
                datalogs = datalogs, 
                results = datalog_results, 
                mlc_odr = mlc_odr, 
@@ -182,7 +191,8 @@ mlc_configurator.arff_generator( device_name = device_name,
 if (n_decision_trees == 1):
     dectree_accuracy, dectree_nodes = decision_tree_generator.generateDecisionTree(
                                                         arff_filename = arff_filename, 
-                                                        dectree_filename = dectree_filenames[0])
+                                                        dectree_filename = dectree_filenames[0],
+                                                        arff_calculus = arff_calculus)
 else:
     for i in range(n_decision_trees) :
         arff_filename_i = arff_filename + str(i+1)
@@ -192,7 +202,8 @@ else:
         logging.info("\n# Decision Tree %d:" %(i+1))
         dectree_accuracy, dectree_nodes = decision_tree_generator.generateDecisionTree( 
                                                arff_filename = arff_filename_i, 
-                                               dectree_filename = dectree_filenames[i] )
+                                               dectree_filename = dectree_filenames[i],
+                                               arff_calculus = arff_calculus )
 
 
 
@@ -212,7 +223,9 @@ metaclassifier6_values = "0,0,0,0,0,0,0,0"
 metaclassifier7_values = "0,0,0,0,0,0,0,0"
 metaclassifier8_values = "0,0,0,0,0,0,0,0"
 metaclassifier_values = [metaclassifier1_values, metaclassifier2_values, metaclassifier3_values, metaclassifier4_values, metaclassifier5_values, metaclassifier6_values, metaclassifier7_values, metaclassifier8_values]
-mlc_configurator.ucf_generator( device_name = device_name, 
+
+mlc_configurator.ucf_generator( arff_calculus = arff_calculus,
+                                device_name = device_name, 
                                 arff_filename = arff_filename, 
                                 dectree_filenames = dectree_filenames,
                                 result_names = result_names, 

@@ -10,6 +10,7 @@ import numpy as np
 import os
 import logging
 
+
 def isLeaf(src_str):
     r = re.match("[0-9]+ \[label=\"", src_str)
     s = re.search("\\\\n", src_str)
@@ -102,8 +103,10 @@ def formatTree(line, indent, dt_file):
 
     return size
 
+def isolate_feature_used(line):
+    return line.split("label=\"")[1].split(" ")[0]
 
-def printTree(dot_tree, dt_file):
+def printTree(dot_tree, dt_file, arff_calculus):
     new_tree = []
 
     # Preprocess the tree
@@ -112,6 +115,10 @@ def printTree(dot_tree, dt_file):
         s = re.search("\[labeldistance=[0-9]+\.?[0-9]*, labelangle=-?[0-9]+, headlabel=\"(False|True)\"\]", line)
         if (r != None):
             line = line[:r.start()] + line[r.end():]
+            if("F" in line and "_on_" in line):
+                feature = isolate_feature_used(line)
+                if not  feature in arff_calculus.features_used_for_tree:
+                    arff_calculus.features_used_for_tree.append(feature)
         if (s != None):
             line = line[:s.start()] + line[s.end():]
         new_tree.append(line)
@@ -127,7 +134,7 @@ def printTree(dot_tree, dt_file):
     return n_nodes, n_leaves
 
 
-def generateDecisionTree( arff_filename, dectree_filename):
+def generateDecisionTree( arff_filename, dectree_filename, arff_calculus):
     data = arff.loadarff(arff_filename)  # <- Write desired file here
     data_set = pd.DataFrame(data[0])
     data_set['class'] = data_set['class'].str.decode('ASCII')
@@ -161,7 +168,7 @@ def generateDecisionTree( arff_filename, dectree_filename):
 
     # Save to file
     dt_file = open(dectree_filename, "w")
-    n_nodes, n_leaves = printTree(dot_tree, dt_file)
+    n_nodes, n_leaves = printTree(dot_tree, dt_file, arff_calculus)
     dt_file.close()
 
     # Read file for logging
