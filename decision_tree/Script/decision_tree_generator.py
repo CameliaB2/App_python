@@ -117,7 +117,7 @@ def printTree(dot_tree, dt_file, arff_calculus):
             line = line[:r.start()] + line[r.end():]
             if("F" in line and "_on_" in line):
                 feature = isolate_feature_used(line)
-                if not  feature in arff_calculus.features_used_for_tree:
+                if not feature in arff_calculus.features_used_for_tree:
                     arff_calculus.features_used_for_tree.append(feature)
         if (s != None):
             line = line[:s.start()] + line[s.end():]
@@ -129,7 +129,7 @@ def printTree(dot_tree, dt_file, arff_calculus):
     print('\nNumber of Leaves  : \t', n_leaves, file=dt_file)
     print('\nSize of the Tree : \t', size_tree, file=dt_file)
 
-    n_nodes = n_leaves - 1;
+    n_nodes = n_leaves - 1
 
     return n_nodes, n_leaves
 
