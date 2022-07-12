@@ -44,8 +44,8 @@ class Chrono_widget(QWidget):
     def countdown(self, txt):
         self.serial.set_SERIAL_SAVING_FLAG(2)
         self.counter = DURATION_INT
+        
         self.timer_ = QtCore.QTimer(self)
-
         self.timer_.timeout.connect(lambda:self.timer_timeout(txt))
         self.timer_.start(1000)
 

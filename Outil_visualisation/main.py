@@ -6,6 +6,7 @@ from PySide6.QtCore import *
 import pyqtgraph as pg
 import file_manager as fm
 from graph import *
+import os.path
 
 
 
@@ -42,6 +43,8 @@ class Tabs(QWidget):
         self.panel.addLayout(self.layout_left_panel)
         self.panel.addWidget(self.graph)
         self.main_layout.addLayout(self.panel)
+        self.create_bottom_bar()     
+        self.main_layout.addLayout(self.toolbar_bot_layout)
 
         self.setLayout(self.main_layout)
 
@@ -56,30 +59,32 @@ class Tabs(QWidget):
             self.data[0] = fm.read_file(fileName)
 
             fileName = fileName.replace('.csv', '-average-Range_4.csv')
-            self.data[1] = fm.read_file(fileName)
-
-            for i in range(6):  
-                for j in range(3):  self.data[1][i].insert(0, 0)
+            if(os.path.exists(fileName)):
+                self.data[1] = fm.read_file(fileName)
+                for i in range(6):  
+                    for j in range(3):  self.data[1][i].insert(0, 0)
 
             fileName = fileName.replace('4.csv', '8.csv')
-            self.data[2] = fm.read_file(fileName)
-            for i in range(6):  
-                for j in range(7):  self.data[2][i].insert(0, 0)
+            if(os.path.exists(fileName)):
+                self.data[2] = fm.read_file(fileName)
+                for i in range(6):  
+                    for j in range(7):  self.data[2][i].insert(0, 0)
 
             fileName = fileName.replace('8.csv', '16.csv')
-            self.data[3] = fm.read_file(fileName)
-            for i in range(4):  
-                for j in range(15):  self.data[3][i].insert(0, 0)
+            if(os.path.exists(fileName)):
+                self.data[3] = fm.read_file(fileName)
+                for i in range(4):  
+                    for j in range(15):  self.data[3][i].insert(0, 0)
 
             self.init_infos()
+            self.set_current_composante()
 
     def init_infos(self):
         self.checkbox_data_obj[0].setChecked(True) #Raw Data True by default
         for obj in self.checkbox_data_obj:
             obj.setEnabled(True)
 
-        self.create_bottom_bar()     
-        self.main_layout.addLayout(self.toolbar_bot_layout)
+        self.update_bottom_bar()     
 
     def create_title_line(self):
         self.title_layout = QHBoxLayout()
@@ -146,16 +151,21 @@ class Tabs(QWidget):
 
     def create_bottom_bar(self):
         self.toolbar_bot_layout = QHBoxLayout()
-        nbr_samples = len(self.data[0][self.current_composante]) #0 because raw data is the first file reading
-        self.sample_nbr_lineE = QLabel("Samples number: " + str(nbr_samples), alignment=Qt.AlignCenter) 
-        self.time_record_lineE = QLabel("Time Recording: " + str(round(nbr_samples*1/26,2)) + "s", alignment=Qt.AlignCenter) 
-        self.ODR_lineE = QLabel("ODR Recording: " + "26Hz", alignment=Qt.AlignCenter) 
+        self.sample_nbr_lineE = QLabel("Samples number: ", alignment=Qt.AlignCenter) 
+        self.time_record_lineE = QLabel("Time Recording: 0s", alignment=Qt.AlignCenter) 
+        self.ODR_lineE = QLabel("ODR Recording: 0Hz", alignment=Qt.AlignCenter) 
         self.sample_nbr_lineE.setObjectName("Info")
         self.time_record_lineE.setObjectName("Info")
         self.ODR_lineE.setObjectName("Info")
         self.toolbar_bot_layout.addWidget(self.sample_nbr_lineE)
         self.toolbar_bot_layout.addWidget(self.time_record_lineE)
         self.toolbar_bot_layout.addWidget(self.ODR_lineE)
+
+    def update_bottom_bar(self):
+        nbr_samples = len(self.data[0][self.current_composante]) #0 because raw data is the first file reading
+        self.sample_nbr_lineE.setText("Samples number: " + str(nbr_samples))
+        self.time_record_lineE.setText("Time Recording: " + str(round(nbr_samples*1/26,2)) + "s")
+        self.ODR_lineE.setText("ODR Recording: " + "26Hz") 
 
     def set_current_composante(self):
             self.current_composante = self.combo_composantes.currentIndex()
