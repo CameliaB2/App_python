@@ -17,7 +17,7 @@ class Serial_COM():
 
 		self.find_USB_devices()
 		sleep(1)
-		self.find_card()
+		#self.find_card()
 
 		self.RUNNING_FLAG = True
 

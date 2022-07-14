@@ -49,7 +49,7 @@ class Window(QMainWindow):
 		self.imu_data_thr = threading.Thread(target=self.ser.thread_run, args=())
 		self.imu_data_thr.start()
 		
-		self.rec_pan = RecordPanel(self.ser, self.list_all_classes, self.current_file)
+		self.rec_pan = RecordPanel(self.ser, self.data, self.current_file)
 		self.img_pan = Image_Panel(self.rec_pan, self.ser)
 		#Pour contrer le str object has no attribute blabla dans classRow
 		set_img_panel(self.img_pan)
@@ -139,17 +139,17 @@ class Window(QMainWindow):
 
 	def _importYAML(self):
 		file1 = open('Ressources/Classes/class_list.yml', 'r')
-		data = yaml.load(file1, Loader=SafeLoader)
+		self.data = yaml.load(file1, Loader=SafeLoader)
 		self.list_pure_classes = []
 		self.list_complex_classes = []
 		self.list_all_classes = []
 		self.list_img_classes = []
 		self.countClasses = 0
 
-		for obj in data['classes']:
+		for obj in self.data['classes']:
 			self.countClasses += 1
 			
-			if(data['classes'][obj]['composite'] is False):
+			if(self.data['classes'][obj]['composite'] is False):
 				self.list_pure_classes.append(obj)
 				
 			else :
@@ -165,8 +165,8 @@ class Window(QMainWindow):
 
 		#Checks
 		for obj in self.list_complex_classes:
-			for e in data['classes'][obj]['sequence']:
-				if e not in data['classes']:
+			for e in self.data['classes'][obj]['sequence']:
+				if e not in self.data['classes']:
 					print("Wrong sequence")
 					s = obj + " -> " + e
 					print(s)
