@@ -45,12 +45,14 @@ class Page_graph(QWidget):
         self.id = _id
 
     def openFileNameDialog(self):
+        path = self.read_preferences_path()
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "", "CSV Files (*.csv);; TXT Files(*.txt)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", path, "CSV Files (*.csv);; TXT Files(*.txt)", options=options)
         if fileName:
             self.reset_file_exist()
             self.file_name_lineE.setText("File name: " + fileName.split("/")[-1])
+            self.write_path_file(fileName.replace(fileName.split("/")[-1], ''))
             self.data[0] = fm.read_file(fileName)
             self.is_file_exist[0] = True
             self.set_tab_name(fileName)
@@ -78,6 +80,23 @@ class Page_graph(QWidget):
 
             self.init_infos()
             self.set_current_composante()
+
+    def read_preferences_path(self):
+        f = open("config.json", "r")
+        if(f.read() == 'to_define'):
+            str_desktop_path = os.path.realpath(__file__)
+            str_desktop_path = str_desktop_path.replace('page_graph.py', 'Logs')
+            self.write_path_file(str_desktop_path)
+            f.close()
+        f = open("config.json", "r")
+        path = f.read()
+        f.close()
+        return path
+
+    def write_path_file(self, _dir):
+        f = open("config.json", "w")
+        f.write(_dir)
+        f.close()
 
     def reset_file_exist(self):
         self.is_file_exist = [False for i in range(len(self.type_data_to_show))]

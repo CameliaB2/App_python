@@ -19,7 +19,7 @@ class Status_bar(QMainWindow):
 class Window(QMainWindow):
     def __init__(self, parent = None):
         super(Window, self).__init__( parent )
-        self.setWindowTitle("Leka - Outil de visualisation des Logs")
+        self.setWindowTitle("Leka - Logs Viewer Tool")
 
         self.tabs = QTabWidget()
         self.nbr_tabs = 1
