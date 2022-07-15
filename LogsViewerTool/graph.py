@@ -30,21 +30,26 @@ class Graph(QWidget):
 		_time = list([0])  
 		_data = [0]
 
-		for type_data in range(len(self.type_data_to_show)):
-			pen = pg.mkPen(color=colors[type_data], width=2) 
-			self.curves[type_data] = self.graph.plot(_time, _data, pen=pen)
+		self.legend = pg.LegendItem(offset=(0.4, .7), colCount=5)
+		self.legend.setParentItem(self.graph.graphicsItem())
+		for i in range(len(self.type_data_to_show)):
+			pen = pg.mkPen(color=colors[i], width=2) 
+			self.curves[i] = self.graph.plot(_time, _data, name = str(self.type_data_to_show[i]), pen=pen)
+			self.legend.addItem(self.curves[i], str(self.type_data_to_show[i]))
 
 		self.graph_layout.addWidget(self.graph)
 		self.setLayout(self.graph_layout)
 
 	def set_graph_parameters(self, _bg, _title, _abs, _ord, _width, _height):
-		self.styles = {"color": "#f00", "font-size": "15px"}
+		self.styles = {"color": "#222", "font-size": "15px"}
 		graph = pg.PlotWidget()   
 		graph.setBackground(_bg)
 		graph.setTitle(_title)
-		graph.addLegend()
+		legend = pg.LegendItem()
+		legend.setParentItem(graph.graphicsItem())
 		graph.setLabel("left", _abs, **self.styles)
 		graph.setLabel("bottom", _ord, **self.styles)
+		graph.showGrid(x=True, y=True)
 		graph.setMinimumWidth(_width)
 		graph.setMinimumHeight(_height)
 		return graph

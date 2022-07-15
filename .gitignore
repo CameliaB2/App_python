@@ -6,5 +6,5 @@ decision_tree/Trees
 decision_tree/Script/__pycache__
 convert_average/Script/__pycache__
 decision_tree/Logs_real
-Outil_visualisation/__pycache__
-Outil_visualisation/Logs
+*/__pycache__
+LogsViewerTool/Logs

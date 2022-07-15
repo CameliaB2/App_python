@@ -14,7 +14,8 @@ class Page_graph(QWidget):
 
         self.composantes_to_show = ["Acc_X", "Acc_Y", "Acc_Z", "Gyr_X", "Gyr_Y", "Gyr_Z"]
         self.type_data_to_show = ["Raw_Data", "Average_4_Data", "Average_8_Data", "Average_16_Data", "Delta_Data"]
-        self.data = [[], [], [], [], []]
+        self.data = [[] for i in range(len(self.composantes_to_show))]
+        self.is_file_exist = [False for i in range(len(self.type_data_to_show))]
         self.current_composante = 0
         self.name_tab = "Page " + str(_id)
 
@@ -48,30 +49,38 @@ class Page_graph(QWidget):
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "", "CSV Files (*.csv);; TXT Files(*.txt)", options=options)
         if fileName:
+            self.reset_file_exist()
             self.file_name_lineE.setText("File name: " + fileName.split("/")[-1])
             self.data[0] = fm.read_file(fileName)
+            self.is_file_exist[0] = True
             self.set_tab_name(fileName)
 
             fileName = fileName.replace('.csv', '-average-Range_4.csv')
             if(os.path.exists(fileName)):
                 self.data[1] = fm.read_file(fileName)
+                self.is_file_exist[1] = True
                 for i in range(6):  
                     for j in range(3):  self.data[1][i].insert(0, 0)
 
             fileName = fileName.replace('4.csv', '8.csv')
             if(os.path.exists(fileName)):
                 self.data[2] = fm.read_file(fileName)
+                self.is_file_exist[2] = True
                 for i in range(6):  
                     for j in range(7):  self.data[2][i].insert(0, 0)
 
             fileName = fileName.replace('8.csv', '16.csv')
             if(os.path.exists(fileName)):
                 self.data[3] = fm.read_file(fileName)
+                self.is_file_exist[3] = True
                 for i in range(4):  
                     for j in range(15):  self.data[3][i].insert(0, 0)
 
             self.init_infos()
             self.set_current_composante()
+
+    def reset_file_exist(self):
+        self.is_file_exist = [False for i in range(len(self.type_data_to_show))]
 
     def set_tab_name(self, fileName):
         fn_split = fileName.split('-')
@@ -105,12 +114,13 @@ class Page_graph(QWidget):
         for obj in self.checkbox_data_obj:
             obj.setEnabled(True)
 
-        self.update_bottom_bar()     
+        self.update_bottom_bar()
+        self.set_checkbox_state() 
 
     def create_title_line(self):
         self.title_layout = QHBoxLayout()
 
-        self.title = QLabel("Données de l'IMU LSM6DSOX", alignment=Qt.AlignCenter)
+        self.title = QLabel("IMU LSM6DSOX - Data Logs", alignment=Qt.AlignCenter)
         self.title.setObjectName("Title")
         self.title_layout.addWidget(self.title)
 
@@ -155,14 +165,14 @@ class Page_graph(QWidget):
         self.import_button = QPushButton("Import")
         self.import_button.setToolTip("Import the file to show")
         self.import_button.setObjectName("Import")
-        self.import_button.setMaximumWidth(75)
+        self.import_button.setMinimumWidth(100)
         self.file_name_lineE = QLabel("File name: No_File")
-        self.file_name_lineE.setMaximumWidth(400)
+        self.file_name_lineE.setMinimumWidth(400)
         self.file_name_lineE.setObjectName("Info")
         self.import_button.clicked.connect(self.openFileNameDialog)
 
-        self.layout_import.addWidget(self.import_button)
-        self.layout_import.addWidget(self.file_name_lineE)
+        self.layout_import.addWidget(self.import_button, alignment=Qt.AlignRight)
+        self.layout_import.addWidget(self.file_name_lineE, alignment=Qt.AlignLeft)
 
 
     def create_data_to_show_checkbox(self):
@@ -179,6 +189,11 @@ class Page_graph(QWidget):
             self.checkbox_data_obj[-1].setEnabled(False)
             self.checkbox_layout.addWidget(self.checkbox_data_obj[-1])
 
+    def set_checkbox_state(self):
+        for i in range(len(self.checkbox_data_obj)):
+            self.checkbox_data_obj[i].setEnabled(self.is_file_exist[i])
+
+        
     def create_bottom_bar(self):
         self.toolbar_bot_layout = QHBoxLayout()
         self.sample_nbr_lineE = QLabel("Samples number: ", alignment=Qt.AlignCenter) 

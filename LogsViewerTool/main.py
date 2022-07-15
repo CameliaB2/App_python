@@ -121,14 +121,14 @@ QPushButton {
 }
 
 QPushButton#Import {
-    background-color: orange;
+    background-color: #F08E20;
     color: white;
     border: solid 3px black;
     border-radius: 5px;
     height: 30px;
 }
 QPushButton#Delete {
-    background-color: red;
+    background-color: #EB1B6B;
     color: white;
     border: solid 3px black;
     border-radius: 5px;
@@ -139,7 +139,7 @@ QPushButton#Icon {
     border-radius: 5px;
 }
 QPushButton#Reset_view{
-    background-color: green;
+    background-color: #ADCC36;
     color: white;
     border: solid 3px black;
     border-radius: 5px;
@@ -147,7 +147,7 @@ QPushButton#Reset_view{
     margin-top: 30px;
 }
 QPushButton#Add_button{
-    background-color: blue;
+    background-color: #56ADD4;
     color: white;
 }
 QCheckBox{
