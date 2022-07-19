@@ -26,7 +26,7 @@ class File_manager():
 
 	def generate_date(self):
 		now = datetime.now()
-		date = now.strftime("%Y_%m_%d-%H_%M_%S-")
+		date = now.strftime("%Y_%m_%d-%H_%M_%S")
 		return str(date)
 
 
@@ -35,7 +35,7 @@ class File_manager():
 		self.name_curr_shapes = _name.split("_&_")
 		print(self.name_curr_shapes)
 
-	def set_full_paths(self):
+	def set_full_paths(self, odr):
 		self.full_paths = []
 		for shape in self.name_curr_shapes:
 			path = self.path_file + "/" + shape 
@@ -45,9 +45,9 @@ class File_manager():
 				print("The new directory is created!")
 
 			if(self.suffix_ != ""):
-				self.full_paths.append(path + "/"  + self.generate_date() + shape + "-" + self.suffix_ + ".csv")
+				self.full_paths.append(path + "/"  + self.generate_date() + "-" + odr + "-" + shape + "-" + self.suffix_ + ".csv")
 			else:
-				self.full_paths.append(path + "/"  + self.generate_date() + shape + ".csv")
+				self.full_paths.append(path + "/"  + self.generate_date() + "-" + odr + "-" + shape + ".csv")
 
 
 	def set_file_path(self, _path):

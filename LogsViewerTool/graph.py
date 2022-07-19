@@ -24,19 +24,21 @@ class Graph(QWidget):
 
 	def create_graph(self):
 		self.graph_layout = QVBoxLayout()
+		self.title = QLabel("", alignment=Qt.AlignCenter)
 		self.graph = self.set_graph_parameters('w', "Acceleration", "Acc (mg)", "Time (*1/26 s)", 720, 400)
 
-		colors = ['b', 'r', 'g', 'violet', 'orange']
+		colors = ['royalblue', 'indianred', 'limegreen', 'violet', 'orange', 'cyan', 'pink', 'lime', 'teal', 'crimson', 'lightcoral', 'darkturquoise', 'peru']
 		_time = list([0])  
 		_data = [0]
 
-		self.legend = pg.LegendItem(offset=(0.4, .7), colCount=5)
+		self.legend = pg.LegendItem(offset=(0, 0.2), colCount=10)
 		self.legend.setParentItem(self.graph.graphicsItem())
 		for i in range(len(self.type_data_to_show)):
 			pen = pg.mkPen(color=colors[i], width=2) 
 			self.curves[i] = self.graph.plot(_time, _data, name = str(self.type_data_to_show[i]), pen=pen)
 			self.legend.addItem(self.curves[i], str(self.type_data_to_show[i]))
 
+		self.graph_layout.addWidget(self.title)
 		self.graph_layout.addWidget(self.graph)
 		self.setLayout(self.graph_layout)
 
@@ -44,7 +46,8 @@ class Graph(QWidget):
 		self.styles = {"color": "#222", "font-size": "15px"}
 		graph = pg.PlotWidget()   
 		graph.setBackground(_bg)
-		graph.setTitle(_title)
+		self.title.setText(_title)
+		self.title.setStyleSheet("font-weight: bold")
 		legend = pg.LegendItem()
 		legend.setParentItem(graph.graphicsItem())
 		graph.setLabel("left", _abs, **self.styles)
@@ -55,12 +58,13 @@ class Graph(QWidget):
 		return graph
 
 
-	def update_graph_parameters(self, _title, _abs, _ord):      
-		self.graph.setTitle(_title)  
+	def update_graph_parameters(self, _title, _abs, _ord):
+		self.title.setText(_title)
 		self.graph.setLabel("left", _abs, **self.styles)
 		self.graph.setLabel("bottom", _ord, **self.styles)
 
-
+	def set_data(self, data):
+		self.data = data
 	def add_graph(self, type_data, current_composante):
 		self._time = list([0])  
 

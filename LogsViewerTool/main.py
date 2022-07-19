@@ -82,7 +82,7 @@ class Window(QMainWindow):
             event.ignore()
 
     def closeAll(self):
-        close = QMessageBox.question(self, "QUIT", "Are you sure want to stop process?", QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        close = QMessageBox.question(self, "QUIT", "Are you sure want to stop process ?\nYou will lose you current analyzes.", QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if close == QtWidgets.QMessageBox.Yes:
             quit()
             return True

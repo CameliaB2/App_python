@@ -41,7 +41,7 @@ class ClassRow(QWidget):
         lay.setSpacing(70)        
         lay.addWidget(self.set_size(self.class_name_text,160,30))
         lay.addWidget(self.set_size(self.textbox,65,30))
-        lay.addWidget(self.set_size(self.record_filename_text, 300, 30))
+        lay.addWidget(self.set_size(self.record_filename_text, 350, 30))
         lay.addWidget(self.set_size(self.record_button, 150, 30))
         lay.addWidget(self.set_size(self.status_button,70, 30))
         lay.addWidget(self.set_size(self.clear_recording_button, 70, 30))
@@ -126,12 +126,13 @@ class ClassRow(QWidget):
     def switch_w(self, state1, state2):
         rec_panel.setVisible(state1)
         img_panel.setVisible(state2)
-    
+
+        #Doublon avec file_manager, à refaire
     def get_name_file(self, _name):
         if(self.suffix != ""):
-            file_name_ = self.generate_date() + _name + "-" + self.suffix + ".csv"
+            file_name_ = self.generate_date() + "-"  + self.ser.odr_freq + "-" + _name + "-" + self.suffix + ".csv"
         else:
-            file_name_ = self.generate_date() + _name + ".csv"
+            file_name_ = self.generate_date() + "-"  + self.ser.odr_freq + "-" + _name + ".csv"
         return file_name_
 
 
@@ -153,7 +154,7 @@ class ClassRow(QWidget):
 
     def generate_date(self):
         now = datetime.now()
-        date = now.strftime("%Y_%m_%d-%H_%M_%S-")
+        date = now.strftime("%Y_%m_%d-%H_%M_%S")
         return str(date)
 
     
