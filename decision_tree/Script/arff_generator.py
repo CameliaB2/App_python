@@ -107,11 +107,21 @@ class Arff_generator:
                 count += 1
 
         _classes = ''
-        for i in range(len(self.results)):
-            if not str(self.results[i]) in _classes:
-                if(_classes != ''):
-                    _classes += ', '
-                _classes += self.results[i]
+        _classes_list = []
+
+        for res in self.results:
+            isPresent = False
+            if(len(_classes_list) == 0):
+                _classes_list.append(res)
+                _classes += res
+            else:
+                for classe in _classes_list:
+                    if res == classe:
+                        isPresent = True
+                if not isPresent:
+                    _classes_list.append(res)
+                    _classes += (', ' + res)
+
         self.data_file.write("@attribute class {" + _classes + '}\n\n')
 
     def write_data_arff_file(self):

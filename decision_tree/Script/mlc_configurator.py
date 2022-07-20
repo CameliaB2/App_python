@@ -5,7 +5,7 @@ import external_tools
 from arff_generator import *
 
 class mlc_configurator:
-	
+    
     class mlc_feature(object):
         def __init__(self, name=None, input=None, threshold=0):
             self.name = name
@@ -142,7 +142,7 @@ class mlc_configurator:
 
     def arff_generator( arff_calculus,
                        device_name, 
-	                   datalogs, 
+                       datalogs, 
                        results,
                        mlc_odr, 
                        input_type, 
@@ -199,7 +199,7 @@ class mlc_configurator:
 
     def ucf_generator( arff_calculus, 
                        device_name, 
-	                   arff_filename, 
+                       arff_filename, 
                        dectree_filenames,
                        result_names, 
                        result_values, 

@@ -58,7 +58,6 @@ datalog_results = [] # leave empty here
 
 # Load class names (folder names) from Logs folder
 class_names = os.listdir("../Logs/")
-print ("available classes = ", class_names)
 
 # For each class (folder), load all data (files in the folder)
 datalogs = []
