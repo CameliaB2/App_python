@@ -43,7 +43,7 @@ class Window(QMainWindow):
 		self._createMenuBar()
 		#self._importCSV()
 		self._importYAML()
-		self.ser = Serial_COM(self.current_file, self.findPorts)
+		self.ser = Serial_COM(self.current_file, self.findPorts, self.odrFreq)
 		
 		self.preference_onglet = Preferences(self.current_file)
 		self.preferences.triggered.connect(self.preference_onglet.show_preferences)
