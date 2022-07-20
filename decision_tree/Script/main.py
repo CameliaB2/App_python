@@ -1,7 +1,6 @@
 import os, datetime
 from ucf_converter import *
 
-import command_parameters
 from command_parameters import *
 
 current_directory = os.getcwd().replace('Script', 'Trees')
@@ -12,7 +11,6 @@ from mlc_script_log import *
 logger = Logger(current_directory, "")
 logging.info("Current directory: " + current_directory)
 
-import external_tools
 
 arff_filename = os.path.join(current_directory, "features.arff")
 

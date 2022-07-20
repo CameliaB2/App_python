@@ -1,13 +1,9 @@
-from PySide6 import QtCore, QtWidgets, QtGui
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import * 
 import sys
-import os
 from os import path
-
 import traitement as tr
-import numpy as np
 
 
 
@@ -72,7 +68,7 @@ class Search_bar(QWidget):
 class Window(QMainWindow):
 	def __init__(self, parent = None):
 		super(Window, self).__init__( parent )
-		self.setWindowTitle("Leka - COnvertisseur moyenne glissante")
+		self.setWindowTitle("Leka - Convertisseur")
 
 
 		self.browser_lay = QVBoxLayout()
@@ -89,9 +85,12 @@ class Window(QMainWindow):
 		self.file_to_transform = Search_bar('File to tranform', 'X42')
 		self.path_file_to_reg = Search_bar('Path where the file will be registered', 'X70')
 
-
+		
 		self.generate_button  = self.create_button("Generate", "green")
 		self.generate_button.clicked.connect(lambda: self.generate(int(self.range_qlineEdit.text())))
+
+		self.generate_button_delta = self.create_button("Generate delta file", "blue")
+		self.generate_button_delta.clicked.connect(self.generate_delta)
 
 		self.generate_multiple_button  = self.create_button("Generate [sample - 4/8/16]", "orange")
 		self.generate_multiple_button.clicked.connect(self.generate_multiple)
@@ -103,6 +102,7 @@ class Window(QMainWindow):
 		self.browser_lay.addWidget(self.path_file_to_reg)
 		self.browser_lay.addWidget(self.generate_button)
 		self.browser_lay.addWidget(self.generate_multiple_button)
+		self.browser_lay.addWidget(self.generate_button_delta)
 
 
 		centralWidget = QWidget()
@@ -154,6 +154,40 @@ class Window(QMainWindow):
 		else:
 			self.set_indication_label('File not created, empty path !', 'red')
 
+
+	def generate_delta(self):
+		if(self.file_to_transform.path_qlineEdit.text() != '' and self.path_file_to_reg.path_qlineEdit.text() != '' ):
+			if( path.exists(self.file_to_transform.path_qlineEdit.text()) and path.exists(self.path_file_to_reg.path_qlineEdit.text())):
+
+				self.data = tr.read_file(self.file_to_transform.path_qlineEdit.text())
+				self.delta_data = tr.calculate_delta_all_data(self.data[0], self.data[1], self.data[2], self.data[3], self.data[4], self.data[5])
+
+				self.set_name_delta()
+				_path =  self.path_file_to_reg.path_qlineEdit.text() + '/' + self.name_file
+
+				data_file = open(_path, "a")
+				head_line = "AccX[mg]\tAccY[mg]\tAccZ[mg]\tGyrX[dps]\tGyrY[dps]\tGyrZ[dps]\t\n"
+				data_file.write(head_line)
+				for i in range(len(self.delta_data[0])):
+					data_file.write(str(self.delta_data[0][i]) + '\t' + 
+									str(self.delta_data[1][i]) + '\t' + 
+									str(self.delta_data[2][i]) + '\t' + 
+									str(self.delta_data[3][i]) + '\t' + 
+									str(self.delta_data[4][i]) + '\t' +
+									str(self.delta_data[5][i]) + '\n')
+				data_file.close()
+				self.set_indication_label('File created successfully!', 'green')
+
+			else:
+				self.set_indication_label('File not created, path not found !', 'red')
+
+		else:
+			self.set_indication_label('File not created, empty path !', 'red')
+
+
+
+
+
 	def set_indication_label(self, _text, _color):
 		self.indication_text.setText(_text)
 		self.indication_text.setStyleSheet("color: " + _color)
@@ -162,6 +196,10 @@ class Window(QMainWindow):
 	def set_name(self, _range):
 		self.name_file = self.file_to_transform.path_qlineEdit.text().split('/')[-1].split('.')[0] + '-average-Range_' + str(_range) + '.csv'
 	
+	def set_name_delta(self):
+		self.name_file = self.file_to_transform.path_qlineEdit.text().split('/')[-1].split('.')[0] + '-delta' + '.csv'
+	
+
 	name_file = ""
 	data = []
 	aver_datas = []

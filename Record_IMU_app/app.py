@@ -1,16 +1,16 @@
 import sys
 import threading
-from numpy.lib import recfunctions as rfn
-from PySide6 import QtCore, QtWidgets, QtGui
+#from numpy.lib import recfunctions as rfn
+
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import *
+import yaml
+from yaml.loader import SafeLoader
 
 from classe_line import *
 from find_com import *
 
-from chrono_class import Chrono_widget
-from time import sleep
 from file_manager import *
 from record_panel import *
 from file_panel import *
@@ -41,10 +41,10 @@ class Window(QMainWindow):
 		self.odrFreq = ODR_LIST[1]
 		self._createActions()
 		self._createMenuBar()
-		self._importCSV()
-		self.ser = Serial_COM(self.current_file, self.findPorts, self.odrFreq)
-		self.odrFreq = ODR_LIST[1]
-
+		#self._importCSV()
+		self._importYAML()
+		self.ser = Serial_COM(self.current_file, self.findPorts)
+		
 		self.preference_onglet = Preferences(self.current_file)
 		self.preferences.triggered.connect(self.preference_onglet.show_preferences)
 		self.exitAction.triggered.connect(self.closeAll)
@@ -56,13 +56,12 @@ class Window(QMainWindow):
 		self.imu_data_thr = threading.Thread(target=self.ser.thread_run, args=())
 		self.imu_data_thr.start()
 		
-		self.rec_pan = RecordPanel(self.ser, self.listeClasses, self.current_file)
+		self.rec_pan = RecordPanel(self.ser, self.data, self.current_file)
 		self.img_pan = Image_Panel(self.rec_pan, self.ser)
 		#Pour contrer le str object has no attribute blabla dans classRow
 		set_img_panel(self.img_pan)
 		set_rec_panel(self.rec_pan)
-		
-		
+
 
 		self.lay = QVBoxLayout()
 		centralWidget = QWidget()
@@ -131,7 +130,7 @@ class Window(QMainWindow):
 		self.formatbar = QToolBar(self)
 		self.addToolBar(Qt.TopToolBarArea, self.formatbar)
 
-		for e in self.listeClasses:
+		for e in self.list_all_classes:
 			toolButton = QToolButton(self)
 			toolButton.setIcon(QtGui.QIcon('Ressources/Classes/Images/' + e + '.png'))
 			toolButton.setToolTip(e)
@@ -143,17 +142,55 @@ class Window(QMainWindow):
 		file1 = open('Ressources/Classes/class_list.csv', 'r')
 		Lines = file1.readlines()
 		 
-		self.listeClasses = []
-		self.listeImgClasses = []
+		self.list_classes = []
+		self.list_img_classes = []
 		self.countClasses = 0
 		# Strips the newline character
-		for line in Lines:
+		for obj in Lines:
 			self.countClasses += 1
-			self.listeClasses.append(line.strip().split("\t")[0])
+			self.list_classes.append(obj.strip().split("\t")[0])
+			print(self.list_classes)
 			
 		file1.close()
 
-	
+
+	def _importYAML(self):
+		file1 = open('Ressources/Classes/class_list.yml', 'r')
+		self.data = yaml.load(file1, Loader=SafeLoader)
+		self.list_pure_classes = []
+		self.list_complex_classes = []
+		self.list_all_classes = []
+		self.list_img_classes = []
+		self.countClasses = 0
+
+		for obj in self.data['classes']:
+			self.countClasses += 1
+			
+			if(self.data['classes'][obj]['composite'] is False):
+				self.list_pure_classes.append(obj)
+				
+			else :
+				self.list_complex_classes.append(obj)
+		
+		self.list_all_classes = self.list_pure_classes + self.list_complex_classes
+		"""print("Pure classes")
+		print(self.list_pure_classes)
+		print("Complex classes")
+		print(self.list_complex_classes)
+		print("All classes")
+		print(self.list_all_classes)"""
+
+		#Checks
+		for obj in self.list_complex_classes:
+			for e in self.data['classes'][obj]['sequence']:
+				if e not in self.data['classes']:
+					print("Wrong sequence")
+					s = obj + " -> " + e
+					print(s)
+
+		file1.close()
+
+
 	def msg_box(self, text):
 		msg = QMessageBox()
 		msg.setText(text)

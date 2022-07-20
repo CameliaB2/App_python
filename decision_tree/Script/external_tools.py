@@ -1,5 +1,4 @@
 from mlc_script_log import *
-import platform
 
 # Unico version check: 
 #if(platform.system() == "Windows"):

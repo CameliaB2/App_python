@@ -1,4 +1,3 @@
-from PySide6 import QtCore, QtWidgets, QtGui
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import * 
@@ -7,7 +6,7 @@ from classe_line import ClassRow
 
 
 class FilePanel(QWidget):
-    def __init__(self, _ser, _file, parent = None):
+    def __init__(self, _ser, _file, _data, parent = None):
         super(FilePanel, self).__init__( parent )
 
         self.lay = QVBoxLayout()  
@@ -17,13 +16,14 @@ class FilePanel(QWidget):
         self.ser = _ser
         self.id = 0
         self.classR = ''
+        self.data = _data
     
 
         self.setLayout(self.lay)
 
 
     def add_item(self, _name):
-        self.classR = ClassRow(_name, self.ser, self.id, self.file)
+        self.classR = ClassRow(self.data, _name, self.ser, self.id, self.file)
         self.l_classRow.append(self.classR)
         self.lay.addWidget(self.l_classRow[-1])
         self.id += 1

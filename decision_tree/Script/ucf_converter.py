@@ -1,4 +1,3 @@
-from time import sleep	
 import numpy as np
 
 def convert_ucf_to_h(_name, _path_ucf, _path_h):
@@ -40,7 +39,7 @@ def convert_ucf_to_h(_name, _path_ucf, _path_h):
 	ucf_file = open(_path_ucf, "r")
 	data_ucf = ucf_file.readlines()
 	data_struct_ucf = []
-	data_struct_num = []
+	
 	#essayer de récupérer l'indice de début du Ac
 	
 	for i in range(4,len(data_ucf)):
