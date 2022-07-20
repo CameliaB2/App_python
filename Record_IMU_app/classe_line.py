@@ -1,9 +1,4 @@
-from PySide6.QtCore import QByteArray, Qt
-from PySide6.QtGui import QGuiApplication
 from PySide6 import QtCore, QtWidgets, QtGui
-from PySide6.QtNetwork import (QAbstractSocket, QHostAddress, QTcpServer,
-                               QTcpSocket)
-
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import * 
@@ -13,7 +8,7 @@ img_panel = ''
 rec_panel = ''
 
 class ClassRow(QWidget):
-    def __init__(self, _name=None, serial=None, _id=None, _file=None, parent=None):
+    def __init__(self, _data=None, _name=None, serial=None, _id=None, _file=None, parent=None):
         super(ClassRow, self).__init__( parent )
 
         lay = QHBoxLayout(self)  
@@ -25,6 +20,7 @@ class ClassRow(QWidget):
         self.file = _file
         self.ser = serial
         self.suffix = ""
+        self.data = _data
 
         self.class_name_text = self.create_className(self.name, 'The name of the class to record', 'white')
         self.textbox = self.create_inputField('white', 'Write a suffix which will be added at the end of the filename')
@@ -80,26 +76,33 @@ class ClassRow(QWidget):
         self.switch_w(False,True)
         self.get_suffix()
         self.set_name()
-        if(self.name.find("_&_") != -1):
-            self.file.set_current_shapes(self.name)
-            self.record_filename_text.setText(self.get_name_file(self.file.name_curr_shapes[0]) + \
-                                             "\n" + \
-                                              self.get_name_file(self.file.name_curr_shapes[1]))
-        else:
-            self.file.set_current_shape(self.name)
-            self.record_filename_text.setText(self.get_name_file(self.name))
+        #appel de la fonction set_current_shapes uniquement si la shape est composite True
+        self.file.set_current_shapes(self.data, self.name)
+        files_name = self.generate_files_name()
+        self.record_filename_text.setText(files_name)
 
         img_panel.ready_button.setEnabled(True)
-        
+
+    def generate_files_name(self):
+        size = len(self.file.name_curr_shapes)
+        files_name = ''
+        for i in range(size):
+            if(size == 1):
+                files_name += self.get_name_file(self.file.name_curr_shapes[0])
+            elif(i == size-1):
+                files_name += self.get_name_file(self.file.name_curr_shapes[i])
+            else:
+                files_name += self.get_name_file(self.file.name_curr_shapes[i]) + "\n"
+        return files_name
 
     def _clear_recording_button_clicked(self):
         self.record_button.setEnabled(True)
         self.record_filename_text.setText('Unregistered')
         self.status_button.setStyleSheet("background-color: lightgray")
-        self.get_suffix()
-        self.file.set_current_shape(self.name)
+        #self.get_suffix()
+        #self.file.set_current_shapes(self.name) #Pourquoi on utilise ça
         self.file.remove_file()
-        self.ser.setserIAL_SAVING_FLAG(0)
+        self.ser.set_SERIAL_SAVING_FLAG(0)
         self.ser.set_headline_flag(False)
 
     def get_suffix(self):

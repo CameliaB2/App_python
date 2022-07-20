@@ -1,7 +1,6 @@
 import os, datetime
 from ucf_converter import *
 
-import command_parameters
 from command_parameters import *
 
 current_directory = os.getcwd().replace('Script', 'Trees')
@@ -12,7 +11,6 @@ from mlc_script_log import *
 logger = Logger(current_directory, "")
 logging.info("Current directory: " + current_directory)
 
-import external_tools
 
 arff_filename = os.path.join(current_directory, "features.arff")
 
@@ -64,7 +62,7 @@ datalogs = []
 datalogs_split_by_class = []
 for class_name in class_names:
     datalogs_i = os.listdir("../Logs/" + class_name +"/")
-    print(class_name, " --> data logs: ", datalogs_i)
+    print(class_name, " --> data logs: ", datalogs_i, " ici")
     datalogs_split_by_class.append(datalogs_i)
     for datalog_i in datalogs_i:
         datalogs.append("../Logs/" + class_name + "/" + datalog_i)
@@ -129,11 +127,11 @@ if input_type == 'accelerometer_only':
 
 
 for c in composantes:
-  features_list.append(mlc_configurator.mlc_feature("MEAN", c))
+  #features_list.append(mlc_configurator.mlc_feature("MEAN", c))
+  #features_list.append(mlc_configurator.mlc_feature("MINIMUM", c))
+  #features_list.append(mlc_configurator.mlc_feature("MAXIMUM", c))
+  #features_list.append(mlc_configurator.mlc_feature("PEAK_TO_PEAK", c))
   features_list.append(mlc_configurator.mlc_feature("VARIANCE", c))
-  features_list.append(mlc_configurator.mlc_feature("PEAK_TO_PEAK", c))
-  features_list.append(mlc_configurator.mlc_feature("MINIMUM", c))
-  features_list.append(mlc_configurator.mlc_feature("MAXIMUM", c))
   features_list.append(mlc_configurator.mlc_feature("ENERGY", c))
 
 """
