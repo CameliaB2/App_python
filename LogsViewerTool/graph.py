@@ -36,7 +36,7 @@ class Graph(QWidget):
 		for i in range(len(self.type_data_to_show)):
 			pen = pg.mkPen(color=colors[i], width=2) 
 			self.curves[i] = self.graph.plot(_time, _data, name = str(self.type_data_to_show[i]), pen=pen)
-			self.legend.addItem(self.curves[i], str(self.type_data_to_show[i]))
+			self.legend.addItem(self.curves[i], str(self.type_data_to_show[i]).replace('-', ' ').replace('_', ' '))
 
 		self.graph_layout.addWidget(self.title)
 		self.graph_layout.addWidget(self.graph)
