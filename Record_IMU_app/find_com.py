@@ -9,10 +9,11 @@ import traitement as tr
 
 
 class Serial_COM():
-	def __init__(self, _file, _menuBar, parent = None):
+	def __init__(self, _file, _menuBar, _odr, parent = None):
 
 		self.findPorts = _menuBar
 		self.current_file = _file
+		self.odr_freq = _odr
 		self.graph = Graph(self)
 
 		self.find_USB_devices()
@@ -51,6 +52,9 @@ class Serial_COM():
 		else:
 			self.serial_verification(_port)
 
+	def set_ODR(self, _odr):
+		self.odr_freq = _odr
+
 	def serial_verification(self, _port):
 		ser = serial.Serial(_port, self.bauds, timeout = .038)
 		if ser.isOpen():
@@ -72,7 +76,7 @@ class Serial_COM():
 
 	def check_if_write_headline_in_file(self,):
 		if self.SERIAL_SAVING_FLAG == 2 and not self.headline_write:
-			self.current_file.set_full_paths()
+			self.current_file.set_full_paths(self.odr_freq)
 			self.current_file.write_headLine()
 			self.set_headline_flag(True)
 			self.graph.set_graph_flag(1)

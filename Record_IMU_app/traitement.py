@@ -46,12 +46,12 @@ def calculate_average_all_data(aX, aY, aZ, gX, gY, gZ, _range):
 	"""
 	return aver_data
 
-def generate(_full_path, _range):
-	data = read_file(_full_path)
-	if(len(data) > _range):
-		aver_datas = calculate_average_all_data(data[0], data[1], data[2], data[3], data[4], data[5], _range)
+def generate(_full_path, _range, _data):
+	if(len(_data) > _range):
+		aver_datas = calculate_average_all_data(_data[0], _data[1], _data[2], _data[3], _data[4], _data[5], _range)
 
 		full_path_average = _full_path.split('.')[0] + '-average-Range-' + str(_range) + '.csv'
+
 
 		data_file = open(full_path_average, "a")
 		head_line = "A_X[mg]\tA_Y[mg]\tA_Z[mg]\tG_X[dps]\tG_Y[dps]\tG_Z[dps]\t\n"
@@ -67,6 +67,8 @@ def generate(_full_path, _range):
 
 def generate_multiple(_full_paths):
 	_range = [4, 8, 16]
+	data = read_file(_full_path)
 	for full_path in _full_paths:
 		for val in _range:
-			generate(full_path, val)
+			generate(full_path, val, data)
+			sleep(1)

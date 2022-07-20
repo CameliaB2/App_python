@@ -2,6 +2,7 @@ import os
 import subprocess
 from mlc_script_log import *
 import external_tools
+from arff_generator import *
 
 class mlc_configurator:
 	
@@ -10,6 +11,7 @@ class mlc_configurator:
             self.name = name
             self.input = input
             self.threshold = threshold
+            pass
             
     class mlc_filter: 
         def __init__(self, filter_id="filter_1", 
@@ -138,8 +140,8 @@ class mlc_configurator:
                          "ABS_MAXIMUM"]
         return feature_names
 
-    def arff_generator(self,
-                        device_name, 
+    def arff_generator( arff_calculus,
+                       device_name, 
 	                   datalogs, 
                        results,
                        mlc_odr, 
@@ -163,94 +165,40 @@ class mlc_configurator:
             logging.error("ERROR: features_list empty")
             return
 
+
+
+
+        logging.info("\nCalling MLC app for features computation and ARFF generation...")
+        
+        ARFF_gen_filename = os.path.join(current_directory, "features.arff")
         config_for_ARFF_gen_filename = os.path.join(current_directory, "ARFF_generation.txt")
 
-        with open(config_for_ARFF_gen_filename, "w") as f:
-            for i in range(len(datalogs)):
-                if os.path.isfile(datalogs[i]):
-                    f.write("%d,0,%s,%s\n" % (i, results[i], datalogs[i]))
-                else:
-                    logging.error("\nERROR: The following file does not exist: " + datalogs[i])
+        arff_calculus.set_datalogs(datalogs)
+        arff_calculus.set_results(results)
+        arff_calculus.create_arff_file(ARFF_gen_filename)
+        arff_calculus.write_arff_generation_txt(config_for_ARFF_gen_filename, device_name, mlc_odr, input_type, accelerometer_fs, accelerometer_odr, gyroscope_fs, gyroscope_odr, n_decision_trees, window_length)
+        arff_calculus.calculate_data_features(window_length)
+        
+        # UNICO IS USE HERE
+        """
+        args = [external_tools.mlc_app, "-" + device_name, "-MLC_script", config_for_ARFF_gen_filename]
+        mlc_app_ret_value = subprocess.call(args)
+        if (mlc_app_ret_value == 0):
+            logging.info("\nARFF generated successfully: " + arff_filename)
+        elif (mlc_app_ret_value == 37):
+            logging.error("\nERROR: too many features")
+        elif (mlc_app_ret_value == 40):
+            logging.error("\nERROR: 0 features configured")
+        elif (mlc_app_ret_value == 36):
+            logging.error("\nERROR: too many filters")
+        elif (mlc_app_ret_value == 35):
+            logging.error("\nERROR: data pattern cannot be loaded")
+        else:
+            logging.error("\nERROR: ", mlc_app_ret_value)
+        """
 
-            f.write("configurationStarted\n")
-            f.write(device_name + "\n")
-            f.write(mlc_odr + "\n")
-            f.write("<input_type>" + input_type + ",") 
-
-            # accelerometer settings
-            f.write(accelerometer_fs +",")  
-            f.write(accelerometer_odr + ",") 
-
-            # gyroscope settings
-            if "gyroscope" in input_type:
-                f.write(gyroscope_fs + ",")  
-                f.write(gyroscope_odr + ",")
-
-            f.write('\n');
-            f.write('%d\n' % (n_decision_trees))  ## Number of decision trees
-            f.write('%d\n' % (window_length))  ## Window length (supported values: from 1 to 255)
-
-
-            # Filters
-            for i in range(len(filters_list)):
-                if filters_list[i].name not in mlc_configurator.get_filter_names(input_type):
-                    logging.error("ERROR: filter \"" + filters_list[i].name + "\" not supported")
-                    return
-                f.write("<"+ filters_list[i].filter_id +">" + filters_list[i].name + "\n")
-                if "BP" in filters_list[i].name:
-                    f.write("<coefficients>" + 
-                            str(filters_list[i].coef_a2) + "," + 
-                            str(filters_list[i].coef_a3) + "," + 
-                            str(filters_list[i].coef_gain) + "\n")
-                elif "IIR1" in filters_list[i].name:
-                    f.write("<coefficients>" + 
-                            str(filters_list[i].coef_b1) + "," + 
-                            str(filters_list[i].coef_b2) + "," + 
-                            str(filters_list[i].coef_a2) + "\n")
-                elif "IIR2" in filters_list[i].name:
-                    f.write("<coefficients>" + 
-                            str(filters_list[i].coef_b1) + "," + 
-                            str(filters_list[i].coef_b2) + "," + 
-                            str(filters_list[i].coef_b3) + "," + 
-                            str(filters_list[i].coef_a2) + "," + 
-                            str(filters_list[i].coef_a3) + "\n")
-            f.write("<filter>" + "END_FILTERS" + "\n") 
-
-            # Features
-            for i in range(len(features_list)):
-                if features_list[i].name not in mlc_configurator.get_feature_names():
-                    logging.error("ERROR: feature \"" + features_list[i].name + "\" not supported")
-                    return
-                if features_list[i].input not in mlc_configurator.get_mlc_inputs(device_name, input_type):
-                    if "_filter_" not in features_list[i].input:
-                        logging.error("ERROR: feature input \"" + features_list[i].input + "\" not supported")
-                        return
-                f.write("<feature>" + features_list[i].name + "_" + features_list[i].input + "\n")
-                if "ZERO_CROSSING" in features_list[i].name or "PEAK_DETECTOR" in features_list[i].name:
-                    f.write("<threshold>" + str(features_list[i].threshold) + "\n") 
-            f.write("<feature>" + "END_FEATURES" + "\n") 
-            f.write(arff_filename + "\n")
-            f.write("EXIT_APP")
-            f.close()
-
-            logging.info("\nCalling MLC app for features computation and ARFF generation...")
-            args = [external_tools.mlc_app, "-" + device_name, "-MLC_script", config_for_ARFF_gen_filename]
-            mlc_app_ret_value = subprocess.call(args)
-            if (mlc_app_ret_value == 0):
-                logging.info("\nARFF generated successfully: " + arff_filename)
-            elif (mlc_app_ret_value == 37):
-                logging.error("\nERROR: too many features")
-            elif (mlc_app_ret_value == 40):
-                logging.error("\nERROR: 0 features configured")
-            elif (mlc_app_ret_value == 36):
-                logging.error("\nERROR: too many filters")
-            elif (mlc_app_ret_value == 35):
-                logging.error("\nERROR: data pattern cannot be loaded")
-            else:
-                logging.error("\nERROR: ", mlc_app_ret_value)
-
-    def ucf_generator( self,
-                        device_name, 
+    def ucf_generator( arff_calculus, 
+                       device_name, 
 	                   arff_filename, 
                        dectree_filenames,
                        result_names, 
@@ -299,39 +247,38 @@ class mlc_configurator:
         # Prepare file for UCF configuration
         configurationStarted = False
         configurationStopped = False
-        with open(config_for_ARFF_gen_filename, "r") as input:
-          with open(config_for_UCF_gen_filename, "w") as output:
-            for line in input:
-              if (configurationStarted == False):
-                if  line.rstrip() == "configurationStarted":
-                  configurationStarted = True
-                  output.write(line)
-              else: #after configurationStarted
-                if line.rstrip() == "<feature>END_FEATURES":
-                  configurationStopped = True
-                  output.write(line)
 
-                  #read ARFF to get feature names
-                  with open(arff_filename) as arff_file:
-                    lines_of_arff = arff_file.readlines()
-                    for line_of_arff in lines_of_arff:
-                      if line_of_arff.startswith( '@attribute F' ) or line_of_arff.startswith('@ATTRIBUTE F'):
-                        line_of_arff_splitted = line_of_arff.split();
-                        output.write(line_of_arff_splitted[1] + '\n')
 
-                  #read ARFF to get class names
-                  with open(arff_filename) as arff_file:
-                    lines_of_arff = arff_file.readlines()
-                    for line_of_arff in lines_of_arff:
-                      if line_of_arff.startswith( '@attribute class' ):
-                        classes_string = line_of_arff[line_of_arff.find('{') + 1 : line_of_arff.find('}')]
-                        classes_list = classes_string.split(', ')
-                        logging.info("Classes from ARFF: " + ', '.join(classes_list))
+        with open(config_for_UCF_gen_filename, "w") as output:
+            with open(config_for_ARFF_gen_filename, "r") as input:
+                for line in input:
+                    if line.rstrip() == "configurationStarted":
+                        configurationStarted = True
+                    if (configurationStarted):
+                          output.write(line)
+                    if line.rstrip() == "<filter>END_FILTERS":
+                        input.close()
+                        break
 
-                elif (configurationStopped == False):
-                  if line.strip() != "":
-                    output.write(line)
-        input.close()
+
+            for feature in arff_calculus.features_used_for_tree:
+                index_feature = arff_calculus.features_fonction_composante.index(feature)
+                line_to_write = "<feature>" + arff_calculus.features_composante[index_feature] + "\n"
+                output.write(line_to_write)
+            output.write("<feature>END_FEATURES\n")
+
+            for feature in arff_calculus.features_used_for_tree:
+                output.write(feature + "\n")
+
+            #read ARFF to get class names
+            with open(arff_filename) as arff_file:
+                lines_of_arff = arff_file.readlines()
+                for line_of_arff in lines_of_arff:
+                  if line_of_arff.startswith( '@attribute class' ):
+                    classes_string = line_of_arff[line_of_arff.find('{') + 1 : line_of_arff.find('}')]
+                    classes_list = classes_string.split(', ')
+                    logging.info("Classes from ARFF: " + ', '.join(classes_list))
+
         output.close()
 
         f = open(config_for_UCF_gen_filename, "a+")

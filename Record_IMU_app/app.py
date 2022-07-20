@@ -17,6 +17,12 @@ from file_panel import *
 from image_panel import *
 from preferences import *
 
+import pyqtgraph as pg
+import traitement as tr
+import numpy as np
+from random import randint
+
+ODR_LIST = ["12.5Hz", "26Hz", "52Hz", "104Hz"]
 
 class Window(QMainWindow):
 	def __init__(self, parent = None):
@@ -32,6 +38,7 @@ class Window(QMainWindow):
 		"""
 		self.current_file = File_manager()
 
+		self.odrFreq = ODR_LIST[1]
 		self._createActions()
 		self._createMenuBar()
 		#self._importCSV()
@@ -102,12 +109,22 @@ class Window(QMainWindow):
 		self.findPorts.setStatusTip('Choose the card\'s port')
 
 		self.findPorts.aboutToShow.connect(self.update_port_menu)
+
+		self.odr_menu = toolsMenu.addMenu('ODR:' + str(self.odrFreq))
+		for freq in ODR_LIST:
+			recent_action = self.odr_menu.addAction('&{}'.format(freq))
+			recent_action.triggered.connect(lambda x=1, n=freq: self.update_odr(n))
 		self.settings = {}
 
 		# Help menu
 		helpMenu = menuBar.addMenu("&Help")
 		helpMenu.addAction(self.helpContentAction)
 		helpMenu.addAction(self.aboutAction)
+
+	def update_odr(self, odrValue):
+		self.odrFreq = odrValue
+		self.ser.set_ODR(self.odrFreq)
+		self.odr_menu.setTitle('ODR: ' + str(self.odrFreq))
 
 	def generate_classes(self):
 		self.formatbar = QToolBar(self)
