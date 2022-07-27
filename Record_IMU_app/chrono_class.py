@@ -41,6 +41,7 @@ class Chrono_widget(QWidget):
     def countdown(self, txt):
         self.serial.set_SERIAL_SAVING_FLAG(2)
         self.counter = DURATION_INT
+        self.FLAG_TIMER = 2
         
         self.timer_ = QtCore.QTimer(self)
         self.timer_.timeout.connect(lambda:self.timer_timeout(txt))
@@ -52,8 +53,9 @@ class Chrono_widget(QWidget):
         if(self.counter > 0):
             self.counter -= 1
 
-        elif(self.counter == 0 and self.FLAG_TIMER == 0): 
+        elif(self.counter == 0 and self.FLAG_TIMER == 2): 
             self.serial.set_SERIAL_SAVING_FLAG(1)
+            self.serial.INDEX_SHAPE = 2
             self.widget_counter_int = (self.widget_counter_int + 1) % 4
             self.pages_qsw.setCurrentIndex(self.widget_counter_int)
             txt.setText("Let's go !")
@@ -66,9 +68,10 @@ class Chrono_widget(QWidget):
             self.switch_w(True, False)
             self.timer_.stop()
             self.serial.graph.set_graph_flag(0)
+            sleep(0.1) #Wait until the last line is waiting
             self.serial.set_SERIAL_SAVING_FLAG(0)
             self.FLAG_TIMER = 0
-            sleep(0.2) #Wait until the last line is waiting
+            #sleep(0.2) #Wait until the last line is waiting
             self.serial.end_recording()
             self.reset_counter()
 
@@ -82,7 +85,7 @@ class Chrono_widget(QWidget):
 
     def update_gui(self):
         self.countdown_timer.setText(str(self.counter))
-        SEC = 2
+        SEC = 1
         if(self.serial.SERIAL_SAVING_FLAG == 1):    #Multiple shape manage
             if((TIME_RECORD - self.counter) % SEC == 0 and TIME_RECORD != self.counter and self.counter != 0):
                 self.serial.INDEX_SHAPE += 1
@@ -114,5 +117,5 @@ class Chrono_widget(QWidget):
         self.timer_.start()
 
     ID_class = 100 #créer la variable globale permet de ne pas prendre en argument img_panel
-    FLAG_TIMER = 0
+    FLAG_TIMER = 3
     INDEX_SHAPE = 0

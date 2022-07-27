@@ -31,22 +31,22 @@ class mlc_configurator:
             self.coef_a3 = coef_a3
             self.coef_gain = coef_gain
 
-    def get_devices(self): 
+    def get_devices(): 
         device_list = ["LSM6DSOX", "LSM6DSRX", "ISM330DHCX", "LSM6DSO32X", "IIS2ICLX"] 
         return device_list
 
-    def get_mlc_odr(self, device_name ): 
+    def get_mlc_odr( device_name ): 
         mlc_odr = ["12.5 Hz", "26 Hz", "52 Hz", "104 Hz"]
         return mlc_odr
 
-    def get_mlc_input_type(self, device_name ): 
+    def get_mlc_input_type( device_name ): 
         if device_name == "IIS2ICLX":
             mlc_input_type = ["accelerometer_only"]
         else: 
             mlc_input_type = ["accelerometer_only", "accelerometer+gyroscope"]
         return mlc_input_type
 
-    def get_mlc_inputs(self, device_name, input_type ): 
+    def get_mlc_inputs( device_name, input_type ): 
         mlc_inputs = []
         if input_type == "accelerometer_only":
             if device_name == "IIS2ICLX":
@@ -58,7 +58,7 @@ class mlc_configurator:
                           "Gyr_X", "Gyr_Y", "Gyr_Z", "Gyr_V", "Gyr_V2"]
         return mlc_inputs
 
-    def get_accelerometer_fs(self, device_name ):
+    def get_accelerometer_fs( device_name ):
         if device_name == "LSM6DSOX":
             accelerometer_fs = ["2 g", "4 g", "8 g", "16 g"]
         if device_name == "LSM6DSO32X":
@@ -71,7 +71,7 @@ class mlc_configurator:
             logging.error("ERROR: device \"" + device_name + "\" not supported")
         return accelerometer_fs
 
-    def get_accelerometer_odr(self, device_name ):
+    def get_accelerometer_odr( device_name ):
         if device_name == "LSM6DSOX":
             accelerometer_odr = ["12.5 Hz", "26 Hz", "52 Hz", "104 Hz", "208 Hz", "416 Hz", "833 Hz", "1666 Hz", "3332 Hz", "6664 Hz"]
         elif device_name == "LSM6DSO32X":
@@ -84,7 +84,7 @@ class mlc_configurator:
             logging.error("ERROR: device \"" + device_name + "\" not supported")
         return accelerometer_odr
 
-    def get_gyroscope_fs(self, device_name ):
+    def get_gyroscope_fs( device_name ):
         if device_name == "LSM6DSOX":
             gyroscope_fs = ["125 dps", "250 dps", "500 dps", "1000 dps", "2000 dps"]
         elif device_name == "LSM6DSO32X":
@@ -95,7 +95,7 @@ class mlc_configurator:
             logging.error("ERROR: device \"" + device_name + "\" not supported")
         return gyroscope_fs
 
-    def get_gyroscope_odr(self, device_name ):
+    def get_gyroscope_odr( device_name ):
         if device_name == "LSM6DSOX":
             gyroscope_odr = ["12.5 Hz", "26 Hz", "52 Hz", "104 Hz", "208 Hz", "416 Hz", "833 Hz", "1666 Hz", "3332 Hz", "6664 Hz"]
         elif device_name == "LSM6DSO32X":
@@ -106,7 +106,7 @@ class mlc_configurator:
             logging.error("ERROR: device \"" + device_name + "\" not supported")
         return gyroscope_odr
 
-    def get_filter_names(self, input_type ):
+    def get_filter_names( input_type ):
         filter_names = []
         if input_type == "accelerometer_only":
             filter_names = ["HP_Acc_XYZ", "HP_Acc_V", "HP_Acc_V2",
@@ -120,7 +120,7 @@ class mlc_configurator:
                             "IIR2_Acc_XYZ", "IIR2_Acc_V", "IIR2_Acc_V2", "IIR2_Gyr_XYZ", "IIR2_Gyr_V", "IIR2_Gyr_V2"]
         return filter_names
 
-    def get_feature_names(self):
+    def get_feature_names():
         feature_names = ["MEAN", 
                          "ABS_MEAN",
                          "VARIANCE", 

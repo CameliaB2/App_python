@@ -145,6 +145,7 @@ def generateDecisionTree( arff_filename, dectree_filename, arff_calculus):
     X = data_set[feature_cols]  # Features
     y = data_set[col_names[-1]]  # Target variable
 
+    """
     #Cross validation 
     label_encoder = LabelEncoder()
     encoded_y = label_encoder.fit_transform(y)
@@ -162,7 +163,8 @@ def generateDecisionTree( arff_filename, dectree_filename, arff_calculus):
             decision_tree_result["Validation Accuracy scores"])
 
     
-
+    """
+    
     # Split dataset into training set and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3,
                                                         random_state=1)  # 70% training and 30% test

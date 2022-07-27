@@ -54,9 +54,14 @@ result_names  = [] # leave empty here
 result_values = [] # leave empty here
 datalog_results = [] # leave empty here
 
+
 # Load class names (folder names) from Logs folder
-class_names = os.listdir("../Logs/")
-print ("available classes = ", class_names)
+direct = os.listdir("../Logs/")
+print ("available classes = ", direct)
+
+#filenames = next(os.walk(direct), (None, None, []))[1] # 2: Get all files | 1: Get all directories
+class_names = list(filter(lambda file: not("DS_Store") in file, direct))
+
 
 # For each class (folder), load all data (files in the folder)
 datalogs = []

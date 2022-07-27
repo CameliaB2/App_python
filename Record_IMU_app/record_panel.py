@@ -62,6 +62,7 @@ class RecordPanel(QWidget):
 
 	def set_header(self, _text, _width, _height):
 		obj = QLabel(str(_text), alignment=Qt.AlignCenter)
+		obj.setObjectName("Header")
 		obj.setStyleSheet("font-weight: bold")
 		obj.setFixedWidth(_width)		
 		obj.setFixedHeight(_height)

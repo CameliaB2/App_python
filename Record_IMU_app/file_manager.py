@@ -11,6 +11,7 @@ class File_manager():
 		self.data_files = []
 		for i in range(len(self.full_paths)):
 			head_line = "A_X[mg]\tA_Y[mg]\tA_Z[mg]\tG_X[dps]\tG_Y[dps]\tG_Z[dps]\t\n"
+			#head_line = "Day[j]\tHour[h]\tMin[min]\tSec[s]\tA_X[mg]\tA_Y[mg]\tA_Z[mg]\tG_X[dps]\tG_Y[dps]\tG_Z[dps]\t\n"
 
 			self.data_files.append(open(self.full_paths[i], "a"))
 			self.data_files[i].write(head_line)
@@ -47,9 +48,9 @@ class File_manager():
 				print("The new directory is created!")
 
 			if(self.suffix_ != ""):
-				self.full_paths.append(path + "/"  + self.generate_date() + "-" + odr + "-" + shape + "-" + self.suffix_ + ".csv")
+				self.full_paths.append(path + "/"  + self.generate_date() + "-" + odr + "-" + shape + "-" + self.suffix_ + ".txt")
 			else:
-				self.full_paths.append(path + "/"  + self.generate_date() + "-" + odr + "-" + shape + ".csv")
+				self.full_paths.append(path + "/"  + self.generate_date() + "-" + odr + "-" + shape + ".txt")
 
 
 	def set_file_path(self, _path):
