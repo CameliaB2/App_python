@@ -2,5 +2,7 @@ Record_IMU_app/config.json
 decision_tree/Trees
 decision_tree/Logs_real
 */__pycache__
+*/Logs_sessionone
+LogsViewerTool/Logs
 */*/__pycache__
 */Logs
