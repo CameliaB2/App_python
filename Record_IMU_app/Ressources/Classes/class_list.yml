@@ -10,58 +10,85 @@ classes:
   
   idle : 
     composite : False
+    sequence : 
+     - idle
   
 
   horizontal : 
     composite : False
+    sequence : 
+     - horizontal
 
 
   forward_backward : 
     composite : False
+    sequence : 
+     - forward_backward
   
 
   vertical :
     composite : False
+    sequence : 
+     - vertical
   
 
   up :
     composite : False
+    sequence : 
+     - up
   
   
   right : 
     composite : False
+    sequence : 
+     - right
   
 
   down :
     composite : False
-  
+    sequence : 
+     - down
 
   left :
     composite : False
+    sequence : 
+     - left
   
 
   diagonal_up_right :
     composite : False
+    sequence : 
+     - diagonal_up_right
   
 
   diagonal_down_right :
     composite : False
+    sequence : 
+     - diagonal_down_right
   
 
   diagonal_down_left :
     composite : False
+    sequence : 
+     - diagonal_down_left
   
 
   diagonal_up_left : 
     composite : False
+    sequence : 
+     - diagonal_up_left
 
   
   arc_left:
     composite : False
+    sequence : 
+     - arc_left
   
 
   arc_right:
     composite : False
+    sequence : 
+     - arc_right
 
 
   circle_clockwise : #discuss if composite = True or False

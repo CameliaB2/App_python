@@ -278,10 +278,12 @@ QPushButton#Icon {
 	color: black;
 	border-radius: 5px;
 }
-#Header {
-	background: black;
+QLabel#Header {
+	color: white;
 }
-
+QLineEdit {
+	color: black;
+}
 """
 
 if __name__ == "__main__":

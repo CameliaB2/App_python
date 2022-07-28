@@ -91,6 +91,15 @@ class Window(QMainWindow):
 
 
 CSS = """
+QMainWindow {
+    background-color: white;
+}
+QMessageBox {
+    background-color: white;
+}
+QMessageBox QPushButton{
+    color: black;
+}
 QLabel {
     color: black;
     font-family: Ressources/Fonts/Poppins;
@@ -156,14 +165,13 @@ QCheckBox{
 }
 QComboBox{
     color: black;
-    margin-left: 15%;
 }
-QComboBox::drop-down{
-    margin-right: 30%;
+QListView{
+    background-color: white;
 }
-QLabel, QComboBox, QLineEdit
-{
-   background-position: center;
+
+QTabBar::tab{
+    color: black;
 }
 """
 
