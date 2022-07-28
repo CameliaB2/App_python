@@ -1,7 +1,4 @@
-from PySide6.QtCore import QByteArray, Qt
-from PySide6.QtGui import QGuiApplication
 from PySide6 import QtCore, QtWidgets, QtGui
-from PySide6.QtNetwork import (QAbstractSocket, QHostAddress, QTcpServer, QTcpSocket)
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import * 
@@ -44,6 +41,7 @@ class Chrono_widget(QWidget):
     def countdown(self, txt):
         self.serial.set_SERIAL_SAVING_FLAG(2)
         self.counter = DURATION_INT
+        self.FLAG_TIMER = 2
         
         self.timer_ = QtCore.QTimer(self)
         self.timer_.timeout.connect(lambda:self.timer_timeout(txt))
@@ -55,7 +53,7 @@ class Chrono_widget(QWidget):
         if(self.counter > 0):
             self.counter -= 1
 
-        elif(self.counter == 0 and self.FLAG_TIMER == 0): 
+        elif(self.counter == 0 and self.FLAG_TIMER == 2): 
             self.serial.set_SERIAL_SAVING_FLAG(1)
             self.widget_counter_int = (self.widget_counter_int + 1) % 4
             self.pages_qsw.setCurrentIndex(self.widget_counter_int)
@@ -117,5 +115,5 @@ class Chrono_widget(QWidget):
         self.timer_.start()
 
     ID_class = 100 #créer la variable globale permet de ne pas prendre en argument img_panel
-    FLAG_TIMER = 0
+    FLAG_TIMER = 3
     INDEX_SHAPE = 0

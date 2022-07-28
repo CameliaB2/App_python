@@ -30,9 +30,11 @@ class File_manager():
 		return str(date)
 
 
-	def set_current_shapes(self, _name):
+	def set_current_shapes(self, _data, _name):
 		self.name_curr_shape = []
-		self.name_curr_shapes = _name.split("_&_")
+		self.name_curr_shapes = _data['classes'][_name]['sequence']
+		print(self.name_curr_shapes)
+		#self.name_curr_shapes = _name.split("_&_")
 		print(self.name_curr_shapes)
 
 	def set_full_paths(self, odr):

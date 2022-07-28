@@ -1,9 +1,4 @@
-from PySide6.QtCore import QByteArray, Qt
-from PySide6.QtGui import QGuiApplication
 from PySide6 import QtCore, QtWidgets, QtGui
-from PySide6.QtNetwork import (QAbstractSocket, QHostAddress, QTcpServer,
-                               QTcpSocket)
-
 from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import * 
@@ -13,7 +8,7 @@ img_panel = ''
 rec_panel = ''
 
 class ClassRow(QWidget):
-    def __init__(self, _name=None, serial=None, _id=None, _file=None, parent=None):
+    def __init__(self, _data=None, _name=None, serial=None, _id=None, _file=None, parent=None):
         super(ClassRow, self).__init__( parent )
 
         lay = QHBoxLayout(self)  
@@ -25,6 +20,7 @@ class ClassRow(QWidget):
         self.file = _file
         self.ser = serial
         self.suffix = ""
+        self.data = _data
 
         self.class_name_text = self.create_className(self.name, 'The name of the class to record', 'white')
         self.textbox = self.create_inputField('white', 'Write a suffix which will be added at the end of the filename')
@@ -80,7 +76,8 @@ class ClassRow(QWidget):
         self.switch_w(False,True)
         self.get_suffix()
         self.set_name()
-        self.file.set_current_shapes(self.name)
+        #appel de la fonction set_current_shapes uniquement si la shape est composite True
+        self.file.set_current_shapes(self.data, self.name)
         files_name = self.generate_files_name()
         self.record_filename_text.setText(files_name)
 

@@ -46,7 +46,8 @@ class Page_graph(QWidget):
                                 "-average-Range_4", \
                                 "-average-Range_8", \
                                 "-average-Range_16",\
-                                "-Delta_Data"]
+                                "-Delta_Data",\
+                                "-lowpass_filter"]
 
         self.is_file_exist = [False for i in range(len(self.type_data_to_show))]
         self.current_composante = 0
@@ -108,7 +109,6 @@ class Page_graph(QWidget):
 
 
     def align_curves(self, index, headline, numberLinesRaw, numberLines):
-        print(numberLinesRaw-numberLines)
         for i in range(len(headline)):
             for j in range(numberLinesRaw-numberLines):
                 self.data[index][i].insert(0,0)

@@ -4,17 +4,17 @@ from sklearn.model_selection import train_test_split  # Import train_test_split 
 from sklearn import metrics  # Import scikit-learn metrics module for accuracy calculation
 from sklearn import tree
 from scipy.io import arff
+from sklearn.model_selection import cross_validate # Import cross_validate
 import re
-import sys
 import numpy as np
-import os
+
 import logging
 
 
 def isLeaf(src_str):
     r = re.match("[0-9]+ \[label=\"", src_str)
     s = re.search("\\\\n", src_str)
-    if (r != None and s == None):
+    if (r is not None and s is None):
         return True
     else:
         return False
@@ -24,20 +24,20 @@ def printClassName(src_str, dt_file):
     r = re.search("[0-9]+ \[label=\"", src_str)
     s = re.search("\"\] ;", src_str)
     t = re.search("\\\\n", src_str)
-    if (r != None and s != None and t == None):
+    if (r is not None and s is not None and t is None):
         print(src_str[r.end():s.start()], end="", file=dt_file)
 
 
 def printCondition(src_str, dt_file):
     r = re.search("[0-9]+ \[label=\"", src_str)
     s = re.search("\\\\n", src_str)
-    if (r != None and s != None):
+    if (r is not None and s is not None):
         print(src_str[r.end():s.start()], end="", file=dt_file)
 
 
 def getNodeNum(src_str):
     r = re.match("[0-9]+", src_str)
-    if (r != None):
+    if (r is not None):
         return int(r.group(0))
     else:
         print("on rentre ici pardi")
@@ -45,7 +45,6 @@ def getNodeNum(src_str):
 
 
 def getNextLineIndex(src_list, node_num):
-    tmp = []
     i = len(src_list) - 1
     for line in reversed(src_list):
         if (getNodeNum(line) == int(node_num)):
@@ -55,7 +54,7 @@ def getNextLineIndex(src_list, node_num):
 
 
 def isNodeInfo(src_str):
-    if (re.match('[0-9]+ -> [0-9]+[ ]+;', src_str) != None):
+    if (re.match('[0-9]+ -> [0-9]+[ ]+;', src_str) is not None):
         return True
     else:
         return False
@@ -113,7 +112,7 @@ def printTree(dot_tree, dt_file, arff_calculus):
     for line in dot_tree.split("\n"):
         r = re.search("[0-9]+\\\\n\[([0-9]+[,]?[ ]?)+\]\\\\n", line)
         s = re.search("\[labeldistance=[0-9]+\.?[0-9]*, labelangle=-?[0-9]+, headlabel=\"(False|True)\"\]", line)
-        if (r != None):
+        if (r is not None):
             line = line[:r.start()] + line[r.end():]
             if("F" in line and "_on_" in line):
                 feature = isolate_feature_used(line)
@@ -145,7 +144,24 @@ def generateDecisionTree( arff_filename, dectree_filename, arff_calculus):
     X = data_set[feature_cols]  # Features
     y = data_set[col_names[-1]]  # Target variable
 
-        #Cross validation a voir
+    #Cross validation 
+    label_encoder = LabelEncoder()
+    encoded_y = label_encoder.fit_transform(y)
+
+    decision_tree_model = DecisionTreeClassifier(criterion="entropy",
+                                    random_state=0)
+    decision_tree_result = cross_validation(decision_tree_model, X, encoded_y, 5)
+    print(decision_tree_result)
+
+    model_name = "Decision Tree"
+    plot_result(model_name,
+            "Accuracy",
+            "Accuracy scores in 5 Folds",
+            decision_tree_result["Training Accuracy scores"],
+            decision_tree_result["Validation Accuracy scores"])
+
+    
+
     # Split dataset into training set and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3,
                                                         random_state=1)  # 70% training and 30% test

@@ -5,17 +5,18 @@ from PySide6 import QtCore, QtWidgets, QtGui
 
 
 class RecordPanel(QWidget):
-	def __init__(self, _serial = None, _liste=None, _file=None, parent = None):
+	def __init__(self, _serial = None, _data = None, _file=None, parent = None):
 		super(RecordPanel, self).__init__(parent)
 
 		self.current_file = _file
 		self._ser = _serial
+		self.data = _data
 
 		
 		self.indication_text = QLabel("Please, select which classes you want to record in the toolbar just above.", alignment=Qt.AlignCenter)
 		self.indication_text.setObjectName("Title")		
 
-		self.panel = FilePanel(self._ser ,self.current_file)
+		self.panel = FilePanel(self._ser ,self.current_file, self.data)
   
 
 		scroll = QtWidgets.QScrollArea()

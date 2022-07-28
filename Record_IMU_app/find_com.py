@@ -4,8 +4,6 @@ from time import sleep
 from graph import *
 import threading
 import serial
-import time
-import sys
 
 import traitement as tr
 
@@ -20,7 +18,7 @@ class Serial_COM():
 
 		self.find_USB_devices()
 		sleep(1)
-		self.find_card()
+		#self.find_card()
 
 		self.RUNNING_FLAG = True
 
