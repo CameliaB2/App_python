@@ -26,10 +26,10 @@ class Chrono_widget(QWidget):
 
         self.chrono_label = QLabel(name, alignment=QtCore.Qt.AlignCenter)
         self.chrono_pic = QPixmap("Ressources/Images/chrono.png")
-        self.chrono_pic = self.chrono_pic.scaled(50, 60, QtCore.Qt.KeepAspectRatio)
+        self.chrono_pic = self.chrono_pic.scaled(60, 70, QtCore.Qt.KeepAspectRatio)
         
         self.countdown_timer = QtWidgets.QLabel(name, alignment=QtCore.Qt.AlignCenter)
-        self.countdown_timer.setFont(QFont('Ressources/Fonts/Poppins', 40, QFont.Bold))
+        self.countdown_timer.setFont(QFont('Ressources/Fonts/Poppins', 50, QFont.Bold))
         self.countdown_timer.setStyleSheet("color: rgb(0,0,0)")
         self.chrono_label.setPixmap(self.chrono_pic)
 
@@ -63,6 +63,7 @@ class Chrono_widget(QWidget):
             txt.setText("Let's go !")
 
             self.counter = self.time_record
+            self.img_panel.set_name_segment(self.serial.current_file.name_curr_shapes[(self.serial.INDEX_SHAPE+1)%len(self.serial.current_file.name_curr_shapes)])
             self.FLAG_TIMER = 1
 
         elif(self.counter <= 0 and self.FLAG_TIMER == 1):
@@ -96,11 +97,12 @@ class Chrono_widget(QWidget):
         if(self.serial.SERIAL_SAVING_FLAG == 1):    #Multiple shape manage
             #print(self.time_record, '-', self.counter, '%', self.time_per_movement, '=', (self.time_record - self.counter) % self.time_per_movement)
             if((self.time_record - self.counter) % self.time_per_movement == 0 and self.time_record != self.counter and self.counter != 0):
-                self.serial.INDEX_SHAPE += 1
-                if(self.serial.INDEX_SHAPE == len(self.serial.current_file.name_curr_shapes)):
-                    self.serial.INDEX_SHAPE = 0
+                self.serial.INDEX_SHAPE = (self.serial.INDEX_SHAPE+1)%len(self.serial.current_file.name_curr_shapes)
+                #if(self.serial.INDEX_SHAPE == len(self.serial.current_file.name_curr_shapes)):
+                    #self.serial.INDEX_SHAPE = 0
                     
-            self.img_panel.info.setText("Shape to do: " + self.serial.current_file.name_curr_shapes[self.serial.INDEX_SHAPE])
+                #self.img_panel.info.setText("Shape to do: " + self.serial.current_file.name_curr_shapes[self.serial.INDEX_SHAPE])
+                self.img_panel.set_name_segment(self.serial.current_file.name_curr_shapes[(self.serial.INDEX_SHAPE+1)%len(self.serial.current_file.name_curr_shapes)])
             self.img_panel.set_name_(self.serial.current_file.name_curr_shapes[self.serial.INDEX_SHAPE])
 
         if(self.counter <= 5):

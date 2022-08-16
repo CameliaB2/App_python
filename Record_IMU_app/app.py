@@ -145,14 +145,17 @@ class Window(QMainWindow):
 		helpMenu.addAction(self.aboutAction)
 
 	def update_odr(self, odrValue):
+		print(odrValue)
 		self.odrFreq = odrValue
 		self.ser.set_ODR(self.odrFreq)
 		self.odr_menu.setTitle('ODR: ' + str(self.odrFreq))
+		self.img_pan.update_time_label()
 
 	def updateIsTimeRecord(self, value):
 		self.is_time_record = value
 		self.ser.set_is_time_record(self.is_time_record)
 		self.is_time_menu.setTitle('IS TIME RECORD: ' + str(self.is_time_record))
+		self.img_pan.update_time_label()
 
 	def updateTimeRecord(self, value):
 		self.time_record = value
@@ -160,11 +163,13 @@ class Window(QMainWindow):
 		self.img_pan.chrono_w.setTimeRecord(self.time_record)
 		self.img_pan.info.setText("Please press on Ready to start the countdown. The recording will start right after (" + str(self.img_pan.chrono_w.time_record) + "s).")
 		self.time_menu.setTitle('TIME RECORD: ' + str(self.time_record) + 's')
+		self.img_pan.update_time_label()
 
 	def updateTimePerMovement(self, value):
 		self.time_per_movement = value
 		self.img_pan.chrono_w.setTimeMovement(self.time_per_movement)
 		self.time_movement_menu.setTitle('TIME PER MOVEMENT: ' + str(self.time_per_movement) + 's')
+		self.img_pan.update_time_label()
 
 	def generate_classes(self):
 		self.formatbar = QToolBar(self)
@@ -282,6 +287,23 @@ def switch_widget(state1, state2):
 CSS = """
 QLabel {
 	color: black;
+	font-family: Ressources/Fonts/Poppins;
+}
+QLabel#first_info {
+	padding-top: 40px;
+	color: black;
+	font-size: 18px;
+	font-family: Ressources/Fonts/Poppins;
+}
+QLabel#infos_next {
+	color: black;
+	font-size: 18px;
+	font-family: Ressources/Fonts/Poppins;
+	font-weight: bold;
+}
+QLabel#infos {
+	color: black;
+	font-size: 18px;
 	font-family: Ressources/Fonts/Poppins;
 }
 QLabel#Title {

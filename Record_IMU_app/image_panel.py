@@ -5,6 +5,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import * 
 from PySide6.QtCore import * 
 from classe_line import *
+from chrono_class import *
 from find_com import *
 from time import sleep
 import threading
@@ -13,6 +14,7 @@ import sys
 IMAGE_CLASSE_WIDTH = 400
 IMAGE_CLASSE_HEIGHT = 400
 
+IMAGE_NEXT_SIZE = 150
 
 class Image_Panel(QWidget):
 
@@ -32,7 +34,7 @@ class Image_Panel(QWidget):
 		self.stop_button.setObjectName("White")
 		self.ready_button.setObjectName("White")
 
-		self.info = QLabel("Please press on Ready to start the countdown. The recording will start right after (" + str(self.chrono_w.time_record) + "s).", alignment=QtCore.Qt.AlignCenter)
+		self.info = QLabel("Please press on Ready to start the countdown. The recording will start right after (" + str(DURATION_INT) + "s).", alignment=QtCore.Qt.AlignCenter)
 		self.info.setObjectName("Title")
 		#self.info.setFixedHeight(100)
 
@@ -57,8 +59,23 @@ class Image_Panel(QWidget):
 		#self.graph_layout.addWidget(_serial.graph, alignment=QtCore.Qt.AlignCenter)
 
 		self.panel_right_layout = QVBoxLayout()
+
+		
+		self.total_time_label = QLabel("Total Time: " + str(self.chrono_w.time_record) + "s")
+		self.total_time_label.setObjectName("first_info")
+		self.time_per_move_label = QLabel("Time per Move: " + str(self.chrono_w.time_per_movement) + "s")
+		self.time_per_move_label.setObjectName("infos")
+		self.odr_label = QLabel("MLC ODR: " + str(self.ser.odr_freq))
+		self.odr_label.setObjectName("infos")
+		self.next_line = self.setNextImage()
+
 		self.panel_right_layout.addWidget(self.chrono_w, alignment=QtCore.Qt.AlignCenter)
-		self.panel_right_layout.addWidget(_serial.graph, alignment=QtCore.Qt.AlignCenter)
+		self.panel_right_layout.addWidget(self.total_time_label, alignment=QtCore.Qt.AlignCenter)
+		self.panel_right_layout.addWidget(self.time_per_move_label, alignment=QtCore.Qt.AlignCenter)
+		self.panel_right_layout.addWidget(self.odr_label, alignment=QtCore.Qt.AlignCenter)
+		#self.panel_right_layout.addWidget(_serial.graph, alignment=QtCore.Qt.AlignCenter) 
+		self.panel_right_layout.addWidget(self.next_line, alignment=QtCore.Qt.AlignCenter) 
+		self.panel_right_layout.addStretch()
 
 		
 		self.button_img_layout.addWidget(self.stop_button, alignment=QtCore.Qt.AlignRight)
@@ -66,17 +83,40 @@ class Image_Panel(QWidget):
 		self.button_img_layout.addWidget(self.ready_button, alignment=QtCore.Qt.AlignLeft)
 		
 
-		self.main_layout.setSpacing(70)   
 		self.main_layout.addWidget(self.info)	
+	
 		self.lay = QHBoxLayout()
 		self.lay.addWidget(self.shape_label, alignment=QtCore.Qt.AlignCenter)
 		self.lay.addLayout(self.panel_right_layout)
 		self.main_layout.addLayout(self.lay)
 		self.main_layout.addLayout(self.button_img_layout)
 		#self.main_layout.addLayout(self.panel_right_layout)
-		
-		#self.main_layout.addStretch()
+
 		self.setLayout(self.main_layout)
+
+	def setNextImage(self):
+		widget = QWidget()
+		self.next_shape_layout = QHBoxLayout()
+
+		self.next_mouvement = QLabel("Next Movement: ")
+		self.next_mouvement.setObjectName("infos")
+
+		self.next_label = QLabel(self.name, alignment=QtCore.Qt.AlignCenter)
+		self.next_pic = QPixmap("Ressources/Classes/Images/" + str(self.name)+ ".png") #by default
+		self.next_pic = self.next_pic.scaled(IMAGE_NEXT_SIZE, IMAGE_NEXT_SIZE, QtCore.Qt.KeepAspectRatio)
+		self.next_label.setPixmap(self.next_pic)
+
+		self.next_shape_layout.addWidget(self.next_mouvement, alignment=QtCore.Qt.AlignCenter)
+		self.next_shape_layout.addWidget(self.next_label, alignment=QtCore.Qt.AlignCenter)
+		self.next_shape_layout.addStretch()
+		widget.setLayout(self.next_shape_layout)
+		return widget
+
+	def setNext(self):
+		print(str(self.ser.current_file.name_curr_shapes[self.ser.INDEX_SHAPE]))
+		self.next_pic = QPixmap("Ressources/Classes/Images/" + str(self.ser.current_file.name_curr_shapes[self.ser.INDEX_SHAPE])+ ".png")
+		self.next_pic = self.next_pic.scaled(IMAGE_NEXT_SIZE, IMAGE_NEXT_SIZE, QtCore.Qt.KeepAspectRatio)
+		self.next_label.setPixmap(self.next_pic)
 
 	def clear_serial(self):
 		self.ser.serial.flushOutput()
@@ -90,6 +130,11 @@ class Image_Panel(QWidget):
 		btn.setFont(QFont('Ressources/Fonts/Poppins', 16, QFont.Bold))
 		#btn = QPushButton(self.font)
 		return btn
+
+	def update_time_label(self):
+		self.total_time_label.setText("Total Time: " + str(self.chrono_w.time_record) + "s")
+		self.time_per_move_label.setText("Time per Move: " + str(self.chrono_w.time_per_movement) + "s")
+		self.odr_label.setText("MLC ODR: " + self.ser.odr_freq)
 
 	def msg_box(self, text):
 		msg = QMessageBox()
@@ -115,3 +160,9 @@ class Image_Panel(QWidget):
 		self.shape_label.setMinimumWidth(IMAGE_CLASSE_WIDTH)
 		self.shape_label.setPixmap(self.shape_pic)
 	
+		#A faire ne propre
+	def set_name_segment(self, name):
+		self.next_pic = QPixmap("Ressources/Classes/Images/" + str(name)+ ".png")
+		self.next_pic = self.next_pic.scaled(IMAGE_NEXT_SIZE, IMAGE_NEXT_SIZE, QtCore.Qt.KeepAspectRatio)
+	
+		self.next_label.setPixmap(self.next_pic)

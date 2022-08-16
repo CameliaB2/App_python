@@ -60,10 +60,14 @@ class Serial_COM():
 			self.serial_verification(_port)
 
 	def set_ODR(self, _odr):
-		self.odr_freq = _odr
-		actions = {'12.5Hz': 80, '26Hz': 38, '52Hz': 19, '104Hz': 10}
-		self.time_odr = actions.get(_odr)
-		self.serial.timeout = self.time_odr/1000
+		try:
+			self.odr_freq = _odr
+			actions = {'12.5Hz': 80, '26Hz': 38, '52Hz': 19, '104Hz': 10}
+			self.time_odr = actions.get(_odr)
+			self.serial.timeout = self.time_odr/1000
+			return
+		except IOError:
+			return
 
 	def set_is_time_record(self, is_time_record):
 		self.is_time_record = is_time_record

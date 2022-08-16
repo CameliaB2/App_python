@@ -82,6 +82,7 @@ class ClassRow(QWidget):
         self.record_filename_text.setText(files_name)
 
         img_panel.ready_button.setEnabled(True)
+        img_panel.setNext()
 
     def generate_files_name(self):
         size = len(self.file.name_curr_shapes)
