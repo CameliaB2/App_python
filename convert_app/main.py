@@ -3,6 +3,7 @@ from PySide6.QtGui import *
 from PySide6.QtCore import * 
 import sys
 from os import path
+import os
 import traitement as tr
 
 
@@ -82,6 +83,7 @@ class Window(QMainWindow):
 		self.range_line_lay.addWidget(self.range_text)
 		self.range_line_lay.addWidget(self.range_qlineEdit)
 
+		self.repository_to_transform = Search_bar('Repository to tranform', 'X70')
 		self.file_to_transform = Search_bar('File to tranform', 'X42')
 		self.path_file_to_reg = Search_bar('Path where the file will be registered', 'X70')
 
@@ -98,6 +100,7 @@ class Window(QMainWindow):
 		self.indication_text = QLabel("File created successfully !", alignment=Qt.AlignCenter)
 
 		self.browser_lay.addLayout(self.range_line_lay)
+		self.browser_lay.addWidget(self.repository_to_transform)
 		self.browser_lay.addWidget(self.file_to_transform)
 		self.browser_lay.addWidget(self.path_file_to_reg)
 		self.browser_lay.addWidget(self.generate_button)
@@ -150,7 +153,47 @@ class Window(QMainWindow):
 
 			else:
 				self.set_indication_label('File not created, path not found !', 'red')
+		elif (self.repository_to_transform.path_qlineEdit.text() != ''):# Load class names (folder names) from Logs folder
+			self.datalogs = []
+			direct = os.listdir(self.repository_to_transform.path_qlineEdit.text())
+			repositories_ODR = list(filter(lambda file: not("DS_Store") in file, direct))			
+			for repo_odr in repositories_ODR:
+				direct = os.listdir(self.repository_to_transform.path_qlineEdit.text() + "/" + repo_odr)
+				repositories_time_per_mov = list(filter(lambda file: not("DS_Store") in file, direct))
+				for repo_tpm in repositories_time_per_mov:
+					direct = os.listdir(self.repository_to_transform.path_qlineEdit.text() + "/" + repo_odr + "/" + repo_tpm)
+					repositories_class = list(filter(lambda file: not("DS_Store") in file, direct))
+					for repo_class in repositories_class:
+						direct = os.listdir(self.repository_to_transform.path_qlineEdit.text() + "/" + repo_odr + "/" + repo_tpm + "/" + repo_class)
+						datalogs_file = list(filter(lambda file: not("DS_Store") in file, direct))
+						for datalogs_i in datalogs_file:
+							if(repo_class != "Idle"):
+								self.datalogs.append(self.repository_to_transform.path_qlineEdit.text() + "/" + repo_odr + "/" + repo_tpm + "/" + repo_class + "/" + datalogs_i)
+			
+			for datalog in self.datalogs:
+				self.data = tr.read_file(datalog)
+				self.aver_datas = tr.calculate_average_all_data(self.data[0], self.data[1], self.data[2], self.data[3], self.data[4], self.data[5], _range)
+				self.set_name(_range)
+				path_base = datalog.replace('.txt', '')
+				path_base = path_base.replace('.csv', '')
 
+				_path =  path_base + '-average-Range_' + str(_range) + '.csv'
+
+				data_file = open(_path, "a")
+				head_line = "AccX[mg]\tAccY[mg]\tAccZ[mg]\tGyrX[dps]\tGyrY[dps]\tGyrZ[dps]\t\n"
+				data_file.write(head_line)
+				for i in range(len(self.aver_datas[0])):
+					data_file.write(str(self.aver_datas[0][i]) + '\t' + 
+									str(self.aver_datas[1][i]) + '\t' + 
+									str(self.aver_datas[2][i]) + '\t' + 
+									str(self.aver_datas[3][i]) + '\t' + 
+									str(self.aver_datas[4][i]) + '\t' +
+									str(self.aver_datas[5][i]) + '\n')
+				data_file.close()
+				os.remove(datalog) #Keep only average files
+				self.set_indication_label('File created successfully!', 'green')
+
+			print(self.datalogs)
 		else:
 			self.set_indication_label('File not created, empty path !', 'red')
 

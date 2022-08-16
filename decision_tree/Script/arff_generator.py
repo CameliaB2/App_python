@@ -14,7 +14,7 @@ class Arff_generator:
 
 
         self.composantes = ['Acc_X', 'Acc_Y', 'Acc_Z', 'Gyr_X', 'Gyr_Y', 'Gyr_Z']
-        self.features = ['MEAN', 'MINIMUM', 'MAXIMUM', 'PEAK_TO_PEAK', 'VARIANCE', 'ENERGY']
+        self.features = ['MEAN', 'MAXIMUM', 'MINIMUM', 'PEAK_TO_PEAK', 'VARIANCE', 'ENERGY']
         
         self.features_composante = [] #Exemple MEAN_Acc_X
         self.features_fonction_composante = [] #Exemple F1_MEAN_on_Acc_X

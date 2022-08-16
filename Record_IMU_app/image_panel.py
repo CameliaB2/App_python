@@ -24,11 +24,6 @@ class Image_Panel(QWidget):
 		self.main_layout = QVBoxLayout(self)
 		self.button_img_layout = QHBoxLayout()
 
-		self.info = QLabel("Please press on Ready to start the countdown. The recording will start right after.", alignment=QtCore.Qt.AlignCenter)
-		self.info.setObjectName("Title")
-		#self.info.setFixedHeight(100)
-		
-		
 		self.name = ""
 		self.chrono_w = Chrono_widget(self.name, _rec, self, self.ser)
 		self.chrono_w.setFixedHeight(75)
@@ -36,6 +31,10 @@ class Image_Panel(QWidget):
 		self.ready_button = self.create_button("Ready", 'green', 150, 50)
 		self.stop_button.setObjectName("White")
 		self.ready_button.setObjectName("White")
+
+		self.info = QLabel("Please press on Ready to start the countdown. The recording will start right after (" + str(self.chrono_w.time_record) + "s).", alignment=QtCore.Qt.AlignCenter)
+		self.info.setObjectName("Title")
+		#self.info.setFixedHeight(100)
 
 		# Open the correct pic according to the tab of chosen shape		
 		self.shape_label = QLabel(self.name, alignment=QtCore.Qt.AlignCenter)
@@ -82,7 +81,6 @@ class Image_Panel(QWidget):
 	def clear_serial(self):
 		self.ser.serial.flushOutput()
 		self.ser.serial.flushInput()
-		print("on flush output")
 
 	def create_button(self, _text, _bg, _w, _h):
 		btn = QPushButton(_text)

@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split  # Import train_test_split 
 from sklearn import metrics  # Import scikit-learn metrics module for accuracy calculation
 from sklearn import tree
 from scipy.io import arff
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import cross_validate # Import cross_validate
 import re
 import numpy as np
@@ -165,7 +166,7 @@ def generateDecisionTree( arff_filename, dectree_filename, arff_calculus):
     """
     
     # Split dataset into training set and test set
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3,
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25,
                                                         random_state=1)  # 70% training and 30% test
 
     # Create Decision Tree classifer object
@@ -178,8 +179,20 @@ def generateDecisionTree( arff_filename, dectree_filename, arff_calculus):
     y_pred = clf.predict(X_test)
 
     # Model Accuracy, how often is the classifier correct?
-    dectree_accuracy = metrics.accuracy_score(y_test, y_pred)
+    dectree_accuracy = "{:.3f}".format(metrics.accuracy_score(y_test, y_pred))
+    dectree_precision = "{:.3f}".format(metrics.precision_score(y_test, y_pred, average='weighted'))
+    dectree_recall = "{:.3f}".format(metrics.recall_score(y_test, y_pred, average='weighted'))
+    dectree_f1 = "{:.3f}".format(metrics.f1_score(y_test, y_pred, average='weighted'))
     
+    label_encoder = LabelEncoder()
+    y_test_enc = label_encoder.fit_transform(y_test)
+    y_pred_enc = label_encoder.fit_transform(y_pred)
+
+    scaler = StandardScaler()
+    y_test_scaler = scaler.fit_transform(y_test_enc.reshape(-1, 1))
+    y_pred_scaler = scaler.fit_transform(y_pred_enc.reshape(-1, 1))
+    dectree_mse = "{:.3f}".format(metrics.mean_squared_error(y_test_scaler, y_pred_scaler, squared=True))
+
     dot_tree = tree.export_graphviz(clf, out_file=None, class_names=clf.classes_, label="none", impurity=False,
                                     feature_names=feature_cols)
 
@@ -194,6 +207,10 @@ def generateDecisionTree( arff_filename, dectree_filename, arff_calculus):
     text_file.close()
     if n_nodes > 0:
         logging.info("Accuracy:" + str(dectree_accuracy))
+        logging.info("Precision:" + str(dectree_precision))
+        logging.info("Recall:" + str(dectree_recall))
+        logging.info("F1:" + str(dectree_f1))
+        logging.info("MSE:" + str(dectree_mse))
         logging.info(file_content)
     else: 
         logging.error("ERROR: decision tree empty. Please check selected features")

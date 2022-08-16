@@ -70,9 +70,11 @@ for class_name in class_names:
     datalogs_i = os.listdir("../Logs/" + class_name +"/")
     print(class_name, " --> data logs: ", datalogs_i)
     datalogs_split_by_class.append(datalogs_i)
+    if('.DS_Store' in datalogs_i):
+        datalogs_i.pop(datalogs_i.index('.DS_Store'))
     for datalog_i in datalogs_i:
         datalogs.append("../Logs/" + class_name + "/" + datalog_i)
-        datalog_results.append(class_name);
+        datalog_results.append(class_name)
 print("All data logs: ", datalogs)
 print("All data logs 0: ", datalogs[0])
 

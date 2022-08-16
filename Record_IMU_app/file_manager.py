@@ -7,11 +7,13 @@ class File_manager():
 	def __init__(self, parent=None):
 		self.name_curr_shape = "test"
 
-	def write_headLine(self):
+	def write_headLine(self, time_record):
 		self.data_files = []
 		for i in range(len(self.full_paths)):
-			head_line = "A_X[mg]\tA_Y[mg]\tA_Z[mg]\tG_X[dps]\tG_Y[dps]\tG_Z[dps]\t\n"
-			#head_line = "Day[j]\tHour[h]\tMin[min]\tSec[s]\tA_X[mg]\tA_Y[mg]\tA_Z[mg]\tG_X[dps]\tG_Y[dps]\tG_Z[dps]\t\n"
+			if(time_record == "YES"):
+				head_line = "Day[j]\tHour[h]\tMin[min]\tSec[s]\tA_X[mg]\tA_Y[mg]\tA_Z[mg]\tG_X[dps]\tG_Y[dps]\tG_Z[dps]\t\n"
+			else:
+				head_line = "A_X[mg]\tA_Y[mg]\tA_Z[mg]\tG_X[dps]\tG_Y[dps]\tG_Z[dps]\t\n"
 
 			self.data_files.append(open(self.full_paths[i], "a"))
 			self.data_files[i].write(head_line)

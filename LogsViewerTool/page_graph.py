@@ -114,7 +114,7 @@ class Page_graph(QWidget):
                 self.data[index][i].insert(0,0)
 
     def set_tab_name(self, fileName):
-        fn_split = fileName.split('-')
+        fn_split = fileName.split('/')[-1].split('-')
         if(len(fn_split) > ODR_INDEX):
             for i in range(len(self.tab_array)):
                 if(self.tab_array[i].id == self.id):
@@ -251,8 +251,8 @@ class Page_graph(QWidget):
         self.toolbar_bot_layout.addWidget(self.ODR_lineE)
 
     def set_ODR(self, fileName):
-            fn_split = fileName.split('-')
-            self.ODR = int(fn_split[ODR_INDEX].replace('Hz', ''))
+            fn_split = fileName.split('/')[-1].split('-')
+            self.ODR = float(fn_split[ODR_INDEX].replace('Hz', ''))
 
     def update_bottom_bar(self):
         nbr_samples = len(self.data[0][self.current_composante]) #0 because raw data is the first file reading

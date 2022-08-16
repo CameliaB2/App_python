@@ -23,7 +23,9 @@ import numpy as np
 from random import randint
 
 ODR_LIST = ["12.5Hz", "26Hz", "52Hz", "104Hz"]
-TIME_RECORD = ["YES", "NO"]
+IS_TIME_RECORD = ["YES", "NO"]
+TIME_RECORD = [5, 20, 30, 60, 120, 180]
+TIME_PER_MOVEMENT = [0.5, 1, 1.5, 2, 4, 7, 10]
 
 class Window(QMainWindow):
 	def __init__(self, parent = None):
@@ -40,12 +42,15 @@ class Window(QMainWindow):
 		self.current_file = File_manager()
 
 		self.odrFreq = ODR_LIST[1]
-		self.time_record = TIME_RECORD[1]
+		self.is_time_record = IS_TIME_RECORD[1]
+		self.time_record = TIME_RECORD[3]
+		self.time_per_movement = TIME_PER_MOVEMENT[1]
+
 		self._createActions()
 		self._createMenuBar()
 		#self._importCSV()
 		self._importYAML()
-		self.ser = Serial_COM(self.current_file, self.findPorts, self.odrFreq)
+		self.ser = Serial_COM(self.current_file, self.findPorts, self.odrFreq, 38, self.is_time_record)
 
 		self.preference_onglet = Preferences(self.current_file)
 		self.preferences.triggered.connect(self.preference_onglet.show_preferences)
@@ -117,10 +122,20 @@ class Window(QMainWindow):
 			recent_action = self.odr_menu.addAction('&{}'.format(freq))
 			recent_action.triggered.connect(lambda x=1, n=freq: self.update_odr(n))
 
-		self.odr_menu = toolsMenu.addMenu('TIME RECORD: ' + str(self.time_record))
-		for answer in TIME_RECORD:
-			recent_action = self.odr_menu.addAction('&{}'.format(answer))
-			recent_action.triggered.connect(lambda x=1, n=answer: self.updateTimeRecord(n))
+		self.is_time_menu = toolsMenu.addMenu('IS TIME RECORD: ' + str(self.is_time_record))
+		for answer in IS_TIME_RECORD:
+			recent_action = self.is_time_menu.addAction('&{}'.format(answer))
+			recent_action.triggered.connect(lambda x=1, n=answer: self.updateIsTimeRecord(n))
+
+		self.time_menu = toolsMenu.addMenu('TIME RECORD: ' + str(self.time_record) + 's')
+		for time_value in TIME_RECORD:
+			recent_action = self.time_menu.addAction('&{}s'.format(time_value))
+			recent_action.triggered.connect(lambda x=1, n=time_value: self.updateTimeRecord(n))
+
+		self.time_movement_menu = toolsMenu.addMenu('TIME PER MOUVEMENT: ' + str(self.time_per_movement) + 's')
+		for time_value in TIME_PER_MOVEMENT:
+			recent_action = self.time_movement_menu.addAction('&{}s'.format(time_value))
+			recent_action.triggered.connect(lambda x=1, n=time_value: self.updateTimePerMovement(n))
 			
 		self.settings = {}
 
@@ -134,9 +149,22 @@ class Window(QMainWindow):
 		self.ser.set_ODR(self.odrFreq)
 		self.odr_menu.setTitle('ODR: ' + str(self.odrFreq))
 
+	def updateIsTimeRecord(self, value):
+		self.is_time_record = value
+		self.ser.set_is_time_record(self.is_time_record)
+		self.is_time_menu.setTitle('IS TIME RECORD: ' + str(self.is_time_record))
+
 	def updateTimeRecord(self, value):
 		self.time_record = value
-		self.odr_menu.setTitle('TIME RECORD: ' + str(self.time_record))
+		#self.ser.set_is_time_record(self.is_time_record)
+		self.img_pan.chrono_w.setTimeRecord(self.time_record)
+		self.img_pan.info.setText("Please press on Ready to start the countdown. The recording will start right after (" + str(self.img_pan.chrono_w.time_record) + "s).")
+		self.time_menu.setTitle('TIME RECORD: ' + str(self.time_record) + 's')
+
+	def updateTimePerMovement(self, value):
+		self.time_per_movement = value
+		self.img_pan.chrono_w.setTimeMovement(self.time_per_movement)
+		self.time_movement_menu.setTitle('TIME PER MOVEMENT: ' + str(self.time_per_movement) + 's')
 
 	def generate_classes(self):
 		self.formatbar = QToolBar(self)
