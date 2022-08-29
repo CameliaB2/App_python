@@ -83,7 +83,7 @@ class Window(QMainWindow):
 		self.range_line_lay.addWidget(self.range_text)
 		self.range_line_lay.addWidget(self.range_qlineEdit)
 
-		self.repository_to_transform = Search_bar('Repository to tranform', 'X70')
+		self.repository_to_transform = Search_bar('Folder to tranform', 'X70')
 		self.file_to_transform = Search_bar('File to tranform', 'X42')
 		self.path_file_to_reg = Search_bar('Path where the file will be registered', 'X70')
 

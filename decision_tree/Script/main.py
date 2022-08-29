@@ -121,6 +121,7 @@ logging.info('n_decision_trees = %d' % (n_decision_trees))
 # filters configuration
 # the list of available filters can be obtained with mlc_configurator.get_filter_names(input_type)
 filters_list = []   
+#filters_list.append(mlc_configurator.mlc_filter("filter_1", "IIR2_Acc_XYV", coef_b1=0.595178, coef_b2=1.190355, coef_b3=0.595178, coef_a2=-1.019146, coef_a3=0.361564))
 #filters_list.append(mlc_configurator.mlc_filter("filter_1", "HP_Acc_XYZ"))
 #filters_list.append(mlc_configurator.mlc_filter("filter_2", "BP_Acc_V", coef_a2=-0.5, coef_a3=0.5, coef_gain=1))
 #filters_list.append(mlc_configurator.mlc_filter("filter_3", "IIR1_Acc_V", coef_b1=1, coef_b2=0.25, coef_a2=0.75))

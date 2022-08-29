@@ -105,5 +105,5 @@ class RecordPanel(QWidget):
 
 	
 	def remove_file(self, _name):
-		filename = _name + ".txt"
+		filename = _name + ".csv"
 		os.remove(_name)

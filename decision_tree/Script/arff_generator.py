@@ -181,7 +181,7 @@ class Arff_generator:
                 f.write(gyroscope_fs + ",")  
                 f.write(gyroscope_odr + ",")
 
-            f.write('\n');
+            f.write('\n')
             f.write('%d\n' % (n_decision_trees))  ## Number of decision trees
             f.write('%d\n' % (window_length))  ## Window length (supported values: from 1 to 255)
 

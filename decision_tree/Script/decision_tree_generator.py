@@ -145,6 +145,7 @@ def generateDecisionTree( arff_filename, dectree_filename, arff_calculus):
     X = data_set[feature_cols]  # Features
     y = data_set[col_names[-1]]  # Target variable
 
+
     """
     #Cross validation 
     label_encoder = LabelEncoder()

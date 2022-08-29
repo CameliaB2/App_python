@@ -291,18 +291,18 @@ QLabel {
 }
 QLabel#first_info {
 	padding-top: 40px;
-	color: black;
+	color: white;
 	font-size: 18px;
 	font-family: Ressources/Fonts/Poppins;
 }
 QLabel#infos_next {
-	color: black;
+	color: white;
 	font-size: 18px;
 	font-family: Ressources/Fonts/Poppins;
 	font-weight: bold;
 }
 QLabel#infos {
-	color: black;
+	color: white;
 	font-size: 18px;
 	font-family: Ressources/Fonts/Poppins;
 }

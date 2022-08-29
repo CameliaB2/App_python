@@ -50,9 +50,9 @@ class File_manager():
 				print("The new directory is created!")
 
 			if(self.suffix_ != ""):
-				self.full_paths.append(path + "/"  + self.generate_date() + "-" + odr + "-" + shape + "-" + self.suffix_ + ".txt")
+				self.full_paths.append(path + "/"  + self.generate_date() + "-" + odr + "-" + shape + "-" + self.suffix_ + ".csv")
 			else:
-				self.full_paths.append(path + "/"  + self.generate_date() + "-" + odr + "-" + shape + ".txt")
+				self.full_paths.append(path + "/"  + self.generate_date() + "-" + odr + "-" + shape + ".csv")
 
 
 	def set_file_path(self, _path):
